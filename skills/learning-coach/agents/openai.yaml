@@ -1,0 +1,4 @@
+interface:
+  display_name: "Learning Coach"
+  short_description: "Diagnose gaps and maintain durable learning records"
+  default_prompt: "Use $learning-coach to help me master a topic through adaptive questions and persistent learning documents."
