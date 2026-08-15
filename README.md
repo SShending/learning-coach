@@ -1,10 +1,28 @@
 # Learning Coach
 
-Learning Coach is a Codex skill for stateful, evidence-based learning. It turns
-ongoing questions into durable learning state and can grow each topic into a
-private, versioned repository for recall, review, and eventual tutorial export.
+Learning Coach is an evidence-based learning coach that preserves evolving
+understanding, diagnosed gaps, mastery evidence, review needs, and learning
+strategy across conversations.
 
-## What It Does
+## Version Status
+
+Learning Coach v3 is under development on `main`. It targets ChatGPT and uses a
+purpose-built Learning Vault MCP service to keep all durable learning content in
+one private GitHub repository. The approved v3 specification is tracked in
+[Issue #1](https://github.com/SShending/learning-coach/issues/1), with
+implementation tickets in
+[Issues #2-#14](https://github.com/SShending/learning-coach/issues).
+
+Learning Coach v2 remains available as a stable Codex skill:
+
+- Frozen release: [`v2.0.0`](https://github.com/SShending/learning-coach/tree/v2.0.0)
+- Maintenance branch: [`v2`](https://github.com/SShending/learning-coach/tree/v2)
+
+V2 learning workspaces and repositories are not currently guaranteed to be
+compatible with the v3 Learning Vault. Migration is outside the v3 private-alpha
+scope.
+
+## V2 Features
 
 - Diagnoses knowledge gaps from the learner's questions and answers.
 - Adapts explanations, examples, and checks to the learner's current level.
@@ -13,18 +31,18 @@ private, versioned repository for recall, review, and eventual tutorial export.
 - Generates tutorial candidates, then requires explicit confirmation before
   promoting them into curated material.
 
-## Install
+## Install V2
 
 Ask Codex:
 
 ```text
 Install the learning-coach skill from
-https://github.com/SShending/learning-coach/tree/main/skills/learning-coach
+https://github.com/SShending/learning-coach/tree/v2.0.0/skills/learning-coach
 ```
 
 Or invoke `$skill-installer` with that GitHub URL.
 
-## Use
+## Use V2
 
 For a local learning workspace:
 
@@ -75,11 +93,13 @@ Mastery is never inferred from exposure alone:
 | 3 | Applies it independently |
 | 4 | Transfers, compares, debugs, designs with, or teaches it |
 
-## Repository Layout
+## V2 Repository Layout
 
-The installable skill is in [`skills/learning-coach`](skills/learning-coach).
+The stable installable skill is in
+[`skills/learning-coach`](https://github.com/SShending/learning-coach/tree/v2.0.0/skills/learning-coach).
 It includes deterministic initialization and validation scripts and requires no
-separate service, database, or learning platform.
+separate service, database, or learning platform. The v3 runtime will replace
+this direct file-access model with authenticated Learning Vault operations.
 
 ## License
 
