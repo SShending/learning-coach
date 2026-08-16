@@ -82,7 +82,7 @@ function updateWithText(text: string) {
 describe("Learning Update privacy minimization", () => {
   it("rejects secrets before persistence without echoing them", async () => {
     const harness = await readyHarness();
-    const secret = "ghp_abcdefghijklmnopqrstuvwxyz1234567890";
+    const secret = `ghp_${"a".repeat(36)}`;
 
     try {
       const error = await harness.callError("save_learning_update", updateWithText(secret));
