@@ -1,4 +1,4 @@
 interface:
   display_name: "Learning Coach"
-  short_description: "Learn deeply and grow a durable topic repository"
-  default_prompt: "Use $learning-coach to help me master a topic and maintain a private learning repository for future recall."
+  short_description: "Resume learning from private mastery evidence"
+  default_prompt: "Use $learning-coach to resume my topic from the Learning Vault and choose the next useful step."

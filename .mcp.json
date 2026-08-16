@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "learning-vault": {
+      "command": "node",
+      "args": ["${PLUGIN_ROOT}/dist/mcp/stdio.js"]
+    }
+  }
+}
