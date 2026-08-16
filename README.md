@@ -1,115 +1,117 @@
 # Learning Coach
 
-Learning Coach is a ChatGPT learning plugin that resumes from durable evidence
-instead of chat history. Its skill runs the learning loop; its authenticated
-Learning Vault MCP service reads and writes one private GitHub repository for
-the learner.
+Learning Coach is a ChatGPT/Codex skill for learning from evidence instead of
+restarting from chat history. It uses the GitHub tools already connected to the
+host to read and update one private `learning-vault` repository. GitHub is the
+durable content store; there is no local learning folder and no Learning Coach
+server in the default path.
 
-V3 is a single-user private alpha. It is designed primarily for personal recall,
-gap diagnosis, review, and adaptation of learning strategy. Notes may eventually
-become useful public material, but tutorial production is not the default goal.
+The primary use is personal recall, gap diagnosis, review, and adjustment of
+learning strategy. Notes may eventually become useful public material, but
+tutorial production is optional.
 
-## How V3 Works
-
-```text
-ChatGPT + learning-coach skill
-              |
-              | purpose-built MCP operations over OAuth
-              v
-       Learning Vault service
-          |              |
-          |              `- encrypted learner-to-Vault binding
-          v
-  one private GitHub repository
-  (sole durable source of learning content)
-```
-
-GitHub stores Topic state, concept relationships, Mastery Evidence, review
-needs, learning notes, session summaries, strategy observations, and Public
-Export candidates. The service stores only the encrypted operational binding
-needed to locate the learner's repository. It does not keep a second copy of
-learning content, raw chat transcripts, retry payloads, or an offline queue.
-
-## Learning Vault Operations
-
-| Operation | Purpose |
-| --- | --- |
-| `get_vault_status` | Check binding, schema compatibility, and current revision |
-| `bind_vault` / `disconnect_vault` | Manage the learner's one private Vault binding |
-| `initialize_vault` | Create the versioned schema in an empty bound repository |
-| `get_learning_context` | Start or resume a Topic from durable state |
-| `save_learning_update` | Atomically save a meaningful, distilled update |
-| `get_review_queue` | Retrieve concepts that should be recalled or reapplied |
-| `save_conflict_merge` | Save an explicitly confirmed merge after a stale write |
-| `prepare_forget` / `apply_forget` | Preview and apply removal from current state |
-| `prepare_public_export` | Build a privacy-reviewed candidate from a strict whitelist |
-
-Routine writes use optimistic concurrency and never force-update the default
-branch. A stale write is rejected until the latest Vault is read and the learner
-confirms a merge. Forget removes current material without claiming to erase Git
-history. Public Export never changes the private repository's visibility or
-publishes its history.
-
-## Private Alpha
-
-The complete setup and real-Vault acceptance checklist are in
-[Private Alpha Runbook](docs/private-alpha-runbook.md). The flow requires:
-
-- Node.js 22 or newer;
-- an OAuth 2.1 provider that issues signed JWT access tokens;
-- a GitHub App installed on exactly one private Vault repository;
-- a stable HTTPS deployment ending in `/mcp`;
-- a ChatGPT developer-mode MCP registration and plugin app binding.
-
-Local verification:
-
-```bash
-npm ci
-npm test
-npm run typecheck
-npm run build
-```
-
-The repository includes a local stdio entry for Codex development and an
-authenticated Streamable HTTP entry for ChatGPT. `.env.example` documents the
-required runtime variables; the service reads its environment directly and does
-not load `.env` files itself.
-
-## Repository Layout
+## Default Workflow
 
 ```text
-.codex-plugin/              plugin metadata
-skills/learning-coach/      ChatGPT learning workflow
-src/mcp/                    public Learning Vault tool contract
-src/application/            learning use cases and invariants
-src/domain/                 schemas, privacy rules, Forget, and export rules
-src/adapters/               GitHub App and encrypted operational storage
-src/http/                    authenticated Streamable HTTP endpoint
-tests/                      contract, HTTP, and end-to-end acceptance tests
-examples/                   minimal framework-free memory agent
-docs/adr/                   accepted v3 design decisions
+Install Learning Coach
+        |
+        v
+Connect GitHub with repository read/write access
+        |
+        v
+Create or choose one private learning-vault repository
+        |
+        v
+Start learning; each meaningful update becomes a small GitHub commit
 ```
 
-The approved specification is [Issue #1](https://github.com/SShending/learning-coach/issues/1),
-with implementation work tracked in
-[Issues #2-#14](https://github.com/SShending/learning-coach/issues).
+The ordinary workflow does not need a tunnel, runtime API key, private key,
+Node.js service, or always-on computer. A GitHub connection is still required:
+the skill cannot grant itself access to a repository.
+
+## ChatGPT Setup
+
+1. Connect GitHub in the ChatGPT surface you use. This can be the official
+   GitHub connector or a registered GitHub MCP connection that exposes
+   repository contents read and write tools.
+2. Create an empty private repository named `learning-vault`, or decide on an
+   explicit `owner/repository` name to give Learning Coach in the first chat.
+3. Install this plugin/skill and start with a concrete target, for example:
+   `Help me learn agent memory well enough to build a minimal agent.`
+4. The first write creates `.learning-vault/vault.json` and the repository
+   README. Later chats reread that file and continue from its evidence.
+
+If the GitHub connection is read-only, Learning Coach can still teach, but it
+will clearly report that the turn was not saved. It will never silently write to
+local files or ask for a Personal Access Token in the chat.
+
+For a ChatGPT developer-mode MCP registration, use GitHub's hosted endpoint
+(`https://api.githubcopilot.com/mcp/`) or the GitHub connection offered by your
+host. The exact OAuth and connector UI is host-controlled and may change. A
+plugin app mapping can be added after the connection is registered; no personal
+connection ID is committed to this repository.
+
+### Current Packaging Boundary
+
+This repository can distribute the Learning Coach skill, but it cannot bundle a
+learner's GitHub authorization. ChatGPT must expose the connected GitHub tools
+to the same chat. If its built-in GitHub connector is read-only, register a
+write-capable GitHub MCP connection before testing saves. Whether the hosted
+GitHub MCP can complete OAuth is a property of the ChatGPT host integration, so
+the skill checks actual tools instead of assuming write access.
+
+## What Is Saved
+
+The fixed format is documented in
+[skills/learning-coach/references/vault-format.md](skills/learning-coach/references/vault-format.md).
+In short:
+
+- `.learning-vault/vault.json` stores Topics, concepts, evidence, review dates,
+  strategy observations, idempotency markers, and export records.
+- `topics/<topic-id>/notes/` stores concise learning notes.
+- `topics/<topic-id>/sessions/` stores privacy-minimized session summaries.
+- `public-exports/` stores only explicitly confirmed candidate material.
+
+The skill rereads before writing, uses the current file SHA when supported,
+verifies the result, and reports conflicts or partial writes. Generic GitHub
+tools cannot enforce every invariant between separate calls; that is the
+deliberate tradeoff for a small, usable first version.
 
 ## Privacy Boundary
 
-- Keep the Learning Vault repository private.
-- Install the GitHub App only on that repository; no Personal Access Token is used.
-- Never persist credentials, private keys, verification codes, or comparable secrets.
+- Keep the Vault repository private.
+- Grant the GitHub connection access only to the selected repository when the
+  host supports repository selection.
+- Never save credentials, private keys, verification codes, or comparable
+  secrets.
 - Abstract personal and workplace identifiers before saving.
-- Store raw chat, uploads, proprietary code, or substantial excerpts only after
+- Save raw chat, uploads, proprietary code, or substantial excerpts only after
   case-specific learner confirmation.
-- Publish only selected material to a separate clean-history repository after review.
+- Public export is a reviewed copy in a separate path/repository. It never
+  changes the private repository's visibility or publishes its history.
 
-## V2 History
+## Future Dedicated MCP
 
-V2 was a Codex skill that wrote directly to local or repository files. It remains
-available on the maintenance branch [`v2`](https://github.com/SShending/learning-coach/tree/v2)
-and frozen tag [`v2.0.0`](https://github.com/SShending/learning-coach/tree/v2.0.0).
-V2 workspaces are not automatically migrated to the v3 Learning Vault.
+The earlier private-alpha Learning Vault MCP is preserved on the
+`v3-custom-mcp` branch. It is not required by `main`, and it is not part of the
+ordinary user setup. A future adapter can add strict schema validation,
+transactional conflict handling, review and Forget operations without changing
+the Vault format or learning workflow.
+
+## Development
+
+This repository is primarily a skill package. Validate the skill with the
+bundled `skill-creator` and `plugin-creator` validators.
+
+The custom MCP implementation and its Node test suite remain on
+`v3-custom-mcp` for later evaluation; `main` intentionally has no runtime
+dependency on it.
+
+## Previous Versions
+
+V2 remains on branch `v2` and tag `v2.0.0`. Issues #1-#14 describe the earlier
+custom-MCP private alpha and are historical context for `v3-custom-mcp`, not the
+default installation path on `main`.
 
 ## License
 

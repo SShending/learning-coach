@@ -1,6 +1,6 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Evidence-based learning across ChatGPT conversations with a private GitHub Learning Vault.",
   "author": {
     "name": "SShending",
@@ -11,7 +11,6 @@
   "license": "MIT",
   "keywords": ["learning", "memory", "review", "github", "mcp"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Learning Coach",
     "shortDescription": "Resume learning from evidence, not chat history",

@@ -1,195 +1,80 @@
-# Private Alpha Runbook
+# Pragmatic GitHub Runbook
 
-This runbook connects one learner, one private GitHub Learning Vault, and one
-ChatGPT developer-mode plugin. It is an operator guide for the v3 private alpha,
-not a public deployment guide.
+This runbook connects one learner, one private GitHub Learning Vault, and the
+Learning Coach skill. It intentionally avoids the earlier custom Learning
+Vault server, tunnel, runtime API key, and always-on deployment.
 
-The automated suite covers the MCP contract, OAuth enforcement, encrypted
-operational persistence, controlled GitHub adapter behavior, and the agent-memory
-learning journey. A live alpha against GitHub and ChatGPT has not been run from
-this repository because no GitHub App credentials, OAuth tenant, deployed HTTPS
-endpoint, or ChatGPT MCP registration were supplied.
+## 1. Connect GitHub In The Host
 
-## 1. Prepare The Private Vault
-
-Create a private, empty GitHub repository for the Learning Vault. Do not reuse a
-repository with unrelated files or history.
-
-Create a GitHub App owned by the learner or their organization:
-
-- Repository permission `Contents`: read and write.
-- Repository permission `Metadata`: read-only.
-- No repository administration or deletion permission.
-- No Personal Access Token flow.
-
-Generate a private key for the App, record its App ID, and install the App with
-access to **only** the private Vault repository. The installation ID, owner, and
-repository name are later passed to `bind_vault`; they are not added to the
-plugin manifest.
-
-## 2. Configure OAuth
-
-Use an established OAuth 2.1 identity provider rather than implementing an
-authorization server for the alpha. It must support authorization code with
-PKCE `S256` and either dynamic client registration or a preconfigured ChatGPT
-client.
-
-Configure:
-
-- scopes `vault:read` and `vault:write`;
-- a discovery document with authorization and token endpoints;
-- a JWKS endpoint for access-token signature verification;
-- signed JWT access tokens containing `sub`, `exp`, `client_id` or `azp`, and
-  `scope` or `scp`;
-- an issuer that exactly matches `LEARNING_VAULT_OAUTH_ISSUER`;
-- an audience that exactly matches the public MCP URL, including `/mcp`;
-- the OAuth `resource` parameter echoed into the access-token audience;
-- ChatGPT's exact redirect URL from its MCP registration page, normally shaped
-  as `https://chatgpt.com/connector/oauth/{callback_id}`.
-
-For a single learner, ensure the stable token subject is always that learner's
-identity. The service uses `sub` as the learner ID and isolates the encrypted
-Vault binding by that value.
-
-The service publishes protected-resource metadata at
-`/.well-known/oauth-protected-resource/mcp` and challenges anonymous `/mcp`
-requests with its metadata URL. See OpenAI's current
-[authentication guide](https://developers.openai.com/plugins/build/auth/).
-
-## 3. Configure And Deploy The Service
-
-Install and verify the project before deployment:
-
-```bash
-npm ci
-npm test
-npm run typecheck
-npm run build
-```
-
-Generate a 32-byte operational-store key and keep it in the deployment
-platform's secret manager:
-
-```bash
-openssl rand -base64 32
-```
-
-Set every variable from `.env.example`. Important relationships:
+Use the GitHub connector or a registered GitHub MCP connection supported by the
+ChatGPT surface. The connection must expose repository contents read and write
+tools. GitHub's hosted MCP endpoint is:
 
 ```text
-LEARNING_VAULT_PUBLIC_URL=https://learning-vault.example.com
-LEARNING_VAULT_OAUTH_AUDIENCE=https://learning-vault.example.com/mcp
+https://api.githubcopilot.com/mcp/
 ```
 
-- `LEARNING_VAULT_STORE_PATH` must be on persistent, private storage.
-- `LEARNING_VAULT_STORE_KEY` must decode to exactly 32 bytes.
-- `LEARNING_VAULT_GITHUB_PRIVATE_KEY` may use escaped `\n` line breaks.
-- `LEARNING_VAULT_OAUTH_REGISTRATION_ENDPOINT` may be omitted when dynamic
-  client registration is not used.
-- Do not use `LEARNING_VAULT_STDIO_LEARNER_ID` in the hosted HTTP service; it is
-  only for the local stdio development entry.
+The host owns OAuth, account linking, and token handling. Do not paste a PAT,
+private key, or runtime key into the learning chat. If the host exposes only
+read tools, continue teaching but expect updates to be reported as unsaved.
 
-Start the built HTTP service with `npm start`. Terminate TLS at the platform or
-reverse proxy and expose a stable public endpoint:
+## 2. Prepare The Private Vault
+
+Create an empty **private** repository named `learning-vault` in the learner's
+account, or choose an explicit `owner/repository` path. Do not reuse a
+repository with unrelated files. If the host supports repository allowlists,
+allow only this repository.
+
+Learning Coach does not create a repository or change its visibility during a
+normal lesson. Those are explicit GitHub actions for the learner to perform.
+
+## 3. Install And Start
+
+Install the plugin from the repository or the selected local marketplace. Start
+a new chat with a concrete capability:
 
 ```text
-https://learning-vault.example.com/mcp
+Help me learn agent memory well enough to build a minimal, testable agent.
 ```
 
-Confirm:
+On the first turn, the skill reads the repository. If it is empty, it prepares
+the fixed schema in `skills/learning-coach/references/vault-format.md` and asks
+for confirmation before the first durable commit. It then saves meaningful
+updates automatically unless the learner opts out for that interaction.
 
-- `GET /healthz` returns `{"status":"ok"}`;
-- protected-resource metadata names the exact `/mcp` resource and both scopes;
-- an anonymous MCP initialization receives `401` and `WWW-Authenticate`;
-- an access token with the wrong issuer, audience, expiry, or signature is rejected;
-- deployment logs do not include tokens, tool inputs, learning notes, or private keys.
+## 4. Verify Continuity
 
-Use MCP Inspector against the deployed URL before connecting ChatGPT. The server
-must initialize over Streamable HTTP and list only the purpose-built Learning
-Vault operations. OpenAI's current server checklist is in
-[Build an MCP server](https://developers.openai.com/plugins/build/mcp-server/).
+- Inspect the first commit and confirm that it contains no raw transcript or
+  credential-shaped string.
+- Open a new chat and ask to resume `agent-memory`.
+- Confirm that the response uses the saved focus, gaps, evidence, and next step.
+- Ask for a review and verify that retrieval evidence, not confidence, changes
+  mastery.
+- Disconnect or remove the GitHub connection and confirm that teaching can
+  continue but new durable updates are reported as unsaved.
 
-## 4. Register The MCP Server In ChatGPT
+## 5. Verify Safety Boundaries
 
-In ChatGPT:
+- A public repository is rejected for writes.
+- An unrelated nonempty repository is never initialized automatically.
+- A changed state-file SHA causes a reread and merge instead of an overwrite.
+- A write with an unknown result is reread before any retry, reusing its update
+  ID.
+- Forget shows its current-material selection and Git-history warning before
+  changing files.
+- Public export shows the exact whitelist and exclusions before writing a
+  candidate. It never changes repository visibility.
 
-1. Open **Settings**.
-2. Select **Security and login** and enable **Developer mode**.
-3. Open **ChatGPT Plugins**, select the plus button, and register the deployed
-   MCP URL and OAuth connection details.
-4. Complete account linking and verify that ChatGPT can scan the tool list.
-5. Copy the connection's technical ID from the browser URL. It starts with
-   `plugin_asdk_app`.
+## 6. Optional ChatGPT App Mapping
 
-Do not invent or commit this ID before the connection exists. Once registered,
-create `.app.json` at the plugin root:
+If the host requires a plugin app mapping, register the GitHub MCP connection in
+developer mode first, then add its technical `plugin_asdk_app_...` ID to a local
+`.app.json`. Do not commit a personal connection ID to the public repository.
+The exact registration screen and OAuth behavior are host-controlled; the
+plugin can only consume the tools that the host exposes.
 
-```json
-{
-  "apps": {
-    "learning-vault": {
-      "id": "plugin_asdk_app_REPLACE_WITH_REGISTERED_ID",
-      "category": "Productivity"
-    }
-  }
-}
-```
+## Future Path
 
-Then add this field to `.codex-plugin/plugin.json`:
-
-```json
-"apps": "./.app.json"
-```
-
-Validate the plugin, install it from the selected personal or repository
-marketplace, and test from a new chat so the latest skill and MCP binding are
-loaded. The current ChatGPT packaging steps are documented in
-[Package your plugin](https://developers.openai.com/plugins/build/plugins/).
-
-The checked-in `.mcp.json` launches the local stdio server for Codex development.
-It is not a substitute for the registered ChatGPT HTTPS connection.
-
-## 5. Run The Real Vault Acceptance Journey
-
-Run this checklist with the actual private repository and inspect its commits
-after each meaningful write.
-
-- Start unbound: `get_vault_status` returns `unbound`.
-- Bind only the selected private repository. A public or inaccessible repository
-  is rejected.
-- Initialize the confirmed empty repository. A second initialization is
-  idempotent, and a nonempty incompatible repository is rejected.
-- Start Topic `agent-memory` with the target capability of building a minimal,
-  testable agent with memory.
-- Answer a diagnostic question incorrectly, then verify that the misconception,
-  prerequisite gap, and next step are distilled without storing raw chat.
-- Open a new ChatGPT chat and confirm that it resumes the same Topic from the
-  GitHub revision without asking for facts already stored.
-- Explain and independently apply a concept; verify that Mastery Evidence, not
-  confidence or exposure, controls its level.
-- Complete a due review and verify that a new observed result updates the Review
-  Queue.
-- Accumulate evidence in a second Topic and verify that Learning Strategy is
-  created only from cross-Topic evidence and remains revisable.
-- Make two chats write from the same base revision. Verify that the second write
-  is rejected as stale and that no merge is saved until the learner confirms a
-  version rebuilt from the latest Vault.
-- Temporarily block service-to-GitHub writes. Verify that teaching may continue,
-  the result is explicitly `unsaved`, and no offline queue or later-sync promise
-  appears.
-- Use a fake credential-shaped string and verify that the write is rejected.
-  Verify that personal and workplace identifiers require abstraction.
-- Preview Forget, inspect all affected material and the Git-history warning, then
-  test both cancellation and explicit application. Confirm that no history is
-  rewritten.
-- Present the exact Public Export whitelist and obtain explicit learner
-  confirmation before preparing the candidate. Confirm that
-  private reflections, unsupported claims, sessions, diagnostics, and identifiers
-  are excluded or redacted, and that no public repository is created.
-- Disconnect the Vault. Confirm the encrypted operational binding is removed but
-  the GitHub repository and its learning content remain intact.
-
-Record the deployed version, ChatGPT connection ID, OAuth provider, GitHub App
-installation ID, Vault repository ID, checklist result, and any failures in a
-private operator note. Do not put tokens, private keys, raw chat, or private
-learning content in that note.
+The strict custom Learning Vault implementation is preserved on the
+`v3-custom-mcp` branch. It may later become an optional adapter once the generic
+GitHub path has been used enough to justify its operational cost.

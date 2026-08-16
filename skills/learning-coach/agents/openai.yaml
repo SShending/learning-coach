@@ -1,4 +1,4 @@
 interface:
   display_name: "Learning Coach"
-  short_description: "Resume learning from private mastery evidence"
-  default_prompt: "Use $learning-coach to resume my topic from the Learning Vault and choose the next useful step."
+  short_description: "Learn and resume from a private GitHub Vault"
+  default_prompt: "Use $learning-coach to resume my topic from my private GitHub Learning Vault and choose the next useful step."

@@ -1,9 +1,10 @@
-# Authorize one Learning Vault through a GitHub App
+# Superseded: authorize the Vault through the host GitHub connection
 
-Learning Vault MCP will access GitHub through a GitHub App installed only on the
-repository bound as the learner's single Learning Vault. The installation will
-request repository metadata read access and repository contents read/write
-access, with no Personal Access Token support and no account-wide private
-repository scope in v3. This adds an explicit GitHub installation step but
-prevents Learning Coach from reaching unrelated repositories and uses
-short-lived installation credentials instead of user-managed secrets.
+This decision was part of the custom MCP private alpha and is retained for
+historical context. The default `main` path no longer requires a Learning Coach
+GitHub App or a self-hosted service. See ADR 0014.
+
+The future dedicated Learning Vault MCP may reuse the narrow GitHub App design,
+installed only on the selected private repository with metadata read and
+contents read/write access, when strict server-side isolation is justified. It
+is not part of the ordinary skill setup.

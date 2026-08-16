@@ -1,13 +1,16 @@
 # Learning Coach
 
-Learning Coach preserves a learner's evolving understanding so future learning
-can resume from evidence instead of restarting from conversation history.
+Learning Coach preserves a learner's evolving understanding in one private
+GitHub repository so future learning can resume from evidence instead of
+restarting from conversation history. The default implementation is a skill
+that uses the host's existing GitHub repository tools; it is not a hosted
+Learning Coach service.
 
 ## Language
 
 **Learning Vault**:
 The single authoritative, private body of a learner's history and current state
-across all of their topics.
+across all of their topics, stored in the `learning-vault` GitHub repository.
 _Avoid_: Workspace, tutorial repository, knowledge base
 
 **Topic**:
@@ -53,10 +56,19 @@ _Avoid_: Hidden reasoning, raw transcript
 
 **Forget**:
 Removal of material from the learner's active state and future learning use; it
-does not claim erasure from the Learning Vault's prior history.
+does not claim erasure from the GitHub repository's prior history.
 _Avoid_: Purge, permanent deletion, history erasure
 
 **Public Export**:
 A deliberately selected, privacy-reviewed body of material derived from the
 Learning Vault for a public audience, without the Vault's private history.
 _Avoid_: Repository visibility change, automatic tutorial
+
+**Generic GitHub path**:
+The default read/write path using the host's existing GitHub connector or MCP
+tools. It is pragmatic and verifiable, but cannot enforce all domain invariants
+between separate generic tool calls.
+
+**Dedicated Learning Vault MCP**:
+The future optional adapter with strict validation and transactional semantics.
+It is preserved on the `v3-custom-mcp` branch and is not required by `main`.
