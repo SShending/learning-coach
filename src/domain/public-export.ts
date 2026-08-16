@@ -19,6 +19,7 @@ export const preparePublicExportInputSchema = z
     exportId: stableIdSchema,
     baseRevision: z.string().min(1),
     title: z.string().min(1).max(200),
+    confirmed: z.boolean(),
     selection: z.array(publicExportSelectionSchema).min(1),
   })
   .strict();

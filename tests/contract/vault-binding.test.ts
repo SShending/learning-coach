@@ -101,4 +101,40 @@ describe("Learning Vault binding", () => {
       await harness.close();
     }
   });
+
+  it("fails closed if the bound repository becomes public", async () => {
+    const harness = await createContractHarness({
+      repositories: [
+        {
+          installationId: 7,
+          repositoryId: 42,
+          owner: "learner",
+          repository: "learning-vault",
+          private: true,
+          defaultBranch: "main",
+          revision: "empty:42",
+          files: {},
+        },
+      ],
+    });
+
+    try {
+      await harness.call("bind_vault", {
+        installationId: 7,
+        owner: "learner",
+        repository: "learning-vault",
+      });
+      harness.setRepositoryPrivacy(false);
+
+      await expect(
+        harness.callError("initialize_vault", { baseRevision: "empty:42" }),
+      ).resolves.toMatchObject({
+        category: "authorization",
+        code: "private_vault_required",
+      });
+      await expect(harness.readRepositoryFile(".learning-vault/vault.json")).resolves.toBeNull();
+    } finally {
+      await harness.close();
+    }
+  });
 });

@@ -182,7 +182,8 @@ after each meaningful write.
 - Preview Forget, inspect all affected material and the Git-history warning, then
   test both cancellation and explicit application. Confirm that no history is
   rewritten.
-- Prepare a Public Export candidate from an explicit whitelist. Confirm that
+- Present the exact Public Export whitelist and obtain explicit learner
+  confirmation before preparing the candidate. Confirm that
   private reflections, unsupported claims, sessions, diagnostics, and identifiers
   are excluded or redacted, and that no public repository is created.
 - Disconnect the Vault. Confirm the encrypted operational binding is removed but

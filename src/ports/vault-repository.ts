@@ -6,7 +6,7 @@ import type {
 
 export interface VaultRepository {
   inspect(request: BindVaultRequest): Promise<RepositoryInspection>;
-  readFile(binding: VaultBinding, path: string): Promise<string | null>;
+  readFile(binding: VaultBinding, path: string, revision?: string): Promise<string | null>;
   listFiles(binding: VaultBinding): Promise<string[]>;
   commit(
     binding: VaultBinding,

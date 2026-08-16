@@ -20,6 +20,7 @@ function update(updateId: string, baseRevision: string, focus: string) {
     baseRevision,
     meaningful: true,
     record: true,
+    privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
     topic: {
       id: "agent-memory",
       title: "Agent memory",
@@ -117,6 +118,18 @@ describe("concurrent Learning Updates", () => {
         }),
       ).resolves.toEqual({
         status: "saved",
+        updateId: "conversation-b-merge",
+        revision: "rev-2",
+        commitId: "commit-2",
+      });
+      await expect(
+        harness.call("save_conflict_merge", {
+          staleBaseRevision: "rev-ready",
+          confirmed: true,
+          update: update("conversation-b-merge", "rev-1", "Merged retrieval and writing"),
+        }),
+      ).resolves.toEqual({
+        status: "already_saved",
         updateId: "conversation-b-merge",
         revision: "rev-2",
         commitId: "commit-2",

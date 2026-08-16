@@ -50,17 +50,21 @@ export class GitHubVaultRepository implements VaultRepository {
     }
   }
 
-  async readFile(binding: VaultBinding, path: string): Promise<string | null> {
+  async readFile(
+    binding: VaultBinding,
+    path: string,
+    pinnedRevision?: string,
+  ): Promise<string | null> {
     this.requireAllowedPath(path);
-    const inspection = await this.inspect(binding);
-    if (this.isEmptyRevision(inspection.revision)) return null;
+    const revision = pinnedRevision ?? (await this.inspect(binding)).revision;
+    if (this.isEmptyRevision(revision)) return null;
     const client = this.clients.forInstallation(binding.installationId);
     try {
       const response = await client.rest.repos.getContent({
         owner: binding.owner,
         repo: binding.repository,
         path,
-        ref: inspection.defaultBranch,
+        ref: revision,
       });
       if (Array.isArray(response.data) || response.data.type !== "file") return null;
       if (!("content" in response.data) || typeof response.data.content !== "string") return null;
@@ -106,6 +110,14 @@ export class GitHubVaultRepository implements VaultRepository {
   ): Promise<{ revision: string; commitId: string }> {
     for (const path of Object.keys(transition.files)) this.requireAllowedPath(path);
     const inspection = await this.inspect(binding);
+    if (!inspection.private) {
+      throw new VaultError(
+        "authorization",
+        "private_vault_required",
+        "The bound Learning Vault is no longer private, so the write was blocked.",
+        true,
+      );
+    }
     if (inspection.revision !== transition.baseRevision) {
       throw this.staleRevision(transition.baseRevision, inspection.revision);
     }

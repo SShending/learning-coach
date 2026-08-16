@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { MemoryOperationalStore } from "../../src/adapters/memory-operational-store.js";
+import type { VaultRepository } from "../../src/ports/vault-repository.js";
 import { createContractHarness } from "../support/contract-harness.js";
 
 const readyVault = JSON.stringify({
@@ -161,6 +163,58 @@ describe("get_learning_context", () => {
             },
           ],
         },
+      });
+    } finally {
+      await harness.close();
+    }
+  });
+
+  it("reads state from the same immutable revision returned to the caller", async () => {
+    const operationalStore = new MemoryOperationalStore();
+    await operationalStore.setBinding("learner-alpha", {
+      installationId: 7,
+      repositoryId: 42,
+      owner: "learner",
+      repository: "learning-vault",
+    });
+    const laterVault = readyVault.replace(
+      "Separate context from durable memory",
+      "A later concurrent focus",
+    );
+    const repository: VaultRepository = {
+      async inspect() {
+        return {
+          installationId: 7,
+          repositoryId: 42,
+          owner: "learner",
+          repository: "learning-vault",
+          private: true,
+          defaultBranch: "main",
+          revision: "rev-snapshot-a",
+          commitId: "rev-snapshot-a",
+        };
+      },
+      async readFile(_binding, _path, revision?: string) {
+        return revision === "rev-snapshot-a" ? readyVault : laterVault;
+      },
+      async listFiles() {
+        return [];
+      },
+      async commit() {
+        throw new Error("not used");
+      },
+      async findCommitByMarker() {
+        return null;
+      },
+    };
+    const harness = await createContractHarness({ operationalStore, repositoryAdapter: repository });
+
+    try {
+      await expect(
+        harness.call("get_learning_context", { topicId: "agent-memory" }),
+      ).resolves.toMatchObject({
+        revision: "rev-snapshot-a",
+        topic: { currentFocus: "Separate context from durable memory" },
       });
     } finally {
       await harness.close();

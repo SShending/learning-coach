@@ -48,13 +48,17 @@ export function readHttpConfig(environment: NodeJS.ProcessEnv) {
   const core = coreConfigFromParsed(parsed);
   const baseUrl = new URL(parsed.LEARNING_VAULT_PUBLIC_URL);
   const publicMcpUrl = new URL("/mcp", baseUrl);
+  const oauthAudience = new URL(parsed.LEARNING_VAULT_OAUTH_AUDIENCE).href;
+  if (oauthAudience !== publicMcpUrl.href) {
+    throw new Error("LEARNING_VAULT_OAUTH_AUDIENCE must equal the public MCP URL.");
+  }
   return {
     ...core,
     host: parsed.LEARNING_VAULT_HOST,
     port: parsed.LEARNING_VAULT_PORT,
     publicMcpUrl,
     oauthIssuer: parsed.LEARNING_VAULT_OAUTH_ISSUER,
-    oauthAudience: parsed.LEARNING_VAULT_OAUTH_AUDIENCE,
+    oauthAudience,
     oauthJwksUri: new URL(parsed.LEARNING_VAULT_OAUTH_JWKS_URI),
     oauthAuthorizationEndpoint: parsed.LEARNING_VAULT_OAUTH_AUTHORIZATION_ENDPOINT,
     oauthTokenEndpoint: parsed.LEARNING_VAULT_OAUTH_TOKEN_ENDPOINT,

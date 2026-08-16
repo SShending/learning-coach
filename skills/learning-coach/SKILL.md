@@ -63,6 +63,8 @@ the exact revision returned by the latest read.
   produce a commit.
 - Never send raw chat history, hidden reasoning, broad prompt logs, or a verbose
   transcript.
+- Include an explicit privacy review on every persisted update, classifying any
+  sensitive context and source excerpts even when both lists are empty.
 - Keep explanations and recall material in notes; keep concept relationships,
   evidence, review timing, and identifiers in structured fields.
 - Report the tool result accurately: `saved`, `already_saved`, `unchanged`, or
@@ -127,10 +129,14 @@ For Forget:
 
 For a possible Public Export:
 
-1. Call `prepare_public_export` only with an explicit Topic, concept, and note whitelist.
-2. Review exclusions and unsupported claims with the learner.
-3. Treat the result only as a candidate. Do not call it a tutorial by default.
-4. Never change the private Vault's visibility or publish its history. Publication
+1. Prepare an explicit Topic, concept, and note whitelist from the current Vault
+   context, including the candidate title and expected exclusions.
+2. Show that exact selection to the learner and obtain explicit confirmation.
+3. Only after confirmation, call `prepare_public_export` with the unchanged
+   whitelist and `confirmed: true`.
+4. Review the resulting exclusions and unsupported claims with the learner.
+5. Treat the result only as a candidate. Do not call it a tutorial by default.
+6. Never change the private Vault's visibility or publish its history. Publication
    requires a separate clean-history repository outside the private-alpha workflow.
 
 ## Boundaries

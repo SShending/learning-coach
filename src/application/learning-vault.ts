@@ -16,6 +16,8 @@ import type { PreparePublicExportInput } from "../domain/public-export.js";
 import type {
   BindVaultRequest,
   LearnerPrincipal,
+  RepositoryInspection,
+  VaultBinding,
   VaultStatus,
 } from "../domain/types.js";
 import {
@@ -28,6 +30,21 @@ import {
 } from "../domain/vault-state.js";
 import type { OperationalStore } from "../ports/operational-store.js";
 import type { VaultRepository } from "../ports/vault-repository.js";
+
+type ConceptState = VaultDocument["topics"][string]["concepts"][string];
+type ReviewReason = "contradiction" | "prerequisite_gap" | "scheduled_review";
+
+function getReviewReason(concept: ConceptState): ReviewReason | null {
+  if (
+    concept.evidence.some(
+      (evidence) => evidence.type === "contradiction" && !evidence.stale,
+    )
+  ) {
+    return "contradiction";
+  }
+  if (concept.status === "blocked") return "prerequisite_gap";
+  return concept.nextReview === null ? null : "scheduled_review";
+}
 
 export class LearningVault {
   constructor(
@@ -50,7 +67,12 @@ export class LearningVault {
       }
 
       const inspection = await this.repository.inspect(binding);
-      const rawState = await this.repository.readFile(binding, VAULT_STATE_PATH);
+      this.requirePrivateInspection(inspection);
+      const rawState = await this.repository.readFile(
+        binding,
+        VAULT_STATE_PATH,
+        inspection.revision,
+      );
       if (rawState === null) {
         return {
           status: "uninitialized",
@@ -139,21 +161,18 @@ export class LearningVault {
     this.requireScope(principal, "vault:write");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
-    const rawState = await this.repository.readFile(binding, VAULT_STATE_PATH);
+    this.requirePrivateInspection(inspection);
+    const rawState = await this.repository.readFile(
+      binding,
+      VAULT_STATE_PATH,
+      inspection.revision,
+    );
 
     if (rawState !== null) {
-      const parsed = vaultDocumentSchema.safeParse(JSON.parse(rawState));
-      if (!parsed.success) {
-        throw new VaultError(
-          "incompatible_schema",
-          "unsupported_schema",
-          "The repository contains an incompatible Learning Vault schema.",
-          false,
-        );
-      }
+      const parsed = this.parseVaultDocument(rawState);
       return {
         status: "already_initialized" as const,
-        schemaVersion: VAULT_SCHEMA_VERSION,
+        schemaVersion: parsed.schemaVersion,
         revision: inspection.revision,
         commitId: inspection.commitId,
       };
@@ -210,7 +229,8 @@ export class LearningVault {
     this.requireScope(principal, "vault:read");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
-    const state = await this.readVaultDocument(binding);
+    this.requirePrivateInspection(inspection);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const topic = state.topics[request.topicId];
 
     if (topic === undefined) {
@@ -271,7 +291,8 @@ export class LearningVault {
     this.requireScope(principal, "vault:write");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
-    const state = await this.readVaultDocument(binding);
+    this.requirePrivateInspection(inspection);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const applied = state.appliedUpdates[proposedUpdate.updateId];
 
     if (applied !== undefined) {
@@ -359,6 +380,13 @@ export class LearningVault {
         concept.evidence = concept.evidence.map((item) =>
           item.type === "contradiction" ? item : { ...item, stale: true },
         );
+      } else if (!evidence.stale) {
+        const observedAt = Date.parse(evidence.observedAt);
+        concept.evidence = concept.evidence.map((item) =>
+          item.type === "contradiction" && Date.parse(item.observedAt) < observedAt
+            ? { ...item, stale: true }
+            : item,
+        );
       }
       concept.evidence = [
         ...concept.evidence.filter((item) => item.id !== evidence.id),
@@ -388,6 +416,30 @@ export class LearningVault {
           "validation",
           "mastery_requires_evidence",
           `Concept ${concept.id} cannot have mastery level ${concept.level} without evidence.`,
+          true,
+        );
+      }
+      const supportedLevel = concept.evidence
+        .filter((evidence) => !evidence.stale)
+        .reduce(
+          (highest, evidence) =>
+            Math.max(
+              highest,
+              {
+                recognition: 1,
+                explanation: 2,
+                application: 3,
+                transfer: 4,
+                contradiction: 0,
+              }[evidence.type],
+            ),
+          0,
+        );
+      if (concept.level > supportedLevel) {
+        throw new VaultError(
+          "validation",
+          "mastery_evidence_insufficient",
+          `Concept ${concept.id} has level ${concept.level}, but its current evidence supports at most level ${supportedLevel}.`,
           true,
         );
       }
@@ -454,6 +506,22 @@ export class LearningVault {
           "validation",
           "unknown_strategy_evidence",
           `Learning Strategy observation references unknown evidence: ${missingEvidence.join(", ")}.`,
+          true,
+        );
+      }
+      const topicsWithoutEvidence = observation.topicIds.filter((topicId) => {
+        const topicEvidenceIds = new Set(
+          Object.values(state.topics[topicId]?.concepts ?? {}).flatMap((concept) =>
+            concept.evidence.map((evidence) => evidence.id),
+          ),
+        );
+        return !observation.evidenceRefs.some((evidenceId) => topicEvidenceIds.has(evidenceId));
+      });
+      if (topicsWithoutEvidence.length > 0) {
+        throw new VaultError(
+          "validation",
+          "strategy_evidence_not_cross_topic",
+          `Learning Strategy needs referenced evidence from every Topic: ${topicsWithoutEvidence.join(", ")}.`,
           true,
         );
       }
@@ -536,16 +604,6 @@ export class LearningVault {
         true,
       );
     }
-    const binding = await this.requireBinding(principal);
-    const inspection = await this.repository.inspect(binding);
-    if (inspection.revision !== request.update.baseRevision) {
-      throw new VaultError(
-        "stale_revision",
-        "stale_revision",
-        `The Vault advanced again from ${request.update.baseRevision} to ${inspection.revision}.`,
-        true,
-      );
-    }
     return this.saveLearningUpdate(principal, request.update);
   }
 
@@ -553,32 +611,43 @@ export class LearningVault {
     this.requireScope(principal, "vault:read");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
-    const state = await this.readVaultDocument(binding);
+    this.requirePrivateInspection(inspection);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const items = Object.values(state.topics).flatMap((topic) =>
-      Object.values(topic.concepts)
-        .filter((concept) => concept.nextReview !== null)
-        .map((concept) => ({
+      Object.values(topic.concepts).flatMap((concept) => {
+        const reason = getReviewReason(concept);
+        if (reason === null) return [];
+        return [{
           topicId: topic.id,
           conceptId: concept.id,
           conceptName: concept.name,
           level: concept.level,
-          dueAt: concept.nextReview as string,
-          reason: concept.evidence.some(
-            (evidence) => evidence.type === "contradiction" && !evidence.stale,
-          )
-            ? "contradiction"
-            : concept.status === "blocked"
-              ? "prerequisite_gap"
-              : "scheduled_review",
+          dueAt: concept.nextReview,
+          reason,
           targetCapability: topic.targetCapability,
-        })),
+        }];
+      }),
     );
-    items.sort(
-      (left, right) =>
-        left.dueAt.localeCompare(right.dueAt) ||
+    const reasonPriority = {
+      contradiction: 0,
+      prerequisite_gap: 1,
+      scheduled_review: 2,
+    } as const;
+    items.sort((left, right) => {
+      const reasonComparison = reasonPriority[left.reason] - reasonPriority[right.reason];
+      if (reasonComparison !== 0) return reasonComparison;
+      if (left.dueAt !== right.dueAt) {
+        if (left.dueAt === null) return -1;
+        if (right.dueAt === null) return 1;
+        const dueComparison = left.dueAt.localeCompare(right.dueAt);
+        if (dueComparison !== 0) return dueComparison;
+      }
+      return (
+        left.level - right.level ||
         left.topicId.localeCompare(right.topicId) ||
-        left.conceptId.localeCompare(right.conceptId),
-    );
+        left.conceptId.localeCompare(right.conceptId)
+      );
+    });
     return { revision: inspection.revision, items };
   }
 
@@ -589,6 +658,7 @@ export class LearningVault {
     this.requireScope(principal, "vault:read");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
+    this.requirePrivateInspection(inspection);
     if (inspection.revision !== request.baseRevision) {
       throw new VaultError(
         "stale_revision",
@@ -597,7 +667,7 @@ export class LearningVault {
         true,
       );
     }
-    const state = await this.readVaultDocument(binding);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const topic = state.topics[request.selection.topicId];
     if (topic === undefined) {
       throw new VaultError(
@@ -657,7 +727,10 @@ export class LearningVault {
         sessions: sessionIds.map((id) => ({ id, path: topic.sessions[id]?.path ?? "" })),
         evidenceIds: [...removedEvidenceIds].sort(),
         reviewItems: conceptIds
-          .filter((id) => topic.concepts[id]?.nextReview !== null)
+          .filter((id) => {
+            const concept = topic.concepts[id];
+            return concept !== undefined && getReviewReason(concept) !== null;
+          })
           .map((conceptId) => ({ topicId: topic.id, conceptId })),
         prerequisiteReferences: Object.values(topic.concepts).flatMap((concept) =>
           concept.prerequisites
@@ -683,6 +756,7 @@ export class LearningVault {
     this.requireScope(principal, "vault:write");
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
+    this.requirePrivateInspection(inspection);
     if (!request.confirmed) {
       return {
         status: "cancelled" as const,
@@ -701,7 +775,7 @@ export class LearningVault {
       );
     }
 
-    const state = await this.readVaultDocument(binding);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const topic = state.topics[request.selection.topicId];
     if (topic === undefined) {
       throw new VaultError("validation", "topic_not_found", "The selected Topic no longer exists.", true);
@@ -738,12 +812,6 @@ export class LearningVault {
         delete topic.sessions[sessionId];
       }
     }
-    state.reviewQueue = state.reviewQueue.filter((item) => {
-      if (item === null || typeof item !== "object") return true;
-      const queueItem = item as { topicId?: unknown; conceptId?: unknown };
-      if (queueItem.topicId !== request.selection.topicId) return true;
-      return !request.selection.forgetTopic && !selectedConcepts.has(String(queueItem.conceptId));
-    });
     state.learningStrategy.observations = state.learningStrategy.observations.filter(
       (observation) =>
         !preview.affected.strategyObservationIds.includes(observation.id) &&
@@ -771,9 +839,18 @@ export class LearningVault {
     request: PreparePublicExportInput,
   ) {
     this.requireScope(principal, "vault:write");
+    if (!request.confirmed) {
+      throw new VaultError(
+        "validation",
+        "export_confirmation_required",
+        "Review and explicitly confirm the Public Export whitelist before preparing it.",
+        true,
+      );
+    }
     const binding = await this.requireBinding(principal);
     const inspection = await this.repository.inspect(binding);
-    const state = await this.readVaultDocument(binding);
+    this.requirePrivateInspection(inspection);
+    const state = await this.readVaultDocument(binding, inspection.revision);
     const existing = state.publicExports[request.exportId];
     if (existing !== undefined) {
       const original = await this.repository.findCommitByMarker(
@@ -873,7 +950,7 @@ export class LearningVault {
           excluded.push({ item, reason: "unsupported_claim" });
           continue;
         }
-        const markdown = await this.repository.readFile(binding, note.path);
+        const markdown = await this.repository.readFile(binding, note.path, inspection.revision);
         if (markdown === null) {
           throw new VaultError(
             "incompatible_schema",
@@ -908,14 +985,14 @@ export class LearningVault {
     }
 
     const candidatePath = `public-exports/${request.exportId}/README.md`;
-    const candidate = [
+    const candidate = redactPublicIdentifiers([
       `# ${request.title}`,
       "",
       "> Public Export candidate. Publish only to a separate repository with clean history after review.",
       "",
       ...sections,
       "",
-    ].join("\n");
+    ].join("\n"));
     if (containsSecret(candidate)) {
       throw new VaultError(
         "privacy_rejection",
@@ -1036,13 +1113,11 @@ export class LearningVault {
     }[status];
   }
 
-  private async readVaultDocument(binding: {
-    installationId: number;
-    owner: string;
-    repository: string;
-    repositoryId: number;
-  }): Promise<VaultDocument> {
-    const rawState = await this.repository.readFile(binding, VAULT_STATE_PATH);
+  private async readVaultDocument(
+    binding: VaultBinding,
+    revision: string,
+  ): Promise<VaultDocument> {
+    const rawState = await this.repository.readFile(binding, VAULT_STATE_PATH, revision);
     if (rawState === null) {
       throw new VaultError(
         "incompatible_schema",
@@ -1051,6 +1126,10 @@ export class LearningVault {
         true,
       );
     }
+    return this.parseVaultDocument(rawState);
+  }
+
+  private parseVaultDocument(rawState: string): VaultDocument {
     try {
       return vaultDocumentSchema.parse(JSON.parse(rawState));
     } catch {
@@ -1082,6 +1161,17 @@ export class LearningVault {
         "authorization",
         "insufficient_scope",
         `The operation requires the ${scope} scope.`,
+        true,
+      );
+    }
+  }
+
+  private requirePrivateInspection(inspection: RepositoryInspection): void {
+    if (!inspection.private) {
+      throw new VaultError(
+        "authorization",
+        "private_vault_required",
+        "The bound Learning Vault is no longer private, so the operation was blocked.",
         true,
       );
     }

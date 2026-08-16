@@ -54,6 +54,7 @@ describe("agent-memory private-alpha learning journey", () => {
         baseRevision: "rev-ready",
         meaningful: true,
         record: true,
+        privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
         topic: {
           id: "agent-memory",
           title: "Agent memory",
@@ -72,7 +73,7 @@ describe("agent-memory private-alpha learning journey", () => {
             status: "blocked",
             prerequisites: [],
             openQuestion: false,
-            level: 1,
+            level: 0,
             nextReview: "2026-08-15T08:00:00.000Z",
           },
         ],
@@ -124,6 +125,7 @@ describe("agent-memory private-alpha learning journey", () => {
         baseRevision: "rev-1",
         meaningful: true,
         record: true,
+        privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
         topic: {
           id: "agent-memory",
           title: "Agent memory",
@@ -184,6 +186,7 @@ describe("agent-memory private-alpha learning journey", () => {
         baseRevision: "rev-2",
         meaningful: true,
         record: true,
+        privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
         topic: {
           id: "database-indexing",
           title: "Database indexing",

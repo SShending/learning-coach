@@ -108,6 +108,7 @@ describe("Learning Update privacy minimization", () => {
         harness.callError("save_learning_update", {
           ...updateWithText("A proprietary repository used the same memory pattern."),
           privacy: {
+            reviewed: true,
             sensitiveContext: [],
             sourceExcerpts: [
               {
@@ -126,6 +127,7 @@ describe("Learning Update privacy minimization", () => {
       await harness.call("save_learning_update", {
         ...updateWithText(`The account ${email} exposed a retrieval gap.`),
         privacy: {
+          reviewed: true,
           sensitiveContext: [
             {
               kind: "personal_identifier",
@@ -146,6 +148,24 @@ describe("Learning Update privacy minimization", () => {
       expect(note).toContain("a private workplace account");
       expect(session).toContain("a private workplace account");
       expect(`${note}${session}`).not.toContain(email);
+    } finally {
+      await harness.close();
+    }
+  });
+
+  it("requires an explicit content-classification review before persistence", async () => {
+    const harness = await readyHarness();
+
+    try {
+      await expect(
+        harness.callError(
+          "save_learning_update",
+          updateWithText("A safe distilled explanation with no source excerpt."),
+        ),
+      ).resolves.toMatchObject({
+        category: "privacy_rejection",
+        code: "privacy_review_required",
+      });
     } finally {
       await harness.close();
     }

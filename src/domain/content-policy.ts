@@ -61,6 +61,15 @@ export function minimizeLearningUpdate(update: LearningUpdateInput): LearningUpd
     );
   }
 
+  if (update.meaningful && update.record && update.privacy === undefined) {
+    throw new VaultError(
+      "privacy_rejection",
+      "privacy_review_required",
+      "Classify sensitive context and source excerpts before persisting this Learning Update.",
+      true,
+    );
+  }
+
   if (update.privacy?.sourceExcerpts.some((excerpt) => !excerpt.confirmed)) {
     throw new VaultError(
       "privacy_rejection",

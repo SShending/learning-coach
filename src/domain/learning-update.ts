@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { distinctTopicIdsSchema } from "./learning-strategy.js";
+
 const topicOrientationSchema = z
   .object({
     id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -71,7 +73,7 @@ const sessionChangeSchema = z
 const strategyObservationChangeSchema = z
   .object({
     id: z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/),
-    topicIds: z.array(z.string().min(1)).min(2),
+    topicIds: distinctTopicIdsSchema,
     condition: z.string().min(1),
     approach: z.string().min(1),
     effect: z.string().min(1),
@@ -83,6 +85,7 @@ const strategyObservationChangeSchema = z
 
 const privacySchema = z
   .object({
+    reviewed: z.literal(true),
     sensitiveContext: z.array(
       z
         .object({

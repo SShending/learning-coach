@@ -48,7 +48,7 @@ const readyVault = JSON.stringify({
           claimStatus: "confirmed",
           sources: [
             {
-              title: "MCP authorization specification",
+              title: "MCP authorization specification for alice@example.com",
               url: "https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization",
               status: "confirmed",
               kind: "primary",
@@ -122,10 +122,29 @@ describe("Public Export preparation", () => {
         repository: "learning-vault",
       });
       await expect(
+        harness.callError("prepare_public_export", {
+          exportId: "agent-memory-retrieval",
+          baseRevision: "rev-ready",
+          title: "Agent memory: selective retrieval",
+          confirmed: false,
+          selection: [
+            {
+              topicId: "agent-memory",
+              conceptIds: ["retrieval"],
+              noteIds: ["retrieval-note"],
+            },
+          ],
+        }),
+      ).resolves.toMatchObject({
+        category: "validation",
+        code: "export_confirmation_required",
+      });
+      await expect(
         harness.call("prepare_public_export", {
           exportId: "agent-memory-retrieval",
           baseRevision: "rev-ready",
           title: "Agent memory: selective retrieval",
+          confirmed: true,
           selection: [
             {
               topicId: "agent-memory",
@@ -182,6 +201,7 @@ describe("Public Export preparation", () => {
           exportId: "agent-memory-retrieval",
           baseRevision: "rev-ready",
           title: "Agent memory: selective retrieval",
+          confirmed: true,
           selection: [
             {
               topicId: "agent-memory",
@@ -224,6 +244,7 @@ describe("Public Export preparation", () => {
           exportId: "out-of-bounds",
           baseRevision: "rev-1",
           title: "Out of bounds",
+          confirmed: true,
           selection: [
             {
               topicId: "agent-memory",
@@ -276,6 +297,7 @@ describe("Public Export preparation", () => {
           exportId: "secret-candidate",
           baseRevision: "rev-ready",
           title: "Unsafe candidate",
+          confirmed: true,
           selection: [
             {
               topicId: "agent-memory",

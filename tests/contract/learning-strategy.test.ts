@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { saveLearningUpdateInputSchema } from "../../src/domain/learning-update.js";
+import { vaultDocumentSchema } from "../../src/domain/vault-state.js";
 import { createContractHarness } from "../support/contract-harness.js";
 
 const initialVault = JSON.stringify({
@@ -50,6 +52,129 @@ const initialVault = JSON.stringify({
 });
 
 describe("cross-Topic Learning Strategy", () => {
+  it("requires at least two distinct Topic identifiers at input and persistence boundaries", () => {
+    const observation = {
+      id: "duplicate-topic-strategy",
+      topicIds: ["agent-memory", "agent-memory"],
+      condition: "When learning an invisible runtime mechanism",
+      approach: "Start from a trace",
+      effect: "The learner recognizes the mechanism",
+      evidenceRefs: ["evidence-agent-example"],
+      observedAt: "2026-08-15T08:00:00.000Z",
+      supersedes: null,
+    };
+
+    expect(
+      saveLearningUpdateInputSchema.safeParse({
+        updateId: "duplicate-topic-update",
+        baseRevision: "rev-ready",
+        meaningful: false,
+        record: true,
+        strategyObservations: [observation],
+      }).success,
+    ).toBe(false);
+    expect(
+      vaultDocumentSchema.safeParse({
+        ...JSON.parse(initialVault),
+        learningStrategy: {
+          observations: [{ ...observation, status: "active" }],
+        },
+      }).success,
+    ).toBe(false);
+  });
+
+  it("requires referenced evidence from every Topic in the observation", async () => {
+    const harness = await createContractHarness({
+      repositories: [
+        {
+          installationId: 7,
+          repositoryId: 42,
+          owner: "learner",
+          repository: "learning-vault",
+          private: true,
+          defaultBranch: "main",
+          revision: "rev-ready",
+          commitId: "commit-ready",
+          files: { ".learning-vault/vault.json": initialVault },
+        },
+      ],
+    });
+
+    try {
+      await harness.call("bind_vault", {
+        installationId: 7,
+        owner: "learner",
+        repository: "learning-vault",
+      });
+      await expect(
+        harness.callError("save_learning_update", {
+          updateId: "single-topic-strategy",
+          baseRevision: "rev-ready",
+          meaningful: true,
+          record: true,
+          privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
+          topic: {
+            id: "database-indexing",
+            title: "Database indexing",
+            goal: "Choose useful indexes",
+            targetCapability: "Diagnose a slow query and propose an index",
+            scope: [],
+            nonGoals: [],
+            currentFocus: "B-tree lookup",
+            knownGaps: [],
+            nextStep: "Compare two query plans",
+          },
+          concepts: [
+            {
+              id: "btree",
+              name: "B-tree lookup",
+              status: "learning",
+              prerequisites: [],
+              openQuestion: false,
+              level: 1,
+              nextReview: null,
+            },
+          ],
+          evidence: [
+            {
+              id: "evidence-index-recognition",
+              conceptId: "btree",
+              observedAt: "2026-08-15T08:00:00.000Z",
+              type: "recognition",
+              summary: "Recognized the B-tree lookup in one query plan.",
+              stale: false,
+            },
+          ],
+          notes: [],
+          session: {
+            id: "session-index-recognition",
+            learnerRequest: "Show me the B-tree lookup.",
+            evidenceObserved: ["Recognized one B-tree lookup."],
+            gapsExposed: [],
+            nextStep: "Compare two query plans",
+          },
+          strategyObservations: [
+            {
+              id: "strategy-with-one-topic-evidence",
+              topicIds: ["agent-memory", "database-indexing"],
+              condition: "When learning an invisible runtime mechanism",
+              approach: "Start from a trace",
+              effect: "The learner recognizes the mechanism",
+              evidenceRefs: ["evidence-index-recognition"],
+              observedAt: "2026-08-15T08:00:00.000Z",
+              supersedes: null,
+            },
+          ],
+        }),
+      ).resolves.toMatchObject({
+        category: "validation",
+        code: "strategy_evidence_not_cross_topic",
+      });
+    } finally {
+      await harness.close();
+    }
+  });
+
   it("records evidence-backed strategy and later revises it without a learning-style label", async () => {
     const harness = await createContractHarness({
       now: "2026-08-15T08:00:00.000Z",
@@ -79,6 +204,7 @@ describe("cross-Topic Learning Strategy", () => {
         baseRevision: "rev-ready",
         meaningful: true,
         record: true,
+        privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
         topic: {
           id: "database-indexing",
           title: "Database indexing",
@@ -153,6 +279,7 @@ describe("cross-Topic Learning Strategy", () => {
         baseRevision: "rev-1",
         meaningful: true,
         record: true,
+        privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
         topic: {
           id: "agent-memory",
           title: "Agent memory",

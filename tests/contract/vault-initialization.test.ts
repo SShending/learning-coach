@@ -34,6 +34,9 @@ describe("initialize_vault", () => {
         revision: "rev-1",
         commitId: "commit-1",
       });
+      const rawState = await harness.readRepositoryFile(".learning-vault/vault.json");
+      expect(rawState).not.toBeNull();
+      expect(JSON.parse(rawState as string)).not.toHaveProperty("reviewQueue");
       await expect(harness.call("get_vault_status", {})).resolves.toEqual({
         status: "ready",
         schemaVersion: 1,
@@ -84,6 +87,39 @@ describe("initialize_vault", () => {
       await expect(harness.call("get_vault_status", {})).resolves.toMatchObject({
         status: "uninitialized",
         revision: "rev-existing",
+      });
+    } finally {
+      await harness.close();
+    }
+  });
+
+  it("reports malformed Vault JSON as an incompatible schema", async () => {
+    const harness = await createContractHarness({
+      repositories: [
+        {
+          installationId: 7,
+          repositoryId: 42,
+          owner: "learner",
+          repository: "learning-vault",
+          private: true,
+          defaultBranch: "main",
+          revision: "rev-malformed",
+          files: { ".learning-vault/vault.json": "{not-json" },
+        },
+      ],
+    });
+
+    try {
+      await harness.call("bind_vault", {
+        installationId: 7,
+        owner: "learner",
+        repository: "learning-vault",
+      });
+      await expect(
+        harness.callError("initialize_vault", { baseRevision: "rev-malformed" }),
+      ).resolves.toMatchObject({
+        category: "incompatible_schema",
+        code: "unsupported_schema",
       });
     } finally {
       await harness.close();

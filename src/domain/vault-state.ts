@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { distinctTopicIdsSchema } from "./learning-strategy.js";
 import { publicExportRecordSchema } from "./public-export.js";
 
 export const VAULT_SCHEMA_VERSION = 1;
@@ -68,7 +69,7 @@ export const topicStateSchema = z.object({
 
 export const strategyObservationSchema = z.object({
   id: z.string().min(1),
-  topicIds: z.array(z.string().min(1)).min(2),
+  topicIds: distinctTopicIdsSchema,
   condition: z.string().min(1),
   approach: z.string().min(1),
   effect: z.string().min(1),
@@ -84,7 +85,6 @@ export const vaultDocumentSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   topics: z.record(z.string(), topicStateSchema),
-  reviewQueue: z.array(z.unknown()),
   learningStrategy: z.object({ observations: z.array(strategyObservationSchema) }),
   appliedUpdates: z.record(
     z.string(),
@@ -109,7 +109,6 @@ export function createEmptyVaultDocument(
     createdAt: now,
     updatedAt: now,
     topics: {},
-    reviewQueue: [],
     learningStrategy: { observations: [] },
     appliedUpdates: {},
     publicExports: {},

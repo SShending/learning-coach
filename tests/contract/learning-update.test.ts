@@ -19,6 +19,7 @@ const firstUpdate = {
   baseRevision: "rev-ready",
   meaningful: true,
   record: true,
+  privacy: { reviewed: true, sensitiveContext: [], sourceExcerpts: [] },
   topic: {
     id: "agent-memory",
     title: "Agent memory",

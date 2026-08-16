@@ -45,7 +45,7 @@ export class MemoryVaultRepository implements VaultRepository {
     return inspection;
   }
 
-  async readFile(binding: VaultBinding, path: string): Promise<string | null> {
+  async readFile(binding: VaultBinding, path: string, _revision?: string): Promise<string | null> {
     const repository = this.boundRepository(binding);
     return repository.files.get(path) ?? null;
   }
@@ -99,6 +99,10 @@ export class MemoryVaultRepository implements VaultRepository {
 
   setWriteAvailability(available: boolean): void {
     this.#writeAvailable = available;
+  }
+
+  setPrivacy(binding: VaultBinding, privateRepository: boolean): void {
+    this.boundRepository(binding).private = privateRepository;
   }
 
   async findCommitByMarker(
