@@ -1,20 +1,20 @@
 {
   "name": "learning-coach",
   "version": "3.0.0-alpha.2",
-  "description": "Evidence-based learning across ChatGPT conversations with a private GitHub Learning Vault.",
+  "description": "Turn questions and practice into a private, persistent knowledge tree with mastery evidence.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
   },
   "homepage": "https://github.com/SShending/learning-coach",
   "repository": "https://github.com/SShending/learning-coach",
-  "license": "MIT",
-  "keywords": ["learning", "memory", "review", "github", "mcp"],
+  "license": "Apache-2.0",
+  "keywords": ["learning", "knowledge-tree", "memory", "review", "github", "mcp"],
   "skills": "./skills/",
   "interface": {
     "displayName": "Learning Coach",
-    "shortDescription": "Resume learning from evidence, not chat history",
-    "longDescription": "Diagnose gaps, teach responsively, track mastery evidence, and maintain one private GitHub Learning Vault across ChatGPT conversations.",
+    "shortDescription": "Build a private knowledge tree that grows with you",
+    "longDescription": "Diagnose gaps, learn through practice, track mastery evidence, and grow a private GitHub-backed knowledge tree across ChatGPT conversations.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
