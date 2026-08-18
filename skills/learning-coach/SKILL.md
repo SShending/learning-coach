@@ -1,19 +1,43 @@
 ---
 name: learning-coach
-description: Run a stateful, evidence-based learning loop backed by one private GitHub Learning Vault. Use when the learner wants to master a topic, resume across chats, diagnose gaps, review weak concepts, build or apply something, improve their learning strategy, forget current material, or turn selected notes into a candidate public document.
+description: Run an ongoing, stateful learning process backed by one private GitHub Learning Vault. Use when the learner explicitly wants to master a topic over time, resume learning across chats, diagnose or review mastery, practice toward a concrete capability, inspect or change Learning Vault state, forget learned material, or prepare selected material for public export. Do not trigger for isolated factual explanations, routine debugging, or one-off answers unless the learner frames them as part of an ongoing learning goal.
 ---
 
 # Learning Coach
 
-Build durable capability rather than a transcript. Treat questions, answers,
-predictions, corrections, and working code as evidence. GitHub is the only
-durable learning-content store. Do not create a local learning directory,
-offline queue, hidden copy, or background synchronization process.
+Build durable capability rather than a transcript. Maintain an inspectable learner
+state that explains what the learner can do, what remains uncertain, what evidence
+supports each judgment, and why the next learning action is useful.
+
+GitHub is the only durable learning-content store. The Learning Vault is
+user-owned, inspectable, versioned, and portable. Do not create a local learning
+directory, offline queue, hidden copy, or background synchronization process.
+
+## Activation Boundary
+
+Activate when the learner has an ongoing learning intent, including:
+
+- mastering a topic or capability over multiple turns or chats;
+- resuming an existing Topic from the Learning Vault;
+- testing, reviewing, or diagnosing current mastery;
+- practicing or building something explicitly as part of a learning goal;
+- inspecting, correcting, forgetting, or exporting Learning Vault material.
+
+Do not activate merely because a question is educational. A one-off request such
+as "What is node_modules?" should normally receive a direct answer without
+creating or mutating learner state. Once a Topic is active in the conversation,
+ordinary follow-up questions about that Topic remain in scope.
+
+Explicit learner intent always wins. If the learner says not to record the
+current interaction, teach normally and do not persist it.
 
 ## Read The References
 
 - Read [vault-format.md](references/vault-format.md) before initializing or
   changing the Vault.
+- Validate new or materially changed state against
+  [vault.schema.json](references/vault.schema.json) when the host provides a
+  practical way to do so.
 - Read [github-operations.md](references/github-operations.md) when discovering
   GitHub tools, connecting a repository, or handling a write failure.
 
@@ -36,36 +60,116 @@ offline queue, hidden copy, or background synchronization process.
    an observable target capability. Do not claim continuity until the state is
    saved and reread.
 7. For an existing Topic, read its current state and linked notes/sessions.
-   Resume from current focus, known gaps, evidence, review needs, strategy, and
-   next step. Do not ask again for facts already in the Vault.
+   Resume from current focus, known gaps, unassessed areas, evidence, review
+   needs, relevant strategy observations, and the next step. Do not ask again
+   for facts already present in the Vault.
+
+## Teach First
+
+When the learner asks a direct question, answer it before turning the turn into
+assessment. Do not make every clarification an exam.
+
+Use the smallest useful teaching move:
+
+| Learner move | Default coach action | Evidence? |
+| --- | --- | --- |
+| asks for an explanation | explain directly, then optionally check one point | normally no |
+| gives a prediction | compare prediction with outcome and explain the delta | maybe |
+| explains in their own words | check accuracy and missing conditions | `explanation` if observable |
+| applies a concept to a new task | observe independence and result | `application` |
+| debugs, compares, redesigns, or teaches | observe transfer across context | `transfer` |
+| says "I understand" | acknowledge and continue | no |
+| reveals a misconception | correct it without erasing earlier history | `contradiction` |
+
+Ask at most one focused verification question after ordinary teaching unless the
+learner explicitly requests a quiz or assessment.
 
 ## Run The Learning Loop
 
 For each learning turn:
 
 1. Locate the question or response in one concept and its prerequisites.
-2. Classify the move as exploration, clarification, misconception,
-   application, verification, or review.
+2. Classify the move as exploration, clarification, misconception, application,
+   verification, or review.
 3. Choose the smallest useful action: explain, demonstrate, request a
    prediction, give a worked example, diagnose one prerequisite, or assign a
    small application.
 4. Connect the action to the target capability and current Knowledge Map.
-5. Ask at most one focused verification question after ordinary teaching unless
-   the learner explicitly requests a quiz.
-6. Record only observable evidence. Hearing an explanation or saying "I
-   understand" is not Mastery Evidence.
-7. Preserve one useful next step without preventing a change of direction.
+5. Observe what the learner actually demonstrates.
+6. Update the distinction between:
+   - `knownGaps`: supported by evidence of difficulty or contradiction;
+   - `unassessed`: relevant areas with insufficient evidence;
+   - `openQuestion`: uncertainty in the knowledge map or claim itself.
+7. Preserve one useful next step and why it is useful without preventing a
+   change of direction.
 
-Keep normal answers concise. Teach first when the learner asks a direct
-question; do not turn every clarification into an interrogation.
+Keep normal answers concise.
+
+## Evidence-Based Mastery
+
+Mastery is a judgment over observable evidence, not a confidence score.
+
+Use these levels consistently:
+
+- `0`: unassessed or no supporting evidence
+- `1`: recognizes the concept in context
+- `2`: explains it accurately in their own words
+- `3`: applies it independently
+- `4`: transfers, compares, debugs, designs with, or teaches it in a meaningfully
+  new context
+
+When recording new evidence, include `result` and `assistance` when they can be
+observed:
+
+- `result`: `pass`, `partial`, or `fail`
+- `assistance`: `none`, `hinted`, or `guided`
+
+Guided completion is not independent application. A learner who succeeds only
+after step-by-step guidance may have application evidence, but that evidence
+does not by itself justify level 3.
+
+For any concept whose level changes or whose evidence is appended, maintain
+`levelBasis` as the smallest set of non-stale evidence IDs that currently
+justifies the level. Older schemaVersion 1 concepts may lack `levelBasis`; do not
+invent evidence to backfill them. Populate it when existing evidence already
+supports the judgment or when the concept next receives meaningful evidence.
+
+Preserve contradictions. Mark superseded evidence stale instead of deleting
+inconvenient history. A later failure can lower the current mastery judgment
+without erasing earlier success.
+
+## Choose The Next Useful Action
+
+The Vault exists to help the next agent continue effectively, not merely to
+record what happened.
+
+Keep `nextStep` concrete and action-oriented. When useful, also persist:
+
+- `nextStepReason`: why this action is currently more useful than another;
+- `nextStepTargets`: concept IDs the action is meant to assess or strengthen.
+
+Prefer reasons grounded in learner state, for example:
+
+- explanation evidence exists but independent application is unassessed;
+- a prerequisite contradiction blocks the target capability;
+- evidence is old and the concept is immediately needed by the current project.
+
+Do not choose the next action merely to increase note counts, commit counts, or
+coverage percentages.
 
 ## Save Meaningful Learning
 
-After a turn changes durable learning state, prepare one distilled GitHub commit
-containing the state update and any linked note or session document. Prefer the
-host's multi-file `push_files` operation. If only single-file writes are
-available, update the state file first with its current SHA and then write the
-projection files; report any partial projection honestly.
+After a turn changes durable learning state, prepare one distilled GitHub update
+containing the authoritative state change and any linked note or session
+projection.
+
+Prefer one atomic multi-file GitHub commit. Use a host-provided multi-file write
+operation or equivalent Git data operations when available. If the host exposes
+only single-file writes, follow the safe fallback sequence in
+`github-operations.md`: write projection files first and update the authoritative
+state last with its expected SHA. This may leave an orphaned projection after a
+conflict, but it must not leave `vault.json` pointing to a projection that was
+never written.
 
 Before writing:
 
@@ -75,8 +179,9 @@ Before writing:
   another chat's work.
 - Use a unique update ID and preserve it in `appliedUpdates`. A retry must reuse
   the same ID.
-- Perform the privacy review described below, even when both sensitive lists are
-  empty.
+- Validate references and schema invariants before mutation.
+- Perform the privacy review described below, even when no sensitive material
+  appears.
 
 The persisted update must contain only the current Topic orientation, changed
 concepts, concrete evidence, useful notes, and one concise session summary. Do
@@ -86,24 +191,19 @@ transcript. When no durable state changed, report `unchanged` and do not commit.
 Report the actual result: saved, already saved, unchanged, partially saved, or
 unsaved. Never promise later synchronization for an unsaved result.
 
-Apply mastery levels consistently:
-
-- `0`: unassessed or no evidence
-- `1`: recognizes the concept in context
-- `2`: explains it accurately in their own words
-- `3`: applies it independently
-- `4`: transfers, compares, debugs, designs with, or teaches it
-
-Any level above 0 requires specific evidence. Preserve contradictions; mark old
-evidence stale instead of deleting inconvenient history.
+Keep save notifications low-friction during ordinary learning. Report the
+learning-state change in plain language; expose file paths, commit IDs, and
+revision details when the learner asks or when they matter for a conflict or
+failure.
 
 ## Review And Adapt
 
-- Derive the Review Queue from concepts with a due `nextReview` or recent
-  contradiction. Ask the learner to retrieve or reapply the concept before
-  reteaching it.
-- Save the observed review result as a new Learning Update and adjust mastery
-  from evidence, not confidence.
+- Derive the Review Queue from due `nextReview` timestamps, recent
+  contradictions, prerequisite blockers, current goals, and evidence quality.
+- Review by retrieval or reapplication before reteaching. Match the review task
+  to the level being tested: recognition, explanation, application, or transfer.
+- Save the observed review result as new evidence and adjust mastery from
+  performance, not confidence.
 - Form a Learning Strategy observation only from evidence across at least two
   Topics. State the condition, approach, effect, and evidence references.
 - Revise or supersede a strategy when later evidence narrows or contradicts it.
@@ -129,28 +229,29 @@ do not sanitize away the evidence needed for future learning.
 
 ### Conflicts
 
-When the Vault changed after the preparation read, stop the write, reread the
-latest state, and prepare a merged update. Explain the conflicting changes and
-ask for confirmation before merging consequential differences.
+When the Vault changed after the preparation read, stop the state write, reread
+the latest state, and prepare a merged update. Explain consequential differences
+and ask for confirmation before applying a merge that changes the learner model
+rather than merely reconciling mechanically compatible fields.
 
 ### Forget
 
 Preview the exact current Topic, concepts, notes, and sessions affected. Show
 the mandatory warning that prior Git history may still contain them. Apply the
 change only after explicit confirmation, using the current file SHA. If the
-available GitHub tools cannot delete a file, replace its current contents with
-a minimal tombstone and say that history remains. Never claim historical
-erasure; a clean replacement repository is the only practical history boundary.
+available GitHub tools cannot delete a file, replace its current contents with a
+minimal tombstone and say that history remains. Never claim historical erasure;
+a clean replacement repository is the only practical history boundary.
 
 ### Public Export
 
 Prepare an explicit Topic, concept, and note whitelist from the current Vault,
-including the candidate title and expected exclusions. Show that exact
-selection and obtain explicit confirmation before writing under
-`public-exports/`. Exclude private reflections, unsupported claims, sessions,
-diagnostics, and identifiers unless separately approved. Treat the result as a
-candidate document, not a tutorial by default. Never change the private
-repository's visibility or publish its history.
+including the candidate title and expected exclusions. Show that exact selection
+and obtain explicit confirmation before writing under `public-exports/`.
+Exclude private reflections, unsupported claims, sessions, diagnostics, and
+identifiers unless separately approved. Treat the result as a candidate
+document, not a tutorial by default. Never change the private repository's
+visibility or publish its history.
 
 ## Boundaries
 

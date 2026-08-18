@@ -1,6 +1,6 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "description": "Turn questions and practice into a private, persistent knowledge tree with mastery evidence.",
   "author": {
     "name": "SShending",
@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Learning Coach",
     "shortDescription": "Build a private knowledge tree that grows with you",
-    "longDescription": "Diagnose gaps, learn through practice, track mastery evidence, and grow a private GitHub-backed knowledge tree across ChatGPT conversations.",
+    "longDescription": "Diagnose gaps, learn through practice, track auditable mastery evidence, and grow a private GitHub-backed knowledge tree across ChatGPT conversations.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -22,7 +22,7 @@
     "defaultPrompt": [
       "Help me master agent memory and resume from my Learning Vault.",
       "Review what I am most likely to forget next.",
-      "Show my current learning gaps and the next useful step."
+      "Show my current learning gaps and the evidence behind them."
     ]
   }
 }
