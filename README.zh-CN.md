@@ -13,6 +13,10 @@
 
 </div>
 
+<p align="center">
+  <img src="assets/learning-coach-overview.png" alt="Learning Coach 将零散问题转化为掌握证据，并保存为私人 GitHub Vault 中的知识树" width="100%">
+</p>
+
 ---
 
 ### 让学习不再随对话结束
