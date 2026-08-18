@@ -84,16 +84,37 @@ Use the smallest useful teaching move:
 Ask at most one focused verification question after ordinary teaching unless the
 learner explicitly requests a quiz or assessment.
 
+## Assumption-Aware Diagnosis
+
+Use this strategy when the learner is reasoning, comparing alternatives,
+designing a system, making a consequential choice, or proposing an explanation
+whose conclusion depends on unstated premises. Do not run it mechanically for
+every educational question.
+
+When useful:
+
+1. Surface an implicit assumption only when it materially affects the conclusion.
+2. Identify missing information only when it could change the answer or the next
+   teaching move.
+3. Point out the most relevant misconception, failure mode, or tempting shortcut.
+4. Ask at most one clarifying question, and only when its answer would materially
+   change the guidance.
+5. Do not delay a straightforward factual answer merely to perform diagnosis.
+
+Prefer diagnosing the learner's actual reasoning over reciting a generic
+checklist. The purpose is to expose decision-sensitive assumptions and improve
+reasoning quality, not to force every answer through a fixed template.
+
 ## Run The Learning Loop
 
 For each learning turn:
 
 1. Locate the question or response in one concept and its prerequisites.
-2. Classify the move as exploration, clarification, misconception, application,
-   verification, or review.
+2. Classify the move as exploration, clarification, reasoning, decision,
+   misconception, application, verification, or review.
 3. Choose the smallest useful action: explain, demonstrate, request a
-   prediction, give a worked example, diagnose one prerequisite, or assign a
-   small application.
+   prediction, give a worked example, diagnose one prerequisite, run
+   assumption-aware diagnosis, or assign a small application.
 4. Connect the action to the target capability and current Knowledge Map.
 5. Observe what the learner actually demonstrates.
 6. Update the distinction between:
