@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/learning-coach-overview.png" alt="Learning Coach turns questions into mastery evidence and a knowledge tree stored in a private GitHub Vault" width="100%">
+</p>
+
 <div align="center">
 
 # Learning Coach
@@ -13,9 +17,6 @@ English | [简体中文](README.zh-CN.md)
 
 </div>
 
-<p align="center">
-  <img src="assets/learning-coach-overview.png" alt="Learning Coach turns questions into mastery evidence and a knowledge tree stored in a private GitHub Vault" width="100%">
-</p>
 
 ---
 
