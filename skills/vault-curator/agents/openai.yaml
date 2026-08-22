@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vault Curator"
+  short_description: "Review and refactor your Learning Vault"
+  default_prompt: "Use $vault-curator to review my private Learning Vault like a codebase, report structural issues, and propose safe refactors before changing anything."
