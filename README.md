@@ -39,16 +39,19 @@ Learning Coach saves only durable learning changes, not every conversation.
 
 # Usage
 
-Learning Coach is a portable Agent Skill that helps AI assistants maintain a long-term learning process through a GitHub-backed Learning Vault.
+Learning Coach is a portable Agent Skill that helps AI assistants maintain a long-term learning process through a GitHub-based Learning Vault.
 
 ```text
 Learning Coach Skill
-        +
-Learning Vault
+        |
+        v
+GitHub Learning Vault
         |
         v
 Persistent learning memory
 ```
+
+The Skill defines the learning workflow. The Vault stores your durable learning progress. The host agent provides the capabilities required to run the workflow.
 
 ## Recommended: ChatGPT Project
 
@@ -66,13 +69,7 @@ skills/learning-coach/
 
 4. Connect a private GitHub repository as your Learning Vault.
 
-Your Vault stores:
-
-- learning goals
-- concepts
-- mastery evidence
-- review history
-- next steps
+See [ChatGPT Project Setup](docs/chatgpt-project.md) for detailed instructions.
 
 ### Start learning
 
@@ -103,15 +100,15 @@ Learning Coach restores your learning state and continues from the next useful s
 
 If your agent environment supports Skills:
 
-1. Install Learning Coach as a Skill.
-2. Connect your Learning Vault.
+1. Load Learning Coach as a Skill.
+2. Provide access to your Learning Vault.
 3. Use:
 
 ```text
 Use Learning Coach.
 ```
 
-The Skill provides the same learning workflow with automatic loading.
+The same workflow can be used by different agent environments.
 
 ## Learning Vault
 
@@ -128,17 +125,72 @@ Learning state is stored in:
 └── vault.json
 ```
 
-Only durable learning progress is stored. Raw conversations and sensitive information are not saved.
+The Vault stores durable learning progress, including:
 
-## Prompts to try
+- learning goals
+- concepts
+- mastery evidence
+- review history
+- next steps
+
+Raw conversations and sensitive information are not saved.
+
+## Prompt Templates
+
+Start a new learning path:
 
 ```text
-Help me master retrieval-augmented generation well enough to build a small demo.
+Use Learning Coach.
 
-Test the concept I am most likely to forget, then update my mastery from evidence.
+My learning goal:
+<what I want to learn>
 
-Show my current knowledge gaps and explain why each one matters.
+My desired outcome:
+<what I want to achieve>
+
+Current level:
+<my current understanding>
+
+Create or resume my learning path from the Learning Vault.
 ```
+
+Continue learning:
+
+```text
+Use Learning Coach.
+
+Resume my learning path for:
+<topic>
+
+Review my progress and choose the next useful step.
+```
+
+Update progress:
+
+```text
+Use Learning Coach.
+
+I completed:
+<implementation / experiment / explanation>
+
+Evaluate my understanding from evidence and update my Learning Vault if this represents durable progress.
+```
+
+## Companion Skills
+
+Learning Coach can be extended with skills that maintain and improve the Learning Vault.
+
+### Vault Curator
+
+Vault Curator helps maintain a healthy knowledge base by:
+
+- merging duplicated concepts
+- organizing topics
+- detecting outdated information
+- improving knowledge structure
+- preparing review summaries
+
+Run Vault Curator periodically after significant learning progress.
 
 ---
 
