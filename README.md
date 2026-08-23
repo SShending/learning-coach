@@ -30,12 +30,12 @@ Learning Coach turns explanations, mistakes, reviews, and practice into a durabl
 flowchart LR
     Q["Ask a question"] --> M["Locate concepts"]
     M --> A["Explain, predict, build"]
-    A --> E["Capture evidence"]
-    E --> S["Save progress"]
+    A --> E["Observe evidence when demonstrated"]
+    E --> S["Save durable progress when state changes"]
     S --> R["Resume later"]
 ```
 
-Learning Coach saves only durable learning changes, not every conversation.
+Learning Coach does not force assessment after every explanation and does not save every conversation. It persists durable learning changes when they occur.
 
 # Usage
 
@@ -51,7 +51,7 @@ GitHub Learning Vault
 Persistent learning memory
 ```
 
-The Skill defines the learning workflow. The Vault stores your durable learning progress. The host agent provides the capabilities required to run the workflow.
+The Skill defines the learning workflow. The Vault stores your durable learning progress. Normal Learning Coach operation requires the host agent to provide both read and write access to the private Learning Vault.
 
 ## Recommended: ChatGPT Project
 
@@ -67,7 +67,7 @@ The easiest way to use Learning Coach is with a ChatGPT Project.
 skills/learning-coach/
 ```
 
-4. Connect a private GitHub repository as your Learning Vault.
+4. Connect a private GitHub repository as your Learning Vault with repository read and write access.
 
 See [ChatGPT Project Setup](docs/chatgpt-project.md) for detailed instructions.
 
@@ -101,7 +101,7 @@ Learning Coach restores your learning state and continues from the next useful s
 If your agent environment supports Skills:
 
 1. Load Learning Coach as a Skill.
-2. Provide access to your Learning Vault.
+2. Provide read and write access to your private Learning Vault.
 3. Use:
 
 ```text
@@ -135,6 +135,17 @@ The Vault stores durable learning progress, including:
 
 Raw conversations and sensitive information are not saved.
 
+### Access contract
+
+Learning Coach treats the Vault as authoritative learner state:
+
+- **read + write:** full Learning Coach operation;
+- **read only:** inspect existing progress, but do not advance a learning cycle or create new learner state;
+- **write without read:** unsupported; Learning Coach never writes blindly;
+- **no read:** Learning Coach cannot start or resume.
+
+A learner may explicitly choose not to persist a particular interaction even when write access is available. That is different from the host lacking write capability.
+
 ## Prompt Templates
 
 Start a new learning path:
@@ -165,6 +176,19 @@ Resume my learning path for:
 Review my progress and choose the next useful step.
 ```
 
+Capture learning already in progress:
+
+```text
+Use Learning Coach.
+
+I have already been learning:
+<topic>
+
+Help me reconstruct my current learning state from what I have already studied, built, or explained. Distinguish previous exposure from demonstrated mastery, identify what is still unassessed, and continue from the next useful step.
+```
+
+See [Capturing Existing Learning](docs/capturing-existing-learning.md) for the full workflow.
+
 Update progress:
 
 ```text
@@ -182,15 +206,16 @@ Learning Coach can be extended with skills that maintain and improve the Learnin
 
 ### Vault Curator
 
-Vault Curator helps maintain a healthy knowledge base by:
+Vault Curator handles Vault maintenance and lifecycle operations, including:
 
-- merging duplicated concepts
-- organizing topics
-- detecting outdated information
-- improving knowledge structure
-- preparing review summaries
+- reviewing Vault health and structural inconsistencies
+- merging or splitting Topics and consolidating duplicate Concepts
+- cleaning up or archiving learning structure
+- repairing broken references
+- forgetting selected stored material with explicit confirmation
+- preparing public exports from an explicit whitelist
 
-Run Vault Curator periodically after significant learning progress.
+Run Vault Curator periodically after significant learning progress or when the Vault itself needs maintenance.
 
 ---
 
