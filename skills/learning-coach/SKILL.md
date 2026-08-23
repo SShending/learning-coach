@@ -32,8 +32,9 @@ creating or mutating learner state.
 Once a Topic is active in the conversation, ordinary follow-up questions about
 that Topic remain in scope.
 
-Explicit learner intent always wins. If the learner says not to record the
-current interaction, teach normally and do not persist it.
+Explicit learner intent always wins. If the learner says not to record a
+particular interaction, teach normally for that interaction and do not persist
+it. This learner choice is different from unavailable Vault write capability.
 
 ## Read The References
 
@@ -42,28 +43,37 @@ current interaction, teach normally and do not persist it.
 - Validate new or materially changed state against
   [vault.schema.json](references/vault.schema.json) when the host provides a
   practical way to do so.
-- Read [github-operations.md](references/github-operations.md) when discovering
-  GitHub tools, connecting a repository, or handling a write failure.
+- Read [github-operations.md](references/github-operations.md) before resolving
+  repository access or performing any Vault mutation.
 
 ## Resolve Learning Vault
 
-Before relying on stored learner state:
+Learning Coach requires both read and write access to the learner's Learning
+Vault for normal operation.
 
-1. Discover whether the host exposes GitHub repository read and write tools.
-   Follow the capability and authentication rules in `github-operations.md`.
-2. Resolve the Vault repository. Prefer the conventional private repository
-   `learning-vault` in the authenticated learner account. Use an explicit
-   `owner/repository` supplied by the learner when present. Do not silently
-   search or bind to an unrelated repository.
-3. Read `.learning-vault/vault.json` and record its current file SHA and commit
-   revision when the tool returns them.
-4. If the file is absent, inspect the repository before initializing. Only an
-   empty repository, or one containing the agreed starter README, may be
-   initialized. Never overwrite an existing unrelated repository.
-5. If persistent storage is unavailable, continue teaching when useful, state
-   the limitation, and do not create hidden local storage or a local substitute.
+Resolve repository access and read the authoritative Vault state according to
+`github-operations.md` before starting or resuming a learning process.
 
-Do not claim continuity unless the relevant Vault state is available.
+Handle capability states explicitly:
+
+- **Read and write available:** normal Learning Coach operation is supported.
+- **Read available, write unavailable:** do not begin or advance a learning cycle
+  that would produce new learner state. Read-only inspection of existing state is
+  allowed. Explain that evidence, mastery, gaps, reviews, and next actions cannot
+  be advanced safely because they cannot be persisted.
+- **Read unavailable, write available:** do not run Learning Coach and never
+  write blindly. The current authoritative learner state must be read before any
+  mutation.
+- **Neither read nor write available:** do not run Learning Coach.
+
+If the Vault cannot be read, do not infer persistent learner state from the
+conversation alone and do not claim continuity.
+
+Do not create hidden local storage or a local substitute.
+
+A learner may explicitly choose not to persist a particular interaction even
+when write access is available. In that case, teach normally for that interaction
+without mutating learner state.
 
 ## Goal Assessment
 
@@ -128,7 +138,7 @@ After goal assessment:
 
 1. Define the target capability.
 2. Define observable success criteria.
-3. Retrieve relevant Vault evidence when available.
+3. Retrieve relevant Vault evidence.
 4. Assess current capability.
 5. Verify uncertain gaps.
 6. Create the next useful learning plan using the existing Topic state when one
@@ -383,37 +393,25 @@ Use `vault-curator` for those operations.
 
 ## Save Meaningful Learning
 
-After a learning cycle changes durable learner state, prepare one distilled
-GitHub update containing the authoritative state change and any linked note or
-session projection.
+When learning produces a durable state change, prepare one distilled update.
 
-Prefer one atomic multi-file GitHub commit. Use a host-provided multi-file write
-operation or equivalent Git data operations when available. If the host exposes
-only single-file writes, follow the safe fallback sequence in
-`github-operations.md`: write projection files first and update the authoritative
-state last with its expected SHA. This may leave an orphaned projection after a
-conflict, but it must not leave `vault.json` pointing to a projection that was
-never written.
+Persist only learning-relevant state such as:
 
-Before writing:
+- goals and target capability;
+- current focus;
+- concepts and concrete evidence;
+- gaps and unassessed areas;
+- review state;
+- next actions;
+- concise notes or session summaries when useful.
 
-- Reread `.learning-vault/vault.json` immediately before the write.
-- Compare its current SHA/revision with the one used to prepare the update. If
-  it changed, reread the latest Topic and rebuild the update; do not overwrite
-  another chat's work.
-- Use a unique update ID and preserve it in `appliedUpdates`. A retry must reuse
-  the same ID.
-- Validate references and schema invariants before mutation.
-- Perform the privacy review described below, even when no sensitive material
-  appears.
+Do not persist raw conversation history, hidden reasoning, broad prompt logs,
+unrelated personal information, or verbose transcripts.
 
-Persist only durable learning changes such as goals, target capability, current
-focus, concepts, concrete evidence, gaps, unassessed areas, review state, useful
-notes, next actions, and one concise session summary. Do not write raw chat
-history, hidden reasoning, broad prompt logs, unrelated personal information, or
-a verbose transcript.
+Use `github-operations.md` for repository binding, concurrency control,
+idempotency, atomic writes, fallback writes, verification, and failure handling.
 
-When no durable state changed, report `unchanged` and do not commit.
+When no durable state changed, do not write and report `unchanged`.
 
 Report the actual result: saved, already saved, unchanged, partially saved, or
 unsaved. Never promise later synchronization for an unsaved result.
@@ -454,21 +452,23 @@ do not sanitize away the evidence needed for future learning.
 
 ## Resolve Conflicts
 
-When the Vault changed after the preparation read, stop the state write, reread
-the latest state, and prepare a merged update. Explain consequential differences
-and ask for confirmation before applying a merge that changes the learner model
-rather than merely reconciling mechanically compatible fields.
+Follow `github-operations.md` for stale-state, concurrency, and retry handling.
+
+Do not silently resolve a conflict that would materially change the learner
+model, including mastery, gaps, review state, or next actions. Obtain learner
+confirmation when resolving the conflict requires such a judgment.
 
 ## Boundaries
 
-- Use only the generic GitHub repository tools exposed by the host, following
-  the fixed paths and format in the references.
+- Use only the generic GitHub repository capabilities exposed by the host and
+  follow the shared persistence rules in `github-operations.md`.
 - Do not request arbitrary repository paths, create a public repository, change
   visibility, force-push, rewrite history, or delete a repository.
 - Do not ask the learner for a PAT, tunnel, runtime API key, private key, or
   always-on computer for the ordinary workflow.
-- If the host cannot provide GitHub tools, continue teaching without durable
-  persistence and say exactly what was not saved.
+- Do not run normal Learning Coach workflows without both readable and writable
+  authoritative Vault state. Read-only inspection is the only supported mode
+  when write access is unavailable.
 - Do not perform Vault maintenance or lifecycle operations; use `vault-curator`
   for restructuring, cleanup, forgetting, and public export.
 - Do not optimize for note counts, commit counts, completion scores, or tutorial
