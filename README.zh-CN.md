@@ -18,19 +18,24 @@
 
 大多数 AI 助手只回答当前问题。对话结束后，你学到了什么、哪里存在误解、下一步应该学习什么，通常都会消失。
 
-Learning Coach 将问题、解释、错误、实践结果转化为长期学习状态，并通过 GitHub-backed Learning Vault 保存。
+Learning Coach 将问题、解释、错误和实践结果转化为长期学习状态，并通过 GitHub-backed Learning Vault 保存。
 
 > AI 不只应该记住你问过什么，还应该记住你真正学会了什么。
 
-## 工作方式
+## Learning Loop
 
 ```text
-Learning Coach Skill
-        +
-Learning Vault
-        |
-        v
-长期学习记忆
+提出问题
+   |
+定位知识点
+   |
+解释、预测、实践
+   |
+记录掌握证据
+   |
+更新 Learning Vault
+   |
+下次继续学习
 ```
 
 Learning Coach 是一个可移植的 Agent Skill。Skill 定义学习流程，Learning Vault 保存长期学习状态。
@@ -92,17 +97,17 @@ Learning Coach 会恢复之前的学习状态，并从当前最有价值的下�
 
 ## 支持 Skill 的 Agent 环境
 
-如果你的 Agent 环境支持 Skill 安装：
+如果你的 Agent 环境支持 Skill：
 
-1. 安装 Learning Coach Skill。
-2. 连接 Learning Vault。
+1. 加载 Learning Coach Skill。
+2. 提供对 Learning Vault 的访问能力。
 3. 使用：
 
 ```text
 使用 Learning Coach。
 ```
 
-Skill 会由宿主自动加载，并提供相同的学习流程。
+不同 Agent 可以通过不同方式提供运行能力。
 
 ---
 
@@ -130,21 +135,73 @@ Learning Coach 会保存长期学习状态：
 
 ---
 
-## 示例
+## Prompt Templates
+
+开始新的学习路径：
 
 ```text
-帮我系统掌握 RAG，最终完成一个可以运行的小项目。
+使用 Learning Coach。
 
-从 Learning Vault 继续 agent-memory，并选择当前最值得学习的下一步。
+我的学习目标：
+<想学习的内容>
 
-测试我最容易忘记的知识点，并根据表现更新掌握程度。
+我的目标产出：
+<希望最终实现或达到的结果>
+
+当前水平：
+<已有理解>
+
+请从 Learning Vault 创建或恢复我的学习路径。
 ```
+
+继续已有学习：
+
+```text
+使用 Learning Coach。
+
+继续学习：
+<主题>
+
+检查我的当前进度，并选择下一步最有价值的学习任务。
+```
+
+更新学习进展：
+
+```text
+使用 Learning Coach。
+
+我完成了：
+<实现 / 实验 / 解释>
+
+请根据证据评估我的理解，并在形成长期掌握后更新 Learning Vault。
+```
+
+---
+
+## Companion Skills
+
+Learning Coach 可以通过额外 Skill 扩展 Learning Vault 管理能力。
+
+### Vault Curator
+
+Vault Curator 用于定期维护 Learning Vault：
+
+- 合并重复知识点
+- 优化知识结构
+- 发现过期或不一致内容
+- 生成复习总结
+
+建议在完成重要学习阶段后运行 Vault Curator。
 
 ---
 
 ## 开发
 
-本仓库主要作为 Agent Skill 包使用。更多开发信息请参考相关文档。
+本仓库主要作为 Agent Skill 包使用。
+
+更多配置说明请参考：
+
+- [ChatGPT Project Setup](docs/chatgpt-project.md)
 
 ## 许可证
 
