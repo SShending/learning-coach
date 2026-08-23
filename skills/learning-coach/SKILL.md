@@ -1,6 +1,6 @@
 ---
 name: learning-coach
-description: Support long-term capability development through a persistent Learning Vault. Use when the learner wants to build a capability over time, resume learning progress, assess mastery, practice toward a goal, or update learning state. Do not trigger for isolated factual questions, routine debugging, or one-off answers.
+description: Support long-term capability development through a persistent Learning Vault. Use when the learner wants to build a capability over time, resume or capture ongoing learning progress, assess mastery, or practice toward a goal. Do not trigger for isolated factual questions, routine debugging, or one-off answers.
 ---
 
 # Learning Coach
@@ -44,6 +44,26 @@ current interaction, teach normally and do not persist it.
   practical way to do so.
 - Read [github-operations.md](references/github-operations.md) when discovering
   GitHub tools, connecting a repository, or handling a write failure.
+
+## Resolve Learning Vault
+
+Before relying on stored learner state:
+
+1. Discover whether the host exposes GitHub repository read and write tools.
+   Follow the capability and authentication rules in `github-operations.md`.
+2. Resolve the Vault repository. Prefer the conventional private repository
+   `learning-vault` in the authenticated learner account. Use an explicit
+   `owner/repository` supplied by the learner when present. Do not silently
+   search or bind to an unrelated repository.
+3. Read `.learning-vault/vault.json` and record its current file SHA and commit
+   revision when the tool returns them.
+4. If the file is absent, inspect the repository before initializing. Only an
+   empty repository, or one containing the agreed starter README, may be
+   initialized. Never overwrite an existing unrelated repository.
+5. If persistent storage is unavailable, continue teaching when useful, state
+   the limitation, and do not create hidden local storage or a local substitute.
+
+Do not claim continuity unless the relevant Vault state is available.
 
 ## Goal Assessment
 
@@ -108,38 +128,46 @@ After goal assessment:
 
 1. Define the target capability.
 2. Define observable success criteria.
-3. Retrieve relevant Vault evidence.
+3. Retrieve relevant Vault evidence when available.
 4. Assess current capability.
 5. Verify uncertain gaps.
-6. Create the next useful learning plan using the existing Topic state.
+6. Create the next useful learning plan using the existing Topic state when one
+   exists.
 
 Do not treat missing Vault evidence as missing capability. The Vault contains
 known evidence, not a complete model of the learner.
 
 ## Start Or Resume Topic
 
-1. Discover whether the host exposes GitHub repository read and write tools.
-   Follow the capability and authentication rules in `github-operations.md`.
-2. Resolve the Vault repository. Prefer the conventional private repository
-   `learning-vault` in the authenticated learner account. Use an explicit
-   `owner/repository` supplied by the learner when present. Do not silently
-   search or bind to an unrelated repository.
-3. Read `.learning-vault/vault.json` and record its current file SHA and commit
-   revision when the tool returns them.
-4. If the file is absent, inspect the repository before initializing. Only an
-   empty repository, or one containing the agreed starter README, may be
-   initialized. Never overwrite an existing unrelated repository.
-5. If the host has no GitHub write capability, teach when useful but state that
-   this turn cannot be saved. Do not fall back to local files.
-6. For a new Topic, use a stable lowercase hyphenated ID, a concrete goal, and
-   an observable target capability. Connect the initial state to the learner's
-   current intent. Do not claim continuity until the state is saved and reread.
-7. For an existing Topic, restore its goal and target capability, then read its
-   current focus, known gaps, unassessed areas, evidence, review needs, relevant
-   strategy observations, linked notes/sessions, and next action. Do not ask
-   again for facts already present in the Vault.
+For a new Topic:
 
-Do not claim continuity unless the relevant state is available.
+- use a stable lowercase hyphenated ID;
+- preserve the learner's goal and observable target capability;
+- connect the initial state to the learner's current intent;
+- do not claim continuity until the state is saved and reread.
+
+For an existing Topic:
+
+- restore its goal and target capability;
+- read its current focus, known gaps, unassessed areas, evidence, review needs,
+  relevant strategy observations, linked notes/sessions, and next action;
+- do not ask again for facts already present in the Vault.
+
+### Capture Existing Learning
+
+If Learning Coach is activated after learning has already begun, reconstruct the
+current state from the learner's prior work and current demonstration.
+
+Distinguish:
+
+- previous exposure or studied material;
+- demonstrated understanding or application;
+- relevant but unassessed areas;
+- evidence-supported known gaps.
+
+Previous exposure is not mastery. Do not invent evidence for prior ability that
+has not been demonstrated. Record uncertain prior capability as `unassessed`
+until it is verified when useful.
 
 ## Capability Assessment
 
@@ -224,26 +252,31 @@ Do not force a checklist. Diagnose the learner's reasoning, not the topic.
 
 ## Run The Learning Loop
 
-A learning cycle contains:
+A learning cycle centers on:
 
-- one target capability;
-- one learning action;
-- observable evidence.
+- one focused learning target that contributes to the Topic's target capability;
+- one useful learning action;
+- observable evidence when the learner demonstrates something.
 
 Do not equate a chat message or a session with a learning cycle. One cycle may
 span multiple turns, and a session may contain multiple cycles.
 
+Do not force assessment merely to close a learning cycle. Aim to obtain
+observable evidence when it improves diagnosis, mastery judgment, review, or the
+next action.
+
 For each learning cycle:
 
-1. Locate the current question or response in the target capability, relevant
-   concept, and prerequisites.
+1. Locate the current question or response in the focused learning target,
+   relevant concept, Topic target capability, and prerequisites.
 2. Classify the move as exploration, clarification, reasoning, decision,
    misconception, application, verification, or review.
 3. Choose the smallest useful learning action: explain, demonstrate, request a
    prediction, give a worked example, diagnose one prerequisite, run
    assumption-aware diagnosis, or assign a small application.
 4. Connect the action to the target capability and current Knowledge Map.
-5. Observe what the learner actually demonstrates.
+5. Observe what the learner actually demonstrates when there is something to
+   assess.
 6. Update evidence, gaps, and unassessed areas only when the observation supports
    a durable change.
 7. Preserve one useful next action and why it is useful without preventing a
