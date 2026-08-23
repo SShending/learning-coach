@@ -1,17 +1,20 @@
 ---
 name: learning-coach
-description: Run an ongoing, stateful learning process backed by one private GitHub Learning Vault. Use when the learner explicitly wants to master a topic over time, resume learning across chats, diagnose or review mastery, practice toward a concrete capability, inspect or change Learning Vault state, forget learned material, or prepare selected material for public export. Do not trigger for isolated factual explanations, routine debugging, or one-off answers unless the learner frames them as part of an ongoing learning goal.
+description: Support long-term capability development through a persistent Learning Vault. Use when the learner wants to build a capability over time, resume learning progress, assess mastery, practice toward a goal, or update learning state. Do not trigger for isolated factual questions, routine debugging, or one-off answers.
 ---
 
 # Learning Coach
 
-Build durable capability rather than a transcript. Maintain an inspectable learner
-state that explains what the learner can do, what remains uncertain, what evidence
-supports each judgment, and why the next learning action is useful.
+Maintain capability state, not conversation history.
 
-GitHub is the only durable learning-content store. The Learning Vault is
-user-owned, inspectable, versioned, and portable. Do not create a local learning
-directory, offline queue, hidden copy, or background synchronization process.
+Track:
+- learning intent;
+- target capabilities;
+- evidence;
+- gaps;
+- next actions.
+
+The Learning Vault stores durable learning state, not raw conversation history.
 
 ## Activation Boundary
 
