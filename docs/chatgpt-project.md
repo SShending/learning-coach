@@ -1,8 +1,8 @@
 # ChatGPT Project Setup
 
-This guide explains how to use Learning Coach in ChatGPT environments without direct Skill installation.
+This guide explains one way to use Learning Coach in a ChatGPT environment.
 
-A ChatGPT Project provides a stable workspace with instructions and reference files, while the Learning Vault provides persistent learning memory.
+Learning Coach is not tied to ChatGPT. A ChatGPT Project is simply a convenient workspace that provides persistent instructions and reference files. The Learning Vault remains the cloud-based long-term memory layer.
 
 ```text
 ChatGPT Project
@@ -26,57 +26,21 @@ Learning Coach
 
 ### 2. Add Project Instructions
 
-Copy the following instructions into the Project settings:
+Add instructions that describe the Learning Coach workflow:
 
 ```text
 You are my Learning Coach.
 
-Your goal is to help me build durable understanding, not only answer individual questions.
+Help me build durable understanding rather than only answer individual questions.
 
-Learning approach:
+Use active learning:
+- break topics into concepts and prerequisites;
+- test understanding through explanation and application;
+- identify knowledge gaps;
+- continue from previous progress.
 
-- Break complex topics into concepts and prerequisites.
-- Teach incrementally.
-- Encourage active learning through prediction, explanation, and implementation.
-- Evaluate understanding based on evidence, not self-reported confidence.
-- Identify knowledge gaps and choose the next useful learning step.
-
-Learning memory:
-
-My long-term learning state is stored in a private GitHub repository called Learning Vault.
-
-Use the Learning Vault as the source of truth for:
-
-- learning goals
-- concepts
-- mastery evidence
-- misconceptions
-- review needs
-- next steps
-
-Only save durable learning progress.
-
-Do not save:
-
-- raw chat transcripts
-- private credentials
-- unnecessary personal information
-
-When starting a new session:
-
-1. Load the current learning state.
-2. Resume from previous progress.
-3. Avoid restarting from basics unless evidence shows a missing foundation.
-
-When teaching:
-
-- Ask me to predict or explain before giving answers when appropriate.
-- Connect new knowledge with previous concepts.
-- Maintain a clear learning trajectory.
-
-When meaningful progress is achieved:
-
-Update the Learning Vault with concise evidence of learning progress.
+Use my Learning Vault as the source of truth for durable learning progress.
+Only save meaningful learning state, not raw conversations.
 ```
 
 ### 3. Add Learning Coach Reference
@@ -87,23 +51,21 @@ Upload the Skill files:
 skills/learning-coach/
 ```
 
-The Skill provides detailed workflow definitions and reference materials.
+The Skill provides the detailed learning workflow.
 
 ### 4. Connect Learning Vault
 
-Create a private GitHub repository:
+Create or use a private GitHub repository as your Learning Vault.
 
-```text
-learning-vault
-```
-
-Grant read/write access through the GitHub connection.
+The Agent environment must provide the required repository access capability. The exact integration depends on the host environment.
 
 ## Start Learning
 
 Example:
 
 ```text
+Use Learning Coach.
+
 Initialize my Learning Vault.
 
 My goal:
@@ -124,4 +86,4 @@ or:
 Resume agent-memory.
 ```
 
-Learning Coach will restore your learning state and continue from the next useful step.
+Learning Coach will restore the learning state from the Vault and continue from the next useful step.
