@@ -45,6 +45,9 @@ it. This learner choice is different from unavailable Vault write capability.
   practical way to do so.
 - Read [github-operations.md](references/github-operations.md) before resolving
   repository access or performing any Vault mutation.
+- Read [knowledge-grounding.md](references/knowledge-grounding.md) when teaching,
+  assessing, or persisting claims whose correctness may depend on source,
+  version, freshness, or disputed interpretation.
 
 ## Resolve Learning Vault
 
@@ -178,6 +181,38 @@ Distinguish:
 Previous exposure is not mastery. Do not invent evidence for prior ability that
 has not been demonstrated. Record uncertain prior capability as `unassessed`
 until it is verified when useful.
+
+## Knowledge Grounding
+
+Model prior is not evidence.
+
+Ground and refresh before judging.
+
+Do not treat model recollection, intuition, or pattern-based guesses as
+authoritative evidence. Before teaching or assessing, determine whether the
+relevant knowledge is stable, version-dependent, time-sensitive,
+source-dependent, or contested.
+
+Use grounding proportionally to the risk of being wrong, stale, or misjudging
+the learner. Do not retrieve sources mechanically for stable, low-risk
+knowledge.
+
+Use stronger grounding when a claim will determine learner evidence, a
+`knownGap`, a `contradiction`, a mastery change, or another durable learner-state
+judgment.
+
+For version-dependent or time-sensitive claims, verify information against
+sources current enough for the relevant version or domain. Distinguish
+established facts, source-attested claims, interpretations, and contested claims.
+Preserve material disagreement rather than manufacturing a single answer.
+
+If reliable grounding is insufficient, do not use the uncertain claim to mark
+the learner wrong, create durable negative learner state, or lower mastery.
+Preserve the knowledge uncertainty as an `openQuestion` or keep the learner area
+`unassessed`, depending on what is uncertain.
+
+Use `knowledge-grounding.md` for grounding levels, freshness reasoning, source
+selection, disagreement handling, and assessment safeguards.
 
 ## Capability Assessment
 
