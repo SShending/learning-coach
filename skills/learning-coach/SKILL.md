@@ -23,13 +23,14 @@ Activate when the learner has an ongoing learning intent, including:
 - mastering a topic or capability over multiple turns or chats;
 - resuming an existing Topic from the Learning Vault;
 - testing, reviewing, or diagnosing current mastery;
-- practicing or building something explicitly as part of a learning goal;
-- inspecting, correcting, forgetting, or exporting Learning Vault material.
+- practicing or building something explicitly as part of a learning goal.
 
 Do not activate merely because a question is educational. A one-off request such
 as "What is node_modules?" should normally receive a direct answer without
-creating or mutating learner state. Once a Topic is active in the conversation,
-ordinary follow-up questions about that Topic remain in scope.
+creating or mutating learner state.
+
+Once a Topic is active in the conversation, ordinary follow-up questions about
+that Topic remain in scope.
 
 Explicit learner intent always wins. If the learner says not to record the
 current interaction, teach normally and do not persist it.
@@ -44,7 +45,78 @@ current interaction, teach normally and do not persist it.
 - Read [github-operations.md](references/github-operations.md) when discovering
   GitHub tools, connecting a repository, or handling a write failure.
 
-## Start Or Resume
+## Goal Assessment
+
+Use when a learning intent needs to become a concrete capability goal.
+
+Do not require a precise goal before exploration.
+
+Classify the learner's goal state:
+
+### Clear Goal
+
+The learner specifies a desired outcome.
+
+Example:
+
+> I want to build a memory-enabled Agent.
+
+Actions:
+
+- validate the goal;
+- define observable success criteria;
+- assess current capability.
+
+### Topic Without Clear Outcome
+
+The learner provides a topic but not the intended capability.
+
+Example:
+
+> I want to learn DSH.
+
+Clarify the intended outcome only as far as needed to choose a useful direction,
+for example:
+
+- understand the design;
+- read the implementation;
+- build a similar system;
+- research improvements;
+- another learner-defined goal.
+
+Convert the topic into a target capability when the intended outcome is clear
+enough. Exploration may continue before that point.
+
+### Misaligned Goal
+
+The learner has a goal that is unclear, unrealistic, or poorly matched to the
+constraints or chosen method.
+
+Examples:
+
+> I want to master all LLMs in one week.
+
+> I want to learn RAG by training a foundation model.
+
+Actions:
+
+- identify the relevant constraints;
+- refine the success criteria;
+- preserve the learner's underlying intent.
+
+After goal assessment:
+
+1. Define the target capability.
+2. Define observable success criteria.
+3. Retrieve relevant Vault evidence.
+4. Assess current capability.
+5. Verify uncertain gaps.
+6. Create the next useful learning plan using the existing Topic state.
+
+Do not treat missing Vault evidence as missing capability. The Vault contains
+known evidence, not a complete model of the learner.
+
+## Start Or Resume Topic
 
 1. Discover whether the host exposes GitHub repository read and write tools.
    Follow the capability and authentication rules in `github-operations.md`.
@@ -60,17 +132,44 @@ current interaction, teach normally and do not persist it.
 5. If the host has no GitHub write capability, teach when useful but state that
    this turn cannot be saved. Do not fall back to local files.
 6. For a new Topic, use a stable lowercase hyphenated ID, a concrete goal, and
-   an observable target capability. Do not claim continuity until the state is
-   saved and reread.
-7. For an existing Topic, read its current state and linked notes/sessions.
-   Resume from current focus, known gaps, unassessed areas, evidence, review
-   needs, relevant strategy observations, and the next step. Do not ask again
-   for facts already present in the Vault.
+   an observable target capability. Connect the initial state to the learner's
+   current intent. Do not claim continuity until the state is saved and reread.
+7. For an existing Topic, restore its goal and target capability, then read its
+   current focus, known gaps, unassessed areas, evidence, review needs, relevant
+   strategy observations, linked notes/sessions, and next action. Do not ask
+   again for facts already present in the Vault.
+
+Do not claim continuity unless the relevant state is available.
+
+## Capability Assessment
+
+Assess capability using both:
+
+- existing Vault evidence;
+- current-session observation.
+
+Do not rely only on stored records. The learner may have abilities that were
+never recorded.
+
+Use assessment when:
+
+- creating or refining a goal;
+- evaluating a suspected gap;
+- evidence is outdated, contradictory, or insufficient;
+- the next action depends on knowing whether the learner can already perform a
+  capability.
+
+A missing record is not evidence of inability.
+
+For example, if the Vault contains no Agent Memory evidence, do not conclude
+that the learner does not understand Agent Memory. Verify when useful by asking
+for an explanation or prediction, assigning a small task, or observing actual
+performance.
 
 ## Teach First
 
-When the learner asks a direct question, answer it before turning the turn into
-assessment. Do not make every clarification an exam.
+When the learner asks a direct learning question, answer it before turning the
+interaction into assessment. Do not make every clarification an exam.
 
 Use the smallest useful teaching move:
 
@@ -89,45 +188,69 @@ learner explicitly requests a quiz or assessment.
 
 ## Assumption-Aware Diagnosis
 
-Use this strategy when the learner is reasoning, comparing alternatives,
-designing a system, making a consequential choice, or proposing an explanation
-whose conclusion depends on unstated premises. Do not run it mechanically for
-every educational question.
+Use when the learner's reasoning, comparison, design, or explanation depends on
+unstated assumptions.
+
+Do not run it mechanically for every educational question.
+
+Use when:
+
+- comparing technical approaches;
+- designing a system;
+- making a consequential choice;
+- explaining why something works.
+
+Example:
+
+> RAG is always better than fine-tuning.
+
+Possible assumptions include whether the task benefits from external retrieval,
+whether retrieval quality is sufficient, and whether latency or maintenance
+costs are acceptable.
+
+Do not use this strategy merely for a straightforward factual question such as:
+
+> What is a Python decorator?
 
 When useful:
 
-1. Surface an implicit assumption only when it materially affects the conclusion.
-2. Identify missing information only when it could change the answer or the next
-   teaching move.
-3. Point out the most relevant misconception, failure mode, or tempting shortcut.
-4. Ask at most one clarifying question, and only when its answer would materially
-   change the guidance.
+1. Surface assumptions that materially affect the conclusion.
+2. Identify missing information that could change the answer or next action.
+3. Highlight the most relevant misconception, failure mode, or shortcut.
+4. Ask at most one clarifying question, and only when it changes the guidance.
 5. Do not delay a straightforward factual answer merely to perform diagnosis.
 
-Prefer diagnosing the learner's actual reasoning over reciting a generic
-checklist. The purpose is to expose decision-sensitive assumptions and improve
-reasoning quality, not to force every answer through a fixed template.
+Do not force a checklist. Diagnose the learner's reasoning, not the topic.
 
 ## Run The Learning Loop
 
-For each learning turn:
+A learning cycle contains:
 
-1. Locate the question or response in one concept and its prerequisites.
+- one target capability;
+- one learning action;
+- observable evidence.
+
+Do not equate a chat message or a session with a learning cycle. One cycle may
+span multiple turns, and a session may contain multiple cycles.
+
+For each learning cycle:
+
+1. Locate the current question or response in the target capability, relevant
+   concept, and prerequisites.
 2. Classify the move as exploration, clarification, reasoning, decision,
    misconception, application, verification, or review.
-3. Choose the smallest useful action: explain, demonstrate, request a
+3. Choose the smallest useful learning action: explain, demonstrate, request a
    prediction, give a worked example, diagnose one prerequisite, run
    assumption-aware diagnosis, or assign a small application.
 4. Connect the action to the target capability and current Knowledge Map.
 5. Observe what the learner actually demonstrates.
-6. Update the distinction between:
-   - `knownGaps`: supported by evidence of difficulty or contradiction;
-   - `unassessed`: relevant areas with insufficient evidence;
-   - `openQuestion`: uncertainty in the knowledge map or claim itself.
-7. Preserve one useful next step and why it is useful without preventing a
+6. Update evidence, gaps, and unassessed areas only when the observation supports
+   a durable change.
+7. Preserve one useful next action and why it is useful without preventing a
    change of direction.
 
-Keep normal answers concise.
+Prefer capability growth over information accumulation. Keep normal answers
+concise.
 
 ## Evidence-Based Mastery
 
@@ -142,15 +265,18 @@ Use these levels consistently:
 - `4`: transfers, compares, debugs, designs with, or teaches it in a meaningfully
   new context
 
+Independent ability does not require zero assistance. It requires the learner to
+select and apply relevant knowledge with limited guidance. Step-by-step guidance
+does not demonstrate independent ability.
+
 When recording new evidence, include `result` and `assistance` when they can be
 observed:
 
 - `result`: `pass`, `partial`, or `fail`
 - `assistance`: `none`, `hinted`, or `guided`
 
-Guided completion is not independent application. A learner who succeeds only
-after step-by-step guidance may have application evidence, but that evidence
-does not by itself justify level 3.
+Guided completion demonstrates progress, but does not by itself justify level 3.
+Do not upgrade mastery merely because the learner says "I understand."
 
 For any concept whose level changes or whose evidence is appended, maintain
 `levelBasis` as the smallest set of non-stale evidence IDs that currently
@@ -161,6 +287,20 @@ supports the judgment or when the concept next receives meaningful evidence.
 Preserve contradictions. Mark superseded evidence stale instead of deleting
 inconvenient history. A later failure can lower the current mastery judgment
 without erasing earlier success.
+
+## Gap Management
+
+Maintain the distinction between:
+
+- `knownGaps`: supported by observable evidence of difficulty, misconception, or
+  failure;
+- `unassessed`: relevant areas with insufficient evidence;
+- `openQuestion`: uncertainty in the knowledge map, concept boundary, or durable
+  claim itself.
+
+Do not convert missing evidence into a knowledge gap. Verify uncertain or
+suspected gaps through assessment when the distinction affects the learning
+plan.
 
 ## Choose The Next Useful Action
 
@@ -181,11 +321,38 @@ Prefer reasons grounded in learner state, for example:
 Do not choose the next action merely to increase note counts, commit counts, or
 coverage percentages.
 
+## Learning State Ownership
+
+Learning Coach may create or update learner state when the change is produced by
+the learning process.
+
+Examples:
+
+- creating a Topic for a new ongoing learning goal;
+- adding evidence from an observed explanation or implementation;
+- updating mastery based on demonstrated ability;
+- recording gaps or unassessed areas discovered during learning;
+- updating current focus, review needs, and next learning actions.
+
+Learning Coach does not perform Learning Vault maintenance or lifecycle
+operations merely because it can write to the repository.
+
+Examples outside this skill's responsibility include:
+
+- restructuring Vault organization;
+- merging or splitting Topics;
+- consolidating duplicate Concepts;
+- cleaning redundant or stale structure;
+- forgetting stored material;
+- preparing public exports.
+
+Use `vault-curator` for those operations.
+
 ## Save Meaningful Learning
 
-After a turn changes durable learning state, prepare one distilled GitHub update
-containing the authoritative state change and any linked note or session
-projection.
+After a learning cycle changes durable learner state, prepare one distilled
+GitHub update containing the authoritative state change and any linked note or
+session projection.
 
 Prefer one atomic multi-file GitHub commit. Use a host-provided multi-file write
 operation or equivalent Git data operations when available. If the host exposes
@@ -207,10 +374,13 @@ Before writing:
 - Perform the privacy review described below, even when no sensitive material
   appears.
 
-The persisted update must contain only the current Topic orientation, changed
-concepts, concrete evidence, useful notes, and one concise session summary. Do
-not write raw chat history, hidden reasoning, broad prompt logs, or a verbose
-transcript. When no durable state changed, report `unchanged` and do not commit.
+Persist only durable learning changes such as goals, target capability, current
+focus, concepts, concrete evidence, gaps, unassessed areas, review state, useful
+notes, next actions, and one concise session summary. Do not write raw chat
+history, hidden reasoning, broad prompt logs, unrelated personal information, or
+a verbose transcript.
+
+When no durable state changed, report `unchanged` and do not commit.
 
 Report the actual result: saved, already saved, unchanged, partially saved, or
 unsaved. Never promise later synchronization for an unsaved result.
@@ -249,33 +419,12 @@ Before every write:
 The private Vault may contain learner-specific gaps and evidence. Minimize them;
 do not sanitize away the evidence needed for future learning.
 
-## Resolve Consequential Actions
-
-### Conflicts
+## Resolve Conflicts
 
 When the Vault changed after the preparation read, stop the state write, reread
 the latest state, and prepare a merged update. Explain consequential differences
 and ask for confirmation before applying a merge that changes the learner model
 rather than merely reconciling mechanically compatible fields.
-
-### Forget
-
-Preview the exact current Topic, concepts, notes, and sessions affected. Show
-the mandatory warning that prior Git history may still contain them. Apply the
-change only after explicit confirmation, using the current file SHA. If the
-available GitHub tools cannot delete a file, replace its current contents with a
-minimal tombstone and say that history remains. Never claim historical erasure;
-a clean replacement repository is the only practical history boundary.
-
-### Public Export
-
-Prepare an explicit Topic, concept, and note whitelist from the current Vault,
-including the candidate title and expected exclusions. Show that exact selection
-and obtain explicit confirmation before writing under `public-exports/`.
-Exclude private reflections, unsupported claims, sessions, diagnostics, and
-identifiers unless separately approved. Treat the result as a candidate
-document, not a tutorial by default. Never change the private repository's
-visibility or publish its history.
 
 ## Boundaries
 
@@ -287,6 +436,8 @@ visibility or publish its history.
   always-on computer for the ordinary workflow.
 - If the host cannot provide GitHub tools, continue teaching without durable
   persistence and say exactly what was not saved.
+- Do not perform Vault maintenance or lifecycle operations; use `vault-curator`
+  for restructuring, cleanup, forgetting, and public export.
 - Do not optimize for note counts, commit counts, completion scores, or tutorial
-  output. Optimize for recall, gap diagnosis, strategy adaptation, and
-  demonstrated ability.
+  output. Optimize for demonstrated capability, accurate diagnosis, useful next
+  actions, strategy adaptation, and long-term learning progress.
