@@ -426,6 +426,57 @@ Examples outside this skill's responsibility include:
 
 Use `vault-curator` for those operations.
 
+## Create Or Update Learning Notes
+
+Learning state and learning notes serve different purposes:
+
+- learner state answers **"What can the learner currently do?"** through evidence,
+  mastery, gaps, review state, and next actions;
+- learning notes answer **"What durable understanding is worth rereading after
+  this conversation is gone?"**
+
+Create or update a learning note when the learning process produces reusable
+knowledge that is likely to help the learner understand, recall, apply, compare,
+or refresh the topic later.
+
+Strong note triggers include:
+
+- a new durable mental model or explanation has become clear;
+- an important misconception has been corrected and the corrected model is worth
+  preserving;
+- the learner forms a reusable comparison, distinction, framework, or decision
+  rule;
+- a meaningful implementation, experiment, derivation, or worked application
+  produces lessons worth reusing;
+- source, version, or freshness context must be preserved because future learning
+  may depend on it;
+- an existing note has become materially incomplete, stale, or superseded by a
+  better understanding.
+
+Use this heuristic:
+
+> Would this understanding still be useful to reread after the conversation is
+> gone?
+
+If yes, create or update the smallest appropriate note. Prefer updating an
+existing note over creating a near-duplicate.
+
+Do not create or update a note merely because:
+
+- the learner asked a small clarification;
+- the learner said they understand;
+- mastery changed without a new reusable understanding;
+- `nextStep`, review timing, or current focus changed;
+- a small verification exercise repeated knowledge already captured;
+- repository activity, note counts, or coverage would increase.
+
+A note does not require a mastery upgrade, and a mastery upgrade does not require
+a note. When both durable knowledge and learner capability changed, persist both
+in the same learning update when practical.
+
+Follow `vault-format.md` for note structure and `knowledge-grounding.md` for
+sources, claim status, version context, and uncertainty.
+
 ## Save Meaningful Learning
 
 When learning produces a durable state change, prepare one distilled update.
@@ -438,7 +489,8 @@ Persist only learning-relevant state such as:
 - gaps and unassessed areas;
 - review state;
 - next actions;
-- concise notes or session summaries when useful.
+- learning notes when the note trigger applies;
+- concise session summaries when useful.
 
 Do not persist raw conversation history, hidden reasoning, broad prompt logs,
 unrelated personal information, or verbose transcripts.
