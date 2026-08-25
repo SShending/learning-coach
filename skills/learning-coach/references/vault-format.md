@@ -26,15 +26,24 @@ optional richer evidence, roadmap, and next-action fields.
 ```text
 .learning-vault/vault.json
 README.md
+topics/<topic-id>/README.md
 topics/<topic-id>/notes/<note-id>.md
 topics/<topic-id>/sessions/<session-id>.md
 public-exports/<export-id>/README.md
 ```
 
 `.learning-vault/vault.json` is the authoritative index and structured learner
-state. Markdown files are human-readable notes and session projections linked
-from that state. Keep paths relative to the repository root and use lowercase
-hyphenated IDs for topics, concepts, notes, and sessions.
+state.
+
+`topics/<topic-id>/README.md` is a derived, human-readable projection of the
+current Topic state. It exists so the learner can open a Topic in GitHub and see
+its goal, capability path, current state, notes, and next action without reading
+raw JSON. It is never authoritative. If it disagrees with `vault.json`, use
+`vault.json` and regenerate the Topic README.
+
+Note and session Markdown files are human-readable learning documents linked from
+the authoritative state. Keep paths relative to the repository root and use
+lowercase hyphenated IDs for topics, concepts, notes, and sessions.
 
 Do not add chat transcripts, hidden reasoning, credentials, tokens, private
 keys, verification codes, or unrelated repository files.
@@ -49,14 +58,17 @@ Earlier v1 Vaults may contain:
 - evidence without `result` or `assistance`;
 - concepts without `levelBasis`;
 - Topics without `unassessed`;
-- Topics without `roadmap`.
+- Topics without `roadmap`;
+- Topic directories without a human-readable `README.md` projection.
 
 These Vaults remain valid. Do not rewrite an entire Vault merely to populate new
-optional fields.
+optional fields or projections.
 
 When a Topic or concept next receives a meaningful update, richer fields may be
-added if supported by existing or newly observed evidence. Never invent evidence
-to make an older record look complete.
+added if supported by existing or newly observed evidence. A missing Topic
+README may also be generated from the current authoritative Topic state without
+changing learner state. Never invent evidence to make an older record look
+complete.
 
 A future incompatible change must increment `schemaVersion` and use an explicit
 migration path. Ordinary learning turns must not perform an implicit schema
@@ -324,12 +336,50 @@ Avoid reasons based on repository activity such as "to create another note" or
 
 ## Documents
 
+### Topic README
+
+Each active Topic should have a human-readable projection at:
+
+```text
+topics/<topic-id>/README.md
+```
+
+Generate it from the authoritative Topic state. Keep it concise and useful for
+human navigation. Include, when present:
+
+- Topic title and goal;
+- target capability;
+- roadmap milestones and statuses;
+- current focus;
+- a compact concept status/mastery view;
+- known gaps;
+- important unassessed areas;
+- links to learning notes;
+- next step and its reason.
+
+Do not copy raw evidence logs, session transcripts, or every internal field into
+the Topic README. The projection should answer: where am I, what have I shown,
+what remains, and what comes next?
+
+Create the Topic README when a Topic is created, or generate it later from the
+current state for a legacy Topic. Update it whenever a durable Topic state change
+would make the displayed goal, roadmap, focus, capability summary, gaps, notes,
+or next action materially stale.
+
+The Topic README is derived data. It must never be used to resolve a conflict
+against `vault.json`, and a manual edit to the Topic README alone does not change
+learner state.
+
+### Learning Notes
+
 Note files contain a title, a short explanation in the learner's own words, a
 small example or application when useful, and source links with one of these
 statuses: confirmed, working model, open question, or unsupported.
 
 Private reflections remain linked as `kind: "private_reflection"` and are
 excluded from public export by default.
+
+### Session Projections
 
 Session files contain:
 
@@ -339,17 +389,20 @@ Session files contain:
 - the next action and its reason when present;
 - the update ID and base revision.
 
-Never put a raw transcript in either file. Use `unsupported` claim status only
+Never put a raw transcript in any projection. Use `unsupported` claim status only
 to flag a claim that must not be taught as fact.
 
 ## Initialization
 
 For a confirmed empty private repository, create `.learning-vault/vault.json`
-and `README.md`. Git does not store empty directories; create `topics/` and
-`public-exports/` only when they receive their first real document.
+and the Vault-root `README.md`. Git does not store empty directories; create
+`topics/` and `public-exports/` only when they receive their first real document.
 
-The first commit should contain schema version `1`, Vault ID, privacy statement,
-empty Topic state, and no invented Topic.
+When the first Topic is created, also create its
+`topics/<topic-id>/README.md` human-readable projection.
+
+The first Vault commit should contain schema version `1`, Vault ID, privacy
+statement, empty Topic state, and no invented Topic.
 
 When practical, validate the initial document against `vault.schema.json` before
 writing and reread it after the commit.
