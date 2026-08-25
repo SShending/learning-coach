@@ -37,6 +37,29 @@ flowchart LR
 
 Learning Coach does not force assessment after every explanation and does not save every conversation. It persists durable learning changes when they occur.
 
+## Topic Model
+
+Each long-running Topic keeps distinct layers of learning state:
+
+```text
+Topic
+├── Goal                  why this matters
+├── Target Capability     the observable destination
+├── Roadmap               adaptive capability milestones
+├── Concepts              the knowledge structure
+├── Current Focus         what is being learned now
+├── Evidence / Mastery    what has actually been demonstrated
+├── Gaps / Unassessed     what is known to be difficult or still unknown
+├── Notes                 durable understanding worth rereading
+└── Next Step             the next concrete action
+```
+
+The roadmap provides medium-term direction between the Topic goal and the next
+action. It is capability-based, evidence-driven, and adaptive rather than a fixed
+course syllabus. Learning Coach can revise the path when evidence, gaps, or the
+learner's goal changes, and useful exploration is still allowed outside the
+roadmap.
+
 # Usage
 
 Learning Coach is a portable Agent Skill that helps AI assistants maintain a long-term learning process through a GitHub-based Learning Vault.
@@ -127,11 +150,11 @@ Learning state is stored in:
 
 The Vault stores durable learning progress, including:
 
-- learning goals
-- concepts
-- mastery evidence
-- review history
-- next steps
+- learning goals and target capabilities
+- adaptive capability roadmaps
+- concepts and mastery evidence
+- durable learning notes
+- gaps, review state, and next steps
 
 Raw conversations and sensitive information are not saved.
 
