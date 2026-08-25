@@ -140,12 +140,19 @@ Learning Coach 会恢复之前的学习状态，并从当前最有价值的下�
 learning-vault
 ```
 
-Learning Coach 会保存长期学习状态：
+Vault 将机器权威状态和人类可读的 Topic 视图分开：
 
 ```text
 .learning-vault/
-└── vault.json
+└── vault.json                     权威 learner state
+
+topics/<topic-id>/
+├── README.md                      当前 Topic 的人类可读视图
+├── notes/                         对话结束后仍值得重读的长期理解
+└── sessions/                      隐私最小化的学习 checkpoint
 ```
+
+`vault.json` 始终是 source of truth。每个 Topic 的 README 都只是由它生成的可读投影，让你打开 GitHub Topic 后就能直接看到目标、Roadmap、Current Focus、能力概览、gap、notes 和 Next Step。如果 Topic README 与 `vault.json` 不一致，以 JSON 状态为准并重新生成 README。
 
 不会保存：
 
