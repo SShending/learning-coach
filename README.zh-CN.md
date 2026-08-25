@@ -22,27 +22,7 @@ Learning Coach 将问题、解释、错误和实践结果转化为长期学习�
 
 > AI 不只应该记住你问过什么，还应该记住你真正学会了什么。
 
-## Learning Loop
-
-```text
-提出问题
-   |
-定位知识点
-   |
-解释、预测、实践
-   |
-在学习者真正展示能力时记录证据
-   |
-只有长期学习状态发生变化时才更新 Learning Vault
-   |
-下次继续学习
-```
-
-Learning Coach 不会在每次解释后强制测验，也不会保存每一段对话。只有形成长期学习状态变化时才持久化。
-
 ## Topic 结构
-
-每个长期 Topic 维护彼此职责不同的学习状态：
 
 ```text
 Topic
@@ -57,205 +37,164 @@ Topic
 └── Next Step             下一步具体行动
 ```
 
-Roadmap 补上了 Topic 目标和下一步行动之间的中期路径。它以能力为单位、由证据驱动，并会随着新的能力证据、gap 或目标变化而调整，而不是固定课程目录。Roadmap 提供方向，但不会阻止学习者探索路径之外的有价值问题。
+Roadmap 连接长期目标与下一步行动。它以能力为单位、由证据驱动，并会随新的 evidence、gap 或目标变化而调整，而不是固定课程目录。
 
-Learning Coach 是一个可移植的 Agent Skill。Skill 定义学习流程，Learning Vault 保存长期学习状态。正常运行需要宿主同时提供对私人 Learning Vault 的读取和写入能力。
+## 三个 Skill，共用一个 Vault
+
+Learning Coach 现在将学习、展示和维护拆成三个独立职责：
+
+```text
+                         Learning Vault
+                              |
+              +---------------+---------------+
+              |               |               |
+              v               v               v
+       Learning Coach    Learning View     Vault Curator
+       学习 / 评估        展示 / 查看        维护 / 修复
+       read + write      read-only         read / write
+```
+
+- **Learning Coach**：因为学习发生而改变 learner state。
+- **Learning View**：只展示已有 learner state，不修改它。
+- **Vault Curator**：在需要时检查、修复和重构 Vault。
+
+因此用户不再需要为了查看学习状态而下载两个仓库、打开 `workbench.html` 再手动选择 `vault.json`。Learning View 可以直接读取已连接的 Learning Vault，并在当前 Agent 界面中整理和展示。
 
 ---
 
-## 使用方法
+## 推荐设置：ChatGPT Project
 
-### 推荐方式：ChatGPT Project
-
-对于大多数用户，最简单的方式是在 ChatGPT 中创建一个 Learning Coach Project。
-
-步骤：
-
-1. 创建一个新的 ChatGPT Project。
-2. 添加 Learning Coach 使用说明。
-3. 上传：
+创建一个 ChatGPT Project，并按需上传：
 
 ```text
-skills/learning-coach/
+skills/learning-coach/   学习时需要
+skills/learning-view/    推荐，用于只读学习状态展示
+skills/vault-curator/    可选，用于维护与修复
 ```
 
-4. 连接一个私有 GitHub 仓库作为 Learning Vault，并提供仓库读取和写入能力。
+然后连接一个私有 GitHub 仓库作为 Learning Vault。
 
-Vault 会保存：
+权限要求：
 
-- 学习目标与目标能力
-- 可动态调整的能力 Roadmap
-- 知识点与掌握证据
-- 长期学习 Notes
-- gap、复习状态与下一步行动
+- Learning Coach：需要 read + write；
+- Learning View：只需要 read；
+- Vault Curator：只读 review 只需要 read，实际 mutation 才需要 write。
 
-开始学习：
+详细说明见 [ChatGPT Project Setup](docs/chatgpt-project.md)。
+
+### 开始或继续学习
 
 ```text
-使用 Learning Coach。
+Use Learning Coach.
 
-初始化我的 Learning Vault。
-
-我的目标：
-深入理解 Agent Memory，并最终实现一个最小可测试的记忆型 Agent。
+Resume agent-memory.
 ```
 
-之后可以直接：
+### 查看整体学习状态
 
 ```text
-继续我的学习。
+Use Learning View.
+
+Show my current learning state.
 ```
 
-或：
+### 查看某个 Topic
 
 ```text
-继续 agent-memory 学习。
+Use Learning View.
+
+Show deepseek-harness.
 ```
 
-Learning Coach 会恢复之前的学习状态，并从当前最有价值的下一步继续。
-
----
-
-## 支持 Skill 的 Agent 环境
-
-如果你的 Agent 环境支持 Skill：
-
-1. 加载 Learning Coach Skill。
-2. 提供对私人 Learning Vault 的读取和写入能力。
-3. 使用：
+### 查看 Roadmap
 
 ```text
-使用 Learning Coach。
+Use Learning View.
+
+Show the roadmap for agent-memory.
 ```
 
-不同 Agent 可以通过不同方式提供运行能力。
+Learning View 不会：
+
+- 创建 evidence；
+- 修改 mastery；
+- 新增 gap；
+- 修改 roadmap；
+- 创建 note；
+- 写入 Vault。
+
+它只负责把当前 Vault 已经记录的状态整理成容易理解的视图。
 
 ---
 
 ## Learning Vault
-
-创建一个私有 GitHub 仓库：
-
-```text
-learning-vault
-```
-
-Vault 将机器权威状态和人类可读的 Topic 视图分开：
 
 ```text
 .learning-vault/
 └── vault.json                     权威 learner state
 
 topics/<topic-id>/
-├── README.md                      当前 Topic 的人类可读视图
-├── notes/                         对话结束后仍值得重读的长期理解
+├── README.md                      当前 Topic 的人类可读投影
+├── notes/                         长期理解
 └── sessions/                      隐私最小化的学习 checkpoint
 ```
 
-`vault.json` 始终是 source of truth。每个 Topic 的 README 都只是由它生成的可读投影，让你打开 GitHub Topic 后就能直接看到目标、Roadmap、Current Focus、能力概览、gap、notes 和 Next Step。如果 Topic README 与 `vault.json` 不一致，以 JSON 状态为准并重新生成 README。
-
-不会保存：
-
-- 原始聊天记录
-- 密钥或凭证
-- 隐藏推理
-- 不必要的个人信息
-
-### 访问契约
-
-Learning Coach 将 Learning Vault 视为权威学习状态：
-
-- **可读 + 可写：** 完整运行 Learning Coach；
-- **仅可读：** 只能查看已有学习状态，不能推进 learning cycle 或产生新的 learner state；
-- **仅可写但不可读：** 不支持，Learning Coach 不会盲写；
-- **不可读：** Learning Coach 无法开始或恢复学习。
-
-如果写入能力存在，学习者可以明确选择“这段不记录”。这与宿主本身没有写入能力是两种不同情况。
-
----
-
-## Prompt Templates
-
-开始新的学习路径：
-
-```text
-使用 Learning Coach。
-
-我的学习目标：
-<想学习的内容>
-
-我的目标产出：
-<希望最终实现或达到的结果>
-
-当前水平：
-<已有理解>
-
-请从 Learning Vault 创建或恢复我的学习路径。
-```
-
-继续已有学习：
-
-```text
-使用 Learning Coach。
-
-继续学习：
-<主题>
-
-检查我的当前进度，并选择下一步最有价值的学习任务。
-```
-
-接管已经进行中的学习：
-
-```text
-使用 Learning Coach。
-
-我已经在学习：
-<主题>
-
-请根据我已经学过、实现过或能够解释的内容，重建当前学习状态。区分“接触过”和“已经证明掌握”，识别仍未评估的部分，并从下一步最有价值的学习任务继续。
-```
-
-完整流程见 [Capturing Existing Learning](docs/capturing-existing-learning.md)。
-
-更新学习进展：
-
-```text
-使用 Learning Coach。
-
-我完成了：
-<实现 / 实验 / 解释>
-
-请根据证据评估我的理解，并在形成长期学习状态变化后更新 Learning Vault。
-```
+`vault.json` 始终是 source of truth。Topic README 只是 derived projection。如果二者冲突，以 `vault.json` 为准。
 
 ---
 
 ## Companion Skills
 
-Learning Coach 可以通过额外 Skill 扩展 Learning Vault 管理能力。
+### Learning View
+
+Learning View 是 Learning Vault 的 read-only presentation layer。
+
+它支持：
+
+- Vault Overview：查看所有 Topic；
+- Topic View：查看一个 Topic 的目标、Roadmap、能力状态、gap、notes 和 next step；
+- Roadmap View：重点查看 milestone 状态；
+- Focused Slice：只看 notes、gaps、unassessed、evidence 等指定部分。
+
+它优先使用当前 Agent 环境原生的 Markdown、表格或 rich UI，而不是要求用户运行独立前端。
 
 ### Vault Curator
 
-Vault Curator 负责 Learning Vault 的维护与生命周期操作，包括：
+Vault Curator 负责：
 
-- 检查 Vault 健康状态和结构一致性
-- 合并或拆分 Topic、整合重复 Concept
-- 清理或归档学习结构
-- 修复失效引用
-- 在明确确认后忘记选定的存储内容
-- 基于明确白名单准备公开导出
+- Vault 健康检查；
+- 引用和结构修复；
+- Topic merge / split；
+- Concept 整合；
+- archive / forget；
+- public export。
 
-建议在完成重要学习阶段后，或 Vault 本身需要维护时运行 Vault Curator。
+---
+
+## Optional standalone viewer
+
+`workbench.html` 保留为可选的本地 viewer prototype，但不再是核心使用路径。
+
+推荐路径是：
+
+```text
+Connected Learning Vault
+        ↓
+Learning View
+        ↓
+当前 Agent UI
+```
 
 ---
 
 ## 开发
 
-本仓库主要作为 Agent Skill 包使用。
-
-更多配置说明请参考：
-
-- [ChatGPT Project Setup](docs/chatgpt-project.md)
+```text
+skills/
+├── learning-coach/
+├── learning-view/
+└── vault-curator/
+```
 
 ## 许可证
 
