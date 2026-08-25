@@ -2,9 +2,28 @@
 
 Learning Coach preserves a learner's evolving understanding in one private
 GitHub repository so future learning can resume from evidence instead of
-restarting from conversation history. The default implementation is a skill
-that uses the host's existing GitHub repository tools; it is not a hosted
+restarting from conversation history. The default implementation is a set of
+skills that use the host's existing GitHub repository tools; it is not a hosted
 Learning Coach service.
+
+## System Roles
+
+Three skills share one authoritative Learning Vault:
+
+- **Learning Coach**: teaches, assesses, and writes durable learner-state changes
+  produced by learning;
+- **Learning View**: reads and presents existing learner state without changing
+  it;
+- **Vault Curator**: reviews, repairs, restructures, forgets, or exports Vault
+  material when explicitly requested.
+
+Canonical distinction:
+
+> Learning Coach changes learner state because learning happened.
+>
+> Learning View shows learner state.
+>
+> Vault Curator maintains the Vault.
 
 ## Language
 
@@ -20,9 +39,28 @@ than constituting an independent learning record.
 _Avoid_: Course, tutorial
 
 **Learning State**:
-The current orientation for a topic: its goal, scope, active focus, known gaps,
-and next useful step.
+The current orientation for a Topic: goal, target capability, adaptive roadmap,
+knowledge structure, current focus, mastery evidence, known gaps, unassessed
+areas, durable notes, review state, and next useful action.
 _Avoid_: Progress score, transcript
+
+**Roadmap**:
+A lightweight, adaptive sequence of capability milestones between the Topic's
+current state and target capability. It is evidence-driven and revisable rather
+than a fixed curriculum.
+_Avoid_: Syllabus, completion checklist, project plan
+
+**Learning View**:
+A read-only presentation of authoritative Learning Vault state in the current
+Agent interface. It may organize, summarize, compare, or visualize existing
+state but does not teach, assess new mastery, or mutate the Vault.
+_Avoid_: Dashboard database, learner-state authority, assessment pass
+
+**Topic README**:
+A derived human-readable projection at `topics/<topic-id>/README.md`. It improves
+GitHub navigation but is never authoritative; `vault.json` wins if the two
+differ.
+_Avoid_: Source of truth, independent Topic state
 
 **Learning Update**:
 An atomic, distilled change to the Learning Vault caused by meaningful new
