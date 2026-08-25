@@ -141,12 +141,19 @@ Create a private GitHub repository:
 learning-vault
 ```
 
-Learning state is stored in:
+The Vault separates machine-authoritative state from human-readable Topic views:
 
 ```text
 .learning-vault/
-└── vault.json
+└── vault.json                     authoritative learner state
+
+topics/<topic-id>/
+├── README.md                      current human-readable Topic view
+├── notes/                         durable understanding worth rereading
+└── sessions/                      privacy-minimized learning checkpoints
 ```
+
+`vault.json` remains the source of truth. Each Topic README is a derived projection so you can open a Topic in GitHub and immediately see its goal, roadmap, current focus, capability summary, gaps, notes, and next step. If a Topic README ever differs from `vault.json`, the JSON state wins and the README should be regenerated.
 
 The Vault stores durable learning progress, including:
 
