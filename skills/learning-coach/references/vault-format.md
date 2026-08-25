@@ -7,7 +7,7 @@ can change without changing the learner's history.
 The authoritative structured state is machine-checkable with
 [`vault.schema.json`](vault.schema.json). The schema deliberately keeps
 `schemaVersion: 1` backward compatible with earlier v1 Vaults while allowing
-optional richer evidence and next-action fields.
+optional richer evidence, roadmap, and next-action fields.
 
 ## Contents
 
@@ -16,6 +16,7 @@ optional richer evidence and next-action fields.
 - [State document](#state-document)
 - [Topic and evidence rules](#topic-and-evidence-rules)
 - [Mastery evidence](#mastery-evidence)
+- [Roadmap state](#roadmap-state)
 - [Next-action state](#next-action-state)
 - [Documents](#documents)
 - [Initialization](#initialization)
@@ -47,7 +48,8 @@ Earlier v1 Vaults may contain:
 - string `nextStep` without `nextStepReason` or `nextStepTargets`;
 - evidence without `result` or `assistance`;
 - concepts without `levelBasis`;
-- Topics without `unassessed`.
+- Topics without `unassessed`;
+- Topics without `roadmap`.
 
 These Vaults remain valid. Do not rewrite an entire Vault merely to populate new
 optional fields.
@@ -76,6 +78,26 @@ Use schema version `1`. The following example shows the richer compatible shape:
       "title": "Agent memory",
       "goal": "Understand memory well enough to build with it",
       "targetCapability": "Build a minimal testable agent",
+      "roadmap": [
+        {
+          "id": "core-mental-model",
+          "title": "Build the core mental model",
+          "targetCapability": "Explain the memory lifecycle and distinguish context from memory.",
+          "status": "demonstrated"
+        },
+        {
+          "id": "memory-mechanisms",
+          "title": "Understand memory mechanisms",
+          "targetCapability": "Explain and compare write, retrieval, update, consolidation, and forgetting.",
+          "status": "active"
+        },
+        {
+          "id": "minimal-implementation",
+          "title": "Build minimal memory",
+          "targetCapability": "Implement and test a minimal memory-enabled agent without a framework.",
+          "status": "planned"
+        }
+      ],
       "scope": ["memory lifecycle"],
       "nonGoals": ["framework-specific APIs"],
       "currentFocus": "Selective retrieval",
@@ -163,7 +185,8 @@ and evidence quality instead of maintaining a second authoritative queue.
 
 ## Topic And Evidence Rules
 
-Every Topic has a bounded goal and an observable target capability. Keep
+Every Topic has a bounded goal and an observable target capability. Maintain a
+lightweight `roadmap` when it improves long-term continuation. Keep
 `currentFocus`, `knownGaps`, `unassessed` when present, and next-action fields
 current after meaningful turns.
 
@@ -227,6 +250,54 @@ a backfill. Do not invent or rewrite evidence solely to populate the field.
 
 Contradictions remain in history. Later evidence may make earlier evidence
 stale and may lower the current mastery level.
+
+## Roadmap State
+
+`roadmap` is an optional schemaVersion 1 Topic field that stores the learner's
+medium-term capability path. It is not a fixed curriculum and is not a second
+Knowledge Map.
+
+Each roadmap milestone contains:
+
+- `id`: stable lowercase hyphenated milestone ID;
+- `title`: short human-readable milestone name;
+- `targetCapability`: an observable ability that would justify completing the
+  milestone;
+- `status`: one of `planned`, `active`, `demonstrated`, or `blocked`.
+
+Use the statuses as follows:
+
+- `planned`: useful later, but not the current primary milestone;
+- `active`: the primary capability milestone currently being advanced;
+- `demonstrated`: the milestone target has sufficient observable evidence;
+- `blocked`: a prerequisite gap or other condition prevents useful progress.
+
+Normally keep one primary `active` milestone. A milestone may involve multiple
+Concepts, and the same Concept may contribute to multiple milestones. Do not
+turn the roadmap into a duplicate list of Concepts.
+
+Do not infer `demonstrated` from chapter coverage, time spent, or an average of
+Concept mastery levels. The milestone target must be supported by evidence
+appropriate to that capability. For example, explanation evidence alone does not
+demonstrate a milestone whose target is independent implementation.
+
+The roadmap is adaptive. Update it when durable learner state shows that the
+useful path has changed, such as when:
+
+- the active milestone is demonstrated;
+- a blocking `knownGap` appears;
+- a checkpoint reconstructs previously unrecorded capability;
+- the learner changes the goal or target capability;
+- a resumed Topic's old path no longer fits the current state.
+
+Keep `roadmap`, `currentFocus`, and `nextStep` distinct:
+
+- `roadmap`: medium-term capability path;
+- `currentFocus`: immediate learning target;
+- `nextStep`: next concrete action.
+
+The roadmap guides continuation but must not prevent useful exploration outside
+the planned path.
 
 ## Next-Action State
 
