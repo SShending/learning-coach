@@ -56,13 +56,18 @@ Every mutation begins from readable authoritative state.
 1. Read `.learning-vault/vault.json` and save the returned branch, commit
    revision, and file SHA when available.
 2. Read only the linked Topic files needed for the current operation. Do not crawl
-   unrelated repositories or private files.
+   unrelated repositories or private files. Treat a Topic README as a derived
+   projection, never as learner-state authority.
 3. Prepare the complete next state and any projection documents in memory.
+   Regenerate `topics/<topic-id>/README.md` when a durable Topic change would make
+   its human-readable view materially stale.
 4. Validate IDs and references:
    - concept prerequisites resolve within the Topic;
    - `nextStepTargets` resolve within the Topic when present;
    - `levelBasis` IDs refer to evidence on the same concept when present;
-   - note/session paths use the fixed Learning Vault layout.
+   - note/session paths use the fixed Learning Vault layout;
+   - Topic README content is derived from the prepared Topic state rather than
+     treated as an independent source of truth.
 5. When practical, validate the state against `vault.schema.json`.
 6. Immediately reread `.learning-vault/vault.json`. If its SHA or revision
    changed, stop and rebuild from the latest learner state.
@@ -73,14 +78,17 @@ Never mutate `vault.json` without first reading the current authoritative state.
 
 When a multi-file atomic write is available:
 
-1. Include `.learning-vault/vault.json` and every changed note/session projection
-   in the same commit.
+1. Include `.learning-vault/vault.json` and every changed projection in the same
+   commit, including Topic README, learning notes, and session projections when
+   applicable.
 2. Base the commit on the revision reread immediately before the write.
 3. Use the unique Learning Update ID consistently in the state and any linked
    projection that records it.
 4. Fast-forward only; never force-update the branch.
 5. Reread `.learning-vault/vault.json` after the commit and verify the update ID,
-   state SHA/revision, and important references before reporting success.
+   state SHA/revision, and important references before reporting success. When a
+   Topic README changed, also verify that its key displayed state matches the
+   authoritative Topic.
 
 Prefer a true multi-file atomic commit. Git data operations that create blobs,
 build one tree, create one commit, and fast-forward the branch ref are also a
@@ -95,21 +103,32 @@ session that was never successfully written.
 Use this order instead:
 
 1. Reread `vault.json` and preserve its expected SHA/revision.
-2. Write or update the required note/session projection files first, using
-   expected SHAs for existing files when available.
+2. Write or update all required projections first, using expected SHAs for
+   existing files when available. This includes:
+   - learning notes created or changed by the update;
+   - session projections created or changed by the update;
+   - `topics/<topic-id>/README.md` when the prepared Topic state would make the
+     current human-readable projection materially stale.
 3. If any required projection write fails, stop before mutating `vault.json`.
 4. Reread `vault.json` again.
 5. If its SHA/revision changed since step 1, do not write the prepared state.
-   Treat any newly created projection as orphaned/non-authoritative and rebuild
-   from the latest state before another mutation.
+   Treat projections written from the abandoned prepared state as
+   orphaned/non-authoritative and rebuild from the latest state before another
+   mutation.
 6. If the state is still current, update `vault.json` **last** with its expected
    SHA.
-7. Reread `vault.json` and verify the update ID and references.
+7. Reread `vault.json` and verify the update ID and references. Verify a changed
+   Topic README against the resulting authoritative Topic when practical.
 
 The fallback deliberately prefers an orphaned projection over a dangling
-authoritative reference. Orphaned projections are inert because future
-operations must follow paths referenced by `vault.json`; they can be reconciled
-or removed later.
+authoritative reference. All projections, including a fixed-path Topic README,
+are non-authoritative. Future operations must derive learner state from
+`vault.json`; if a projection disagrees, regenerate it from the authoritative
+state rather than accepting the projection as truth.
+
+A missing or stale Topic README does not invalidate an otherwise valid Vault. It
+is a human-readable projection that can be repaired mechanically from
+`vault.json` without changing learner state.
 
 If the host cannot safely condition an existing-file update on its current SHA,
 do not use a blind overwrite for `vault.json`.
@@ -125,6 +144,9 @@ the shared Vault protocol requires one.
   applied and do not append duplicate evidence, sessions, exports, or commits.
 - If the result is unknown and the update ID is absent, rebuild from the current
   revision before another mutation.
+- Regenerating a missing or stale Topic README from already-authoritative state
+  is projection repair, not a new learner-state update; it does not require
+  invented evidence or a mastery change.
 
 ## Conflicts
 
@@ -139,6 +161,10 @@ Reread the latest state and distinguish:
   state;
 - consequential differences that change learner state or the scope of a
   lifecycle operation such as Forget or Public Export.
+
+A manual Topic README edit alone is not a learner-state change. If it conflicts
+with `vault.json`, preserve the authoritative state and regenerate the projection
+unless the learner separately asks to change the underlying learning state.
 
 The calling skill decides whether consequential differences require learner
 confirmation based on its own semantic rules.
@@ -156,7 +182,9 @@ confirmation based on its own semantic rules.
 - Projection write failed before state: keep `vault.json` unchanged and report
   the partial result accurately.
 - State write failed after projections: treat written projections as
-  non-authoritative until a later reconciled state update references them.
+  non-authoritative until a later reconciled state update or projection repair.
+- Topic README missing or stale while `vault.json` is valid: regenerate the
+  README from authoritative Topic state; do not infer state from the README.
 - Timeout or unknown result: reread before retrying and reuse the same update ID.
 - Read unavailable: do not mutate authoritative state.
 - Read available but write unavailable: allow only safe read-only behavior; the
