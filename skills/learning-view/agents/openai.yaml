@@ -1,0 +1,4 @@
+interface:
+  display_name: "Learning View"
+  short_description: "Show your Learning Vault without changing it"
+  default_prompt: "Use $learning-view to read my private GitHub Learning Vault and show my current learning state without modifying anything."
