@@ -1,37 +1,94 @@
 # Companion Skills
 
-Learning Coach focuses on guiding the learning process. Additional skills can help maintain and improve the Learning Vault.
+Learning Coach focuses on guiding the learning process. Companion skills keep
+presentation and Vault maintenance out of the core learning loop.
+
+```text
+                         Learning Vault
+                              |
+              +---------------+---------------+
+              |               |               |
+              v               v               v
+       Learning Coach    Learning View     Vault Curator
+       learn / assess    present / inspect maintain / repair
+       read + write      read-only         read or write
+```
+
+## Learning View
+
+Learning View is the read-only presentation layer for the Learning Vault.
+
+Use it when the learner wants to:
+
+- see an overall learning-state summary;
+- inspect one Topic;
+- view a Topic roadmap;
+- inspect stored gaps, unassessed areas, notes, reviews, or evidence;
+- compare existing Topic state without changing it.
+
+Learning View reads `.learning-vault/vault.json` as the source of truth and
+renders the smallest useful view directly in the current Agent interface.
+
+It does not:
+
+- teach or continue a lesson;
+- assess new mastery;
+- create evidence or gaps;
+- change a roadmap or next step;
+- create notes or sessions;
+- repair or rewrite the Vault.
+
+A read-only repository connection is sufficient.
+
+Example:
+
+```text
+Use Learning View.
+
+Show my current learning state.
+```
 
 ## Vault Curator
 
-Vault Curator is a maintenance skill for periodically improving Learning Vault quality.
+Vault Curator is the maintenance and lifecycle skill for the Learning Vault.
 
 It helps with:
 
-- merging duplicated concepts;
-- organizing topics and knowledge structure;
-- detecting inconsistent or outdated entries;
-- improving review organization;
-- preparing summaries from accumulated learning history.
+- reviewing Vault health and structural integrity;
+- repairing broken or stale projections;
+- merging or splitting Topics;
+- consolidating duplicate Concepts;
+- cleaning up or archiving learning structure;
+- forgetting selected stored material;
+- preparing privacy-reviewed public exports.
 
-Vault Curator is not a replacement for Learning Coach.
+A normal structural review can be read-only. Writes are used only when an
+approved maintenance or lifecycle mutation is being applied.
 
-Use them at different stages:
+## Recommended Workflow
 
 ```text
 Learning Coach
     |
-    | daily learning
+    | learning changes learner state
     v
 Learning Vault
     |
-    | periodic maintenance
-    v
-Vault Curator
+    +--> Learning View      anytime, read-only presentation
+    |
+    +--> Vault Curator      periodic maintenance when needed
 ```
 
-Recommended workflow:
-
 1. Learn and practice with Learning Coach.
-2. Run Vault Curator periodically after significant progress.
-3. Continue learning with the refined Vault.
+2. Use Learning View whenever you want to inspect current progress.
+3. Run Vault Curator periodically or when the Vault itself needs repair or
+   restructuring.
+4. Continue learning from the same authoritative Vault.
+
+Canonical division of responsibility:
+
+> Learning Coach changes learner state because learning happened.
+>
+> Learning View shows learner state.
+>
+> Vault Curator maintains the Vault.
