@@ -149,6 +149,43 @@
           "additionalProperties": {
             "$ref": "#/$defs/session"
           }
+        },
+        "roadmap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roadmapMilestone"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "roadmapMilestone": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "targetCapability",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetCapability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "active",
+            "demonstrated",
+            "blocked"
+          ]
         }
       },
       "additionalProperties": true
