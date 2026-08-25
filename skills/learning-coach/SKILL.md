@@ -144,8 +144,8 @@ After goal assessment:
 3. Retrieve relevant Vault evidence.
 4. Assess current capability.
 5. Verify uncertain gaps.
-6. Create the next useful learning plan using the existing Topic state when one
-   exists.
+6. Create or adapt the capability roadmap when it is useful, then choose the
+   next useful learning plan using the existing Topic state when one exists.
 
 Do not treat missing Vault evidence as missing capability. The Vault contains
 known evidence, not a complete model of the learner.
@@ -156,12 +156,13 @@ For a new Topic:
 
 - use a stable lowercase hyphenated ID;
 - preserve the learner's goal and observable target capability;
+- create a lightweight capability roadmap when the target is clear enough;
 - connect the initial state to the learner's current intent;
 - do not claim continuity until the state is saved and reread.
 
 For an existing Topic:
 
-- restore its goal and target capability;
+- restore its goal, target capability, and roadmap when present;
 - read its current focus, known gaps, unassessed areas, evidence, review needs,
   relevant strategy observations, linked notes/sessions, and next action;
 - do not ask again for facts already present in the Vault.
@@ -181,6 +182,68 @@ Distinguish:
 Previous exposure is not mastery. Do not invent evidence for prior ability that
 has not been demonstrated. Record uncertain prior capability as `unassessed`
 until it is verified when useful.
+
+## Roadmap Planning And Adaptation
+
+Maintain a lightweight capability roadmap for a long-running Topic once the
+target capability is clear enough to make the path useful.
+
+A roadmap answers:
+
+> What capability milestones are likely to move this learner from the current
+> state toward the Topic target?
+
+Roadmap principles:
+
+- **capability-based, not content-based:** milestones describe observable
+  abilities, not chapter coverage;
+- **adaptive, not fixed:** the roadmap is a working hypothesis about the learning
+  path, not a curriculum contract;
+- **evidence-driven, not completion-driven:** a milestone becomes demonstrated
+  because relevant evidence supports its target capability, not because material
+  was merely covered;
+- **lightweight, not project-management-heavy:** do not add percentages,
+  estimates, deadlines, or dependency graphs unless the learner explicitly needs
+  them;
+- **direction without constraint:** allow useful exploration outside the roadmap
+  and revise the path when learning reveals a better route.
+
+Use four milestone statuses:
+
+- `planned`: useful later but not the current primary milestone;
+- `active`: the primary capability milestone currently being advanced;
+- `demonstrated`: the milestone target has sufficient observable evidence;
+- `blocked`: a prerequisite gap or other learning condition prevents useful
+  progress.
+
+Normally keep one primary `active` milestone. A milestone may involve several
+Concepts, and a Concept may contribute to several milestones. Do not duplicate
+the Knowledge Map by turning the roadmap into a concept list.
+
+Do not compute milestone completion from average Concept mastery. Judge the
+milestone from evidence appropriate to its own target capability. For example,
+several level-2 explanation judgments do not demonstrate an implementation
+milestone whose target is independent application.
+
+Create or adapt the roadmap when useful, especially when:
+
+- a new Topic has a sufficiently clear target capability;
+- a learning-state checkpoint reconstructs prior learning;
+- the active milestone is demonstrated;
+- a blocking `knownGap` changes the useful path;
+- the learner changes the goal or target capability;
+- an older Topic is resumed and its previous roadmap no longer fits the current
+  state.
+
+For legacy schemaVersion 1 Topics without a roadmap, do not rewrite the Vault
+merely to populate one. Add a roadmap when the Topic next receives a meaningful
+learning update and the roadmap improves continuation.
+
+Keep these levels distinct:
+
+- `roadmap`: medium-term capability path;
+- `currentFocus`: the immediate learning target within the active milestone;
+- `nextStep`: the next concrete action.
 
 ## Knowledge Grounding
 
@@ -312,8 +375,9 @@ next action.
 
 For each learning cycle:
 
-1. Locate the current question or response in the focused learning target,
-   relevant concept, Topic target capability, and prerequisites.
+1. Locate the current question or response in the active roadmap milestone
+   when one exists, focused learning target, relevant concept, Topic target
+   capability, and prerequisites.
 2. Classify the move as exploration, clarification, reasoning, decision,
    misconception, application, verification, or review.
 3. Choose the smallest useful learning action: explain, demonstrate, request a
@@ -390,6 +454,10 @@ Keep `nextStep` concrete and action-oriented. When useful, also persist:
 - `nextStepReason`: why this action is currently more useful than another;
 - `nextStepTargets`: concept IDs the action is meant to assess or strengthen.
 
+Align `nextStep` with the active roadmap milestone when that remains the most
+useful path. If new evidence shows that the roadmap is no longer appropriate,
+adapt the roadmap rather than forcing the next action to follow it.
+
 Prefer reasons grounded in learner state, for example:
 
 - explanation evidence exists but independent application is unassessed;
@@ -410,6 +478,7 @@ Examples:
 - adding evidence from an observed explanation or implementation;
 - updating mastery based on demonstrated ability;
 - recording gaps or unassessed areas discovered during learning;
+- creating or adapting a Topic capability roadmap;
 - updating current focus, review needs, and next learning actions.
 
 Learning Coach does not perform Learning Vault maintenance or lifecycle
@@ -484,6 +553,7 @@ When learning produces a durable state change, prepare one distilled update.
 Persist only learning-relevant state such as:
 
 - goals and target capability;
+- capability roadmap when present;
 - current focus;
 - concepts and concrete evidence;
 - gaps and unassessed areas;
