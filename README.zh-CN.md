@@ -40,6 +40,25 @@ Learning Coach 将问题、解释、错误和实践结果转化为长期学习�
 
 Learning Coach 不会在每次解释后强制测验，也不会保存每一段对话。只有形成长期学习状态变化时才持久化。
 
+## Topic 结构
+
+每个长期 Topic 维护彼此职责不同的学习状态：
+
+```text
+Topic
+├── Goal                  为什么学
+├── Target Capability     最终可观察的目标能力
+├── Roadmap               可动态调整的能力路径
+├── Concepts              领域知识结构
+├── Current Focus         当前正在学习什么
+├── Evidence / Mastery    已经真正证明会什么
+├── Gaps / Unassessed     已确认的困难与尚未评估的部分
+├── Notes                 对话结束后仍值得重读的长期理解
+└── Next Step             下一步具体行动
+```
+
+Roadmap 补上了 Topic 目标和下一步行动之间的中期路径。它以能力为单位、由证据驱动，并会随着新的能力证据、gap 或目标变化而调整，而不是固定课程目录。Roadmap 提供方向，但不会阻止学习者探索路径之外的有价值问题。
+
 Learning Coach 是一个可移植的 Agent Skill。Skill 定义学习流程，Learning Vault 保存长期学习状态。正常运行需要宿主同时提供对私人 Learning Vault 的读取和写入能力。
 
 ---
@@ -64,11 +83,11 @@ skills/learning-coach/
 
 Vault 会保存：
 
-- 学习目标
-- 知识点
-- 掌握证据
-- 复习历史
-- 下一步行动
+- 学习目标与目标能力
+- 可动态调整的能力 Roadmap
+- 知识点与掌握证据
+- 长期学习 Notes
+- gap、复习状态与下一步行动
 
 开始学习：
 
