@@ -54,43 +54,52 @@ Topic
 └── Next Step             the next concrete action
 ```
 
-The roadmap provides medium-term direction between the Topic goal and the next
-action. It is capability-based, evidence-driven, and adaptive rather than a fixed
-course syllabus. Learning Coach can revise the path when evidence, gaps, or the
-learner's goal changes, and useful exploration is still allowed outside the
-roadmap.
+The roadmap provides medium-term direction between the Topic goal and the next action. It is capability-based, evidence-driven, and adaptive rather than a fixed course syllabus. Learning Coach can revise the path when evidence, gaps, or the learner's goal changes, and useful exploration is still allowed outside the roadmap.
+
+## Three Skills, One Vault
+
+The repository separates learning, presentation, and maintenance:
+
+```text
+                         Learning Vault
+                              |
+              +---------------+---------------+
+              |               |               |
+              v               v               v
+       Learning Coach    Learning View     Vault Curator
+       learn / assess    present / inspect maintain / repair
+       read + write      read-only         read or write
+```
+
+- **Learning Coach** changes learner state because learning happened.
+- **Learning View** shows existing learner state without changing it.
+- **Vault Curator** maintains, repairs, and restructures the Vault when requested.
+
+This keeps presentation logic out of the core learning workflow. A learner can ask to see current progress directly in the Agent interface without cloning repositories or opening a standalone dashboard.
 
 # Usage
 
-Learning Coach is a portable Agent Skill that helps AI assistants maintain a long-term learning process through a GitHub-based Learning Vault.
-
-```text
-Learning Coach Skill
-        |
-        v
-GitHub Learning Vault
-        |
-        v
-Persistent learning memory
-```
-
-The Skill defines the learning workflow. The Vault stores your durable learning progress. Normal Learning Coach operation requires the host agent to provide both read and write access to the private Learning Vault.
+Learning Coach is a portable Agent Skill system backed by a private GitHub Learning Vault.
 
 ## Recommended: ChatGPT Project
 
-The easiest way to use Learning Coach is with a ChatGPT Project.
+The easiest setup is a ChatGPT Project with the skills you want to use.
 
 ### Setup
 
 1. Create a new ChatGPT Project.
-2. Add Learning Coach instructions.
-3. Upload:
+2. Add your Learning Coach instructions.
+3. Upload the skill directories you want:
 
 ```text
-skills/learning-coach/
+skills/learning-coach/   required for learning
+skills/learning-view/    recommended for read-only progress views
+skills/vault-curator/    optional for maintenance and repair
 ```
 
-4. Connect a private GitHub repository as your Learning Vault with repository read and write access.
+4. Connect a private GitHub repository as your Learning Vault.
+
+Learning Coach requires repository read and write access for normal operation. Learning View only requires read access. Vault Curator requires write access only when applying an approved mutation.
 
 See [ChatGPT Project Setup](docs/chatgpt-project.md) for detailed instructions.
 
@@ -108,30 +117,30 @@ Understand Agent Memory deeply enough to implement a minimal memory-enabled agen
 ### Continue learning
 
 ```text
-Continue my learning.
-```
-
-or:
-
-```text
 Resume agent-memory.
 ```
 
-Learning Coach restores your learning state and continues from the next useful step.
+### View progress
+
+```text
+Use Learning View.
+
+Show my current learning state.
+```
+
+Or inspect one Topic:
+
+```text
+Use Learning View.
+
+Show deepseek-harness.
+```
+
+Learning View reads the authoritative Vault and presents the result directly in the current Agent interface. It does not create evidence, change mastery, or write to the Vault.
 
 ## Skill-enabled Agents
 
-If your agent environment supports Skills:
-
-1. Load Learning Coach as a Skill.
-2. Provide read and write access to your private Learning Vault.
-3. Use:
-
-```text
-Use Learning Coach.
-```
-
-The same workflow can be used by different agent environments.
+If your Agent environment supports Skills, load the skill directories appropriate to the workflow and provide the repository access each skill requires. The same private Learning Vault can be used across compatible Agent environments.
 
 ## Learning Vault
 
@@ -165,45 +174,15 @@ The Vault stores durable learning progress, including:
 
 Raw conversations and sensitive information are not saved.
 
-### Access contract
-
-Learning Coach treats the Vault as authoritative learner state:
-
-- **read + write:** full Learning Coach operation;
-- **read only:** inspect existing progress, but do not advance a learning cycle or create new learner state;
-- **write without read:** unsupported; Learning Coach never writes blindly;
-- **no read:** Learning Coach cannot start or resume.
-
-A learner may explicitly choose not to persist a particular interaction even when write access is available. That is different from the host lacking write capability.
-
 ## Prompt Templates
 
-Start a new learning path:
-
-```text
-Use Learning Coach.
-
-My learning goal:
-<what I want to learn>
-
-My desired outcome:
-<what I want to achieve>
-
-Current level:
-<my current understanding>
-
-Create or resume my learning path from the Learning Vault.
-```
-
-Continue learning:
+Start or continue learning:
 
 ```text
 Use Learning Coach.
 
 Resume my learning path for:
 <topic>
-
-Review my progress and choose the next useful step.
 ```
 
 Capture learning already in progress:
@@ -217,44 +196,45 @@ I have already been learning:
 Help me reconstruct my current learning state from what I have already studied, built, or explained. Distinguish previous exposure from demonstrated mastery, identify what is still unassessed, and continue from the next useful step.
 ```
 
-See [Capturing Existing Learning](docs/capturing-existing-learning.md) for the full workflow.
-
-Update progress:
+Show an overall read-only view:
 
 ```text
-Use Learning Coach.
+Use Learning View.
 
-I completed:
-<implementation / experiment / explanation>
-
-Evaluate my understanding from evidence and update my Learning Vault if this represents durable progress.
+Show my current learning state.
 ```
 
-## Companion Skills
+Show one Topic or roadmap:
 
-Learning Coach can be extended with skills that maintain and improve the Learning Vault.
+```text
+Use Learning View.
 
-### Vault Curator
+Show the roadmap for <topic>.
+```
 
-Vault Curator handles Vault maintenance and lifecycle operations, including:
+Review Vault health:
 
-- reviewing Vault health and structural inconsistencies
-- merging or splitting Topics and consolidating duplicate Concepts
-- cleaning up or archiving learning structure
-- repairing broken references
-- forgetting selected stored material with explicit confirmation
-- preparing public exports from an explicit whitelist
+```text
+Use Vault Curator.
 
-Run Vault Curator periodically after significant learning progress or when the Vault itself needs maintenance.
+Review my Learning Vault like a codebase. Do not mutate anything yet.
+```
+
+## Optional standalone viewer
+
+`workbench.html` remains an optional local prototype for viewing `vault.json`. It is not required for normal use. Agent-native Learning View is the recommended presentation path because it reads the connected Vault directly and does not require cloning both repositories or manually selecting files.
 
 ---
 
 ## Development
 
-This repository is primarily a skill package. The Skill definition is located at:
+The skill package is organized under:
 
 ```text
-skills/learning-coach/
+skills/
+├── learning-coach/
+├── learning-view/
+└── vault-curator/
 ```
 
 ## License
