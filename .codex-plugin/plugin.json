@@ -1,7 +1,7 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.5",
-  "description": "Learn, inspect, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
+  "version": "3.0.0-alpha.6",
+  "description": "Learn, view, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
@@ -13,16 +13,16 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Learning Coach",
-    "shortDescription": "Build and maintain a private knowledge tree that grows with you",
-    "longDescription": "Learn through practice, diagnose gaps and assumptions, track auditable mastery evidence, and periodically review or refactor a private GitHub-backed Learning Vault.",
+    "shortDescription": "Learn, inspect, and maintain a private knowledge tree",
+    "longDescription": "Learn through practice with auditable mastery evidence, inspect current progress through read-only Learning View, and periodically review or refactor a private GitHub-backed Learning Vault.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://github.com/SShending/learning-coach",
     "defaultPrompt": [
       "Help me master agent memory and resume from my Learning Vault.",
-      "Review what I am most likely to forget next.",
-      "Show my current learning gaps, assumptions, and the evidence behind them.",
+      "Show my current learning state without changing my Learning Vault.",
+      "Show the roadmap and stored evidence for my current Topic.",
       "Review my Learning Vault for structural issues and propose safe refactors."
     ]
   }
