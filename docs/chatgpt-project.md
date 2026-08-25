@@ -1,14 +1,17 @@
 # ChatGPT Project Setup
 
-This guide explains one way to use Learning Coach in a ChatGPT environment.
+This guide explains one way to use the Learning Coach skill set in ChatGPT.
 
-Learning Coach is not tied to ChatGPT. A ChatGPT Project is simply a convenient workspace that provides persistent instructions and reference files. The Learning Vault remains the cloud-based long-term learner-state layer.
+The system is not tied to ChatGPT. A ChatGPT Project is simply a convenient
+workspace for loading the skills while the private GitHub Learning Vault remains
+the durable learner-state layer.
 
 ```text
 ChatGPT Project
       |
-      v
-Learning Coach instructions
+      +--> Learning Coach   learn / assess / update
+      +--> Learning View    read-only presentation
+      +--> Vault Curator    maintenance / repair
       |
       v
 GitHub Learning Vault
@@ -16,22 +19,24 @@ GitHub Learning Vault
 
 ## Requirements
 
-Normal Learning Coach operation requires both repository read and write access to the private Learning Vault.
+Each skill has a different repository capability requirement:
 
-Capability handling is explicit:
+| Skill | Read | Write |
+| --- | --- | --- |
+| Learning Coach | required | required for normal learning |
+| Learning View | required | not needed and must not be used |
+| Vault Curator review | required | not needed |
+| Vault Curator mutation | required | required |
 
-- **read + write:** full Learning Coach operation;
-- **read only:** inspect existing learning state only; do not advance a learning cycle or create new learner state;
-- **write without read:** unsupported; Learning Coach never writes blindly;
-- **no read:** Learning Coach cannot start or resume.
-
-A learner may explicitly choose not to persist a particular interaction even when write access is available. That is different from the host lacking write capability.
+Learning Coach never blind-writes when authoritative Vault state cannot be read.
+Learning View is fully supported with read-only access because it never mutates
+learner state.
 
 ## Setup
 
 ### 1. Create a Project
 
-Create a new ChatGPT Project, for example:
+Create a ChatGPT Project, for example:
 
 ```text
 Learning Coach
@@ -39,42 +44,43 @@ Learning Coach
 
 ### 2. Add Project Instructions
 
-Add instructions that describe the Learning Coach workflow:
+Add concise instructions describing the overall workflow:
 
 ```text
-You are my Learning Coach.
+Use my private Learning Vault as the source of truth for durable learning state.
 
-Help me build durable understanding rather than only answer individual questions.
+Use Learning Coach when I am learning, practicing, or being assessed.
+Use Learning View when I ask to see or summarize my current learning state.
+Use Vault Curator when I ask to review, repair, or reorganize the Vault itself.
 
-Use active learning:
-- break topics into concepts and prerequisites;
-- test understanding through explanation and application when useful;
-- identify evidence-supported gaps and distinguish them from unassessed areas;
-- continue from previous progress.
-
-Use my Learning Vault as the source of truth for durable learning progress.
-Only save meaningful learning state, not raw conversations.
+Do not save raw conversations.
 ```
 
-### 3. Add Learning Coach Reference
+### 3. Add Skill Files
 
-Upload the Skill files:
+Upload the skill directories you want to use:
 
 ```text
 skills/learning-coach/
+skills/learning-view/
+skills/vault-curator/
 ```
 
-The Skill provides the detailed learning workflow.
+`learning-coach` is the core learning skill.
+
+`learning-view` is recommended because it lets the learner inspect the connected
+Vault directly in ChatGPT without cloning repositories or opening
+`workbench.html`.
+
+`vault-curator` is optional and is only needed for Vault maintenance or lifecycle
+operations.
 
 ### 4. Connect Learning Vault
 
-Create or use a private GitHub repository as your Learning Vault.
-
-The Agent environment must provide both repository read and write access for normal Learning Coach operation. The exact integration depends on the host environment.
+Create or use a private GitHub repository as the Learning Vault and provide the
+repository access required by the skills you intend to use.
 
 ## Start Learning
-
-Example:
 
 ```text
 Use Learning Coach.
@@ -87,25 +93,47 @@ Understand Agent Memory deeply enough to implement a minimal memory-enabled agen
 
 ## Continue Learning
 
-Future sessions:
-
 ```text
-Continue my learning.
-```
+Use Learning Coach.
 
-or:
-
-```text
 Resume agent-memory.
 ```
 
-Learning Coach restores the learning state from the Vault and continues from the next useful step.
+Learning Coach restores the authoritative state and continues from the next
+useful learning action.
+
+## View Learning State
+
+Overall view:
+
+```text
+Use Learning View.
+
+Show my current learning state.
+```
+
+One Topic:
+
+```text
+Use Learning View.
+
+Show deepseek-harness.
+```
+
+Roadmap-only view:
+
+```text
+Use Learning View.
+
+Show the roadmap for agent-memory.
+```
+
+Learning View is read-only. It does not create evidence, alter mastery, update a
+roadmap, create notes, or write to the Vault.
 
 ## Capture Existing Learning
 
-Learning Coach can also take over after learning has already begun.
-
-Example:
+Learning Coach can take over after learning has already begun:
 
 ```text
 Use Learning Coach.
@@ -113,9 +141,27 @@ Use Learning Coach.
 I have already been learning:
 <topic>
 
-Help me reconstruct my current learning state from what I have already studied, built, or explained. Distinguish previous exposure from demonstrated mastery, identify what is still unassessed, and continue from the next useful step.
+Help me reconstruct my current learning state from what I have already studied,
+built, or explained. Distinguish previous exposure from demonstrated mastery,
+identify what is still unassessed, and continue from the next useful step.
 ```
 
-Previous exposure is not the same as mastery. Learning Coach should preserve demonstrated evidence, mark uncertain prior capability as unassessed, and avoid inventing evidence for earlier work.
+Previous exposure is not the same as mastery. Learning Coach should preserve
+observable evidence, keep uncertain capability unassessed, and avoid inventing
+evidence for earlier work.
 
-See [Capturing Existing Learning](capturing-existing-learning.md) for the full workflow.
+See [Capturing Existing Learning](capturing-existing-learning.md) for the full
+workflow.
+
+## Maintain The Vault
+
+Read-only health review:
+
+```text
+Use Vault Curator.
+
+Review my Learning Vault like a codebase. Do not mutate anything yet.
+```
+
+Any structural or lifecycle mutation follows Vault Curator's preview and
+confirmation rules.
