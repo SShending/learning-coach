@@ -76,6 +76,9 @@ Ordinary Topic learning must not rewrite the manifest.
 For a domain-local update, `baseRevision` refers to that authoritative document's
 revision/SHA rather than the entire Vault revision.
 
+A retry of the same logical mutation reuses the same update ID. A different
+logical mutation must use a different update ID.
+
 ## Concurrency
 
 A Topic update must:
@@ -93,14 +96,37 @@ A manifest revision changing for an unrelated Topic is not itself a conflict.
 The relevant conflict is a changed binding for the Topic being mutated or a
 changed Topic-state revision.
 
+If the Topic-state revision changed, do not resend the previously prepared whole
+JSON document. Reread the latest Topic state and rebuild the logical update from
+that state. The calling Skill decides whether the update is still semantically
+compatible; learner judgments such as mastery, gaps, or roadmap changes must not
+be mechanically merged when their meaning changed.
+
 This permits independent Topic updates to proceed without contending on one
 Vault-wide state file.
 
 ## Linked documents and projections
 
-When a Topic update creates or changes a note/session body that the new Topic
-state will reference, write the required linked document before the authoritative
+When a Topic update creates a new note/session body that the new Topic state will
+reference, create and verify the required linked document before the authoritative
 Topic state.
+
+Do not overwrite an already referenced note or session body in place as
+preparation for a Topic-state mutation. That would allow linked content to change
+even if the later Topic-state replacement fails.
+
+For changed linked content, use copy-on-write:
+
+1. create the new body at a new revision path;
+2. verify the new body;
+3. switch the note/session metadata `path` in Topic `state.json` using the
+   expected Topic-state revision;
+4. treat the previous body as non-current content eligible for later explicit
+   cleanup or retention policy.
+
+Session projections should normally be immutable once registered. If a structural
+repair must replace one, use the same copy-on-write rule rather than blind
+in-place replacement.
 
 Write the Topic README after the authoritative Topic state has been saved and
 verified. A README failure may leave a stale projection but must not invalidate
@@ -109,6 +135,34 @@ learner state.
 V2 Topic README projections should record the source Topic-state blob SHA in a
 machine-readable header. Projection freshness can then be checked mechanically
 by comparing that SHA with the current Topic-state SHA.
+
+A README generated from an older Topic state may race with a newer Topic-state
+write; the source-SHA mismatch makes that projection mechanically stale without
+creating an authority conflict.
+
+## Unknown results and retries
+
+A timeout or indeterminate host result is not proof that a write failed.
+
+For an authoritative-domain mutation whose result is unknown:
+
+1. reread the relevant manifest binding when applicable;
+2. reread the authoritative domain;
+3. if the logical update ID is present, treat the mutation as already applied;
+4. if the update ID is absent, rebuild from the current authoritative revision
+   before retrying;
+5. reuse the same update ID for the retry.
+
+Never blindly resend a whole prepared authoritative document after an unknown
+result.
+
+For a new immutable/copy-on-write linked body whose create result is unknown,
+read the exact intended path before retrying:
+
+- expected content present -> reuse it;
+- path absent -> retry creation;
+- path present with different content -> stop and review; never overwrite it
+  blindly.
 
 ## Structural operations
 
@@ -122,6 +176,11 @@ Cross-Topic operations such as merge or split should prefer copy-on-write:
 The manifest switch is the topology commit point. Files not referenced by the
 manifest are non-authoritative orphans and may be reviewed or cleaned by Vault
 Curator.
+
+A stale manifest revision during an independent Topic creation may be retried
+mechanically only after rereading the latest manifest and rebuilding from it. Do
+not replace the latest manifest with a whole document prepared from an older
+revision.
 
 For Forget, remove the authoritative binding before deleting files so the Vault
 never points to deleted state. If file deletion then fails, report partial
@@ -145,6 +204,15 @@ than assigned to Topic domains by guessing from update IDs.
 
 See `skills/learning-coach/references/migrations/v1-to-v2.md`.
 
+## Failure model
+
+The proposed protocol is stress-tested in `docs/schema-v2-failure-model.md`.
+That review injects same-domain and cross-domain concurrency, linked-document
+failure, manifest failure, unknown results, projection races, structural-operation
+failure, and mixed V1/V2 migration races.
+
+The failure model is a design gate only. Passing it does not activate V2.
+
 ## Consequences
 
 Benefits:
@@ -153,13 +221,16 @@ Benefits:
 - independent Topic sessions have independent conflict domains;
 - read paths can load only authoritative domains needed by the operation;
 - whole-file replacement remains safe and practical without requiring JSON Patch;
-- stale human projections become mechanically detectable.
+- stale human projections become mechanically detectable;
+- linked content changes can fail safely without mutating content still selected
+  by old authoritative state.
 
 Costs:
 
 - Vault Overview and full Curator review require reading multiple Topic states;
 - Topic creation and structural operations still contend on the small manifest;
 - the system must revalidate manifest bindings before Topic mutations;
+- changed linked content may leave old revision files until explicit cleanup;
 - migration and orphan-recovery rules become part of the persistence contract.
 
 ## Non-goals for V2
@@ -168,7 +239,7 @@ Do not add merely to solve this problem:
 
 - event sourcing;
 - Concept-per-file or evidence-per-file storage;
-- a transaction journal;
+- a runtime transaction journal;
 - JSON Patch as the required persistence API;
 - a derived global dashboard index;
 - completion percentages;
