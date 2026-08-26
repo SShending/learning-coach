@@ -601,8 +601,9 @@ Before every write:
   fact.
 - Include raw chat, uploads, proprietary code, or substantial source excerpts
   only when the learner explicitly confirms that excerpt for this update.
-- Prefer primary sources for current technical claims. Mark durable claims as
-  confirmed, working model, open question, or unsupported.
+- Ground durable claims according to `knowledge-grounding.md`. When note metadata
+  stores a claim status, use the schema enum values exactly: `confirmed`,
+  `working_model`, `open_question`, or `unsupported`.
 
 The private Vault may contain learner-specific gaps and evidence. Minimize them;
 do not sanitize away the evidence needed for future learning.
