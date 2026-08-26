@@ -1,295 +1,279 @@
 ---
 name: vault-curator
-description: Review, maintain, and refactor a private GitHub Learning Vault. Use when the learner explicitly asks to inspect Vault health, organize or restructure Topics, merge or split Topics, consolidate duplicate Concepts, clean up or archive learning structure, forget stored material, prepare public exports, or review the Vault like a codebase. Do not trigger for ordinary teaching, routine learning-state updates, or one-off factual questions.
+description: Review, maintain, and refactor a private GitHub Learning Vault. Use when the learner explicitly asks to inspect Vault health, organize or restructure Topics, merge or split Topics, consolidate duplicate Concepts, clean up or archive learning structure, forget stored material, migrate schema versions, prepare public exports, or review the Vault like a codebase. Do not trigger for ordinary teaching, routine learning-state updates, or one-off factual questions.
 ---
 
 # Vault Curator
 
 Treat the Learning Vault like a long-lived codebase: inspect it periodically,
-report structural debt clearly, and mutate it only when a concrete maintenance or
-lifecycle operation improves future learning continuity or fulfills the learner's
-explicit request.
+report structural debt clearly, and mutate it only when a concrete maintenance,
+lifecycle, or migration operation improves future learning continuity or fulfills
+the learner's explicit request.
 
 The Curator does not teach the current lesson or assess mastery as part of normal
-learning. It reviews and maintains learner state across the Vault. `vault.json`
-remains the authoritative state, and GitHub remains the only durable
-learning-content store.
+learning.
 
 ## Activation Boundary
 
 Activate when the learner explicitly wants to:
 
-- review the overall health of a Learning Vault;
+- review overall Vault health;
 - find redundant, overlapping, underspecified, or oversized Topics;
-- merge or split Topics;
+- merge, split, rename, archive, or reorganize Topics;
 - consolidate duplicate or poorly scoped Concepts;
-- inspect and repair broken references or structural inconsistencies;
-- identify candidates for completion, maintenance, or archival;
-- reorganize the Knowledge Map after a substantial learning phase;
+- inspect/repair broken references or stale projections;
+- migrate schema versions;
 - forget stored learning material;
-- prepare or manage a public export from selected Vault material.
+- prepare/manage a public export.
 
-Do not activate during normal Learning Coach turns merely because learning state
-changed. Routine creation of evidence, mastery updates, gaps, current focus,
-review state, or next actions belongs to `learning-coach`.
+Do not activate during normal Learning Coach turns merely because learner state
+changed. Routine evidence, mastery, gaps, current focus, review state, roadmap,
+and next actions belong to `learning-coach`.
 
-Do not silently refactor or clean the Vault in the background. Periodic manual use
-is the default, and destructive or externally visible changes require explicit
-learner intent and the confirmations defined below.
+Curator is maintenance-operation scoped. It may continue across the turns needed
+for one explicit workflow such as review -> preview -> confirm -> apply, but it is
+not a persistent conversation mode.
 
-## Read The Shared Vault Contract
+Do not silently refactor or clean the Vault in the background.
+
+## Shared Contract
 
 Before reviewing or changing a Vault, read:
 
 - `../learning-coach/references/vault-format.md`
-- `../learning-coach/references/vault.schema.json`
-- `../learning-coach/references/github-operations.md` when a write may occur
-- [review-checklist.md](references/review-checklist.md) for a structural review
+- `../learning-coach/references/github-operations.md`
+- [review-checklist.md](references/review-checklist.md) for structural review
 
-Use the existing schema and semantics rather than inventing a parallel curator
-format.
+For V1 schema validation use the retained V1 schema. For V2 validate the manifest,
+Topic state, and Learning Strategy state against the matching schemas under
+`../learning-coach/references/schemas/v2/`.
+
+## Resolve Version And Authority
+
+Read `.learning-vault/vault.json` first and inspect `schemaVersion`.
+
+### V1
+
+`vault.json` is the authoritative structured learner state. Inspect Topics from
+its `topics` object.
+
+### V2
+
+`vault.json` is an authoritative manifest. For a full health review:
+
+1. read the manifest;
+2. resolve every Topic binding;
+3. read every bound Topic `state.json`;
+4. read Learning Strategy state when its integrity is relevant;
+5. read note/session bodies only when needed to resolve ambiguity or validate a
+   requested operation.
+
+A file under `topics/` that is not selected by the V2 manifest is not an
+active Topic authority. Treat it as an orphan candidate, not as learner state.
 
 ## Review Before Refactoring
 
 A normal structural Curator run is read-only.
 
-1. Resolve the learner's private Learning Vault repository.
-2. Read `.learning-vault/vault.json` and record its current SHA/revision.
-3. Inspect every Topic at the state level when the request concerns overall
-   Vault health.
-4. Read linked notes or sessions only when needed to resolve an ambiguity; do not
-   pull the entire learning history by default.
-5. Run the review checklist when relevant to the request.
-6. Report findings before proposing structural mutations.
+1. Resolve the intended private Learning Vault.
+2. Read and record the current authority revisions relevant to the review.
+3. Inspect the requested scope using the version-specific authority model.
+4. Run the review checklist when relevant.
+5. Report findings before structural mutations.
 
-If the Vault is healthy, say so. Do not manufacture cleanup work to justify the
-review.
+If the Vault is healthy, say so. Do not manufacture cleanup work.
 
-For an explicit lifecycle request such as Forget or Public Export, inspect only
-the material needed to define the requested scope safely; a full structural review
-is not required unless it affects the operation.
+For Forget, migration, or Public Export, inspect only the material needed to
+define the requested scope safely; a full review is unnecessary unless the
+operation depends on it.
 
 ## Report Findings Like Code Review
 
-For structural review, rank findings by consequence:
+Rank structural findings by consequence:
 
-- `blocking`: broken state or references that can prevent reliable continuation;
-- `important`: structural debt likely to confuse future learning or mastery
-  judgments;
-- `suggestion`: optional cleanup or organization improvement.
+- `blocking`: broken authority/references that can prevent reliable continuation;
+- `important`: structural debt likely to confuse future learning or judgments;
+- `suggestion`: optional organization improvement.
 
-For each finding, state:
-
-- what is wrong or potentially confusing;
-- the concrete Vault objects involved;
-- the evidence for the finding;
-- the smallest recommended change;
-- what could be lost or changed semantically.
-
-Separate observed facts from inferred similarity. Similar names alone are not
-sufficient evidence that two Topics or Concepts should be merged.
+For each finding, state the concrete objects involved, evidence, smallest useful
+change, and any semantic risk. Similar names alone are not enough to justify a
+merge.
 
 ## Structural Review
 
-### Topic Overlap
+### Topic overlap
 
-Look for Topics whose goals, target capabilities, scope, Concepts, or active gaps
-substantially overlap. Prefer one coherent Topic when two Topics are teaching the
-same capability from slightly different names.
+Look for substantial overlap in goals, target capabilities, scope, Concepts,
+roadmap milestones, or active gaps. Do not merge merely because Topics share
+prerequisites or domain vocabulary.
 
-Do not merge merely because Topics share prerequisites or domain vocabulary.
+### Topic size and split candidates
 
-### Topic Size And Split Candidates
+A split may be useful when one Topic contains multiple independently useful
+target capabilities or disconnected Concept clusters such that one current focus
+and one next step no longer represent it. Large size alone is not a defect.
 
-Flag a Topic for possible split when it contains multiple independently useful
-target capabilities, disconnected Concept clusters, or a scope broad enough that
-one `currentFocus` and one `nextStep` no longer represent the learner's actual
-state.
+### Concept consolidation
 
-A large Topic is not automatically a bad Topic.
+Before consolidating Concepts, compare evidence, prerequisites, open questions,
+mastery, `levelBasis`, and their role in the target capability.
 
-### Concept Consolidation
+### Capability coverage
 
-Look for duplicate Concepts, aliases, accidental re-creations, or Concepts that
-should instead be represented as parent/child or prerequisite relations.
+Flag missing Concepts only when materially required for the Topic's observable
+target capability. Do not expand for completeness alone.
 
-Before consolidating Concepts, compare their evidence, prerequisites, open
-questions, mastery levels, and current role in the Topic.
+### Roadmap integrity
 
-### Capability Coverage
+Check unique/stable milestone IDs, normally at most one primary active milestone,
+real blockers for `blocked`, sufficient evidence for `demonstrated`, and coherence
+with target capability/current focus/next step. Do not infer milestone completion
+from average Concept mastery.
 
-Compare each Topic's Knowledge Map with its `targetCapability`. Flag missing
-Concepts only when they are materially required to demonstrate the target
-capability. Do not expand the map for completeness alone.
+### Projection integrity
 
-### Lifecycle Review
+- V1 Topic README projects the Topic stored in `vault.json`.
+- V2 Topic README projects the bound Topic `state.json`.
 
-Identify Topics that appear inactive, demonstrated, maintenance-only, or obsolete.
-Under schemaVersion 1, lifecycle is advisory only unless the repository already
-uses an agreed lifecycle convention. Do not invent a new lifecycle field during a
-routine curation pass.
+In V2 compare the README source-state revision marker with the current Topic-state
+revision when available. Missing/stale README is a repairable projection defect,
+not a learner-state change.
+
+### Orphan integrity in V2
+
+Prepared migration files, failed Topic creations, superseded copy-on-write linked
+bodies, or old structural source Topics may remain unreferenced. They are
+non-authoritative. Do not silently delete them; classify and clean them only under
+an explicit maintenance/retention operation.
 
 ## Refactor Principles
 
-Optimize for a Vault that another agent can understand and continue from.
+Optimize for a Vault another agent can understand and continue from.
 
 Prefer:
 
-- fewer coherent Topics over many overlapping Topics;
-- stable canonical Concept IDs over repeated aliases;
+- fewer coherent Topics over overlapping Topics;
+- stable canonical Concept IDs;
 - explicit prerequisites over duplicated explanation structure;
-- preserved evidence history over cosmetically clean rewrites;
-- one useful `nextStep` per active Topic;
-- structural changes justified by learning utility, not aesthetics.
+- preserved evidence/history over cosmetic rewrites;
+- one useful next step per active Topic;
+- structure justified by learning utility, not aesthetics.
 
-Never lower or raise mastery merely because objects were reorganized. Mastery must
-remain grounded in evidence.
+Never raise/lower mastery merely because objects were reorganized.
 
-## Prepare An Exact Refactor Plan
+## Exact Refactor Plan Before Structural Writes
 
-Before any structural write, show a preview containing:
+Before a structural write, preview:
 
-- operation: merge, split, consolidate, rename, move reference, archive, repair,
-  or cleanup;
+- operation;
 - source Topic/Concept IDs;
-- destination or canonical IDs;
-- fields that will change;
-- evidence, notes, sessions, prerequisites, and `levelBasis` references that must
-  be preserved or rewritten;
-- files that will be created, updated, retired, or removed;
+- destination/canonical IDs;
+- fields that change;
+- evidence, notes, sessions, prerequisites, `levelBasis`, and bindings that must
+  be preserved/rewritten;
+- files created, switched, retained, retired, or removed;
 - expected semantic result.
 
-Ask for explicit confirmation of that plan before mutating the Vault.
-
+Ask for explicit confirmation before destructive or externally visible changes
+unless the learner has already explicitly authorized the exact previewed plan.
 A broad request such as "clean up my Vault" authorizes review, not destructive
 refactoring.
 
-## Merge Safely
+## Merge And Split
 
-When merging Topics or Concepts:
+For V1, follow the single-authority safe-write rules in `github-operations.md`.
 
-- choose or confirm one stable canonical ID;
-- preserve all non-duplicate evidence and its original IDs;
-- preserve contradictions and stale history;
-- preserve notes and sessions unless the learner explicitly approves removal;
-- rewrite prerequisites, `nextStepTargets`, `levelBasis`, and other references to
-  the canonical IDs;
-- resolve conflicting goals, scopes, current focus, or next steps explicitly;
-- never average mastery levels mechanically.
+For V2, prefer copy-on-write:
 
-If evidence from the sources supports different mastery judgments, recompute the
-canonical current level from the preserved evidence and explain the judgment.
+1. read/validate source Topic domains and current manifest;
+2. build destination Topic state without changing source authority;
+3. validate all references and preserve evidence provenance;
+4. create/verify destination state and required linked content;
+5. reread the manifest;
+6. switch authoritative membership in one manifest mutation;
+7. verify the manifest;
+8. treat old source files as non-authoritative until explicit cleanup.
 
-## Split Safely
-
-When splitting a Topic:
-
-- define distinct target capabilities for the resulting Topics;
-- assign Concepts according to their actual role, not by name alone;
-- preserve cross-Topic prerequisites conceptually where the schema can represent
-  them without inventing unsupported fields;
-- move or copy note/session references only with a clear provenance reason;
-- do not duplicate mastery evidence merely to make both Topics look complete;
-- give each active Topic its own current focus and next useful step.
-
-If schemaVersion 1 cannot represent the desired relationship cleanly, report the
-limitation instead of fabricating structure.
+Do not average mastery mechanically, duplicate evidence merely to make outputs
+look complete, or change learner judgments just to make a merge/split fit.
 
 ## Forget Stored Material
 
-Treat forgetting as a lifecycle operation, not as routine learning-state update.
+Treat forgetting as a lifecycle operation.
 
 Before mutation:
 
-1. Resolve the exact current Topic, Concepts, notes, sessions, evidence, or other
-   Vault objects the learner wants forgotten.
-2. Preview that exact scope and any references that must also be updated.
-3. Warn that prior Git history may still contain removed material.
-4. Obtain explicit confirmation of the concrete scope before applying the change.
+1. resolve exact current scope;
+2. preview references that must change;
+3. warn that Git history may retain removed material;
+4. obtain explicit confirmation of the concrete scope.
 
-Apply the mutation using the current file SHA/revision and the shared safe-write
-rules. Preserve referential integrity in the remaining Vault.
+V2 Topic Forget removes/switches authoritative bindings **before** deleting now
+unreferenced files. If cleanup fails after the authority switch, report partial
+completion accurately; do not claim historical erasure.
 
-If available GitHub tools cannot delete a projection file, replace its current
-contents with a minimal tombstone only when needed to keep the current repository
-state from exposing the material, and explain that Git history remains.
+Never rewrite Git history.
 
-Never claim historical erasure. Rewriting Git history is outside the skill's
-boundary; a clean replacement repository is the only practical history boundary.
+## Public Export
 
-## Prepare Public Export
+Build an explicit whitelist of selected Topics/Concepts/notes/claims, show the
+candidate destination, exclude private reflections/raw sessions/unsupported
+claims/identifiers by default, and obtain explicit confirmation before externally
+visible export. Never change the private Vault repository's visibility.
 
-Treat public export as an explicit, externally visible lifecycle operation.
+## Schema Migration
 
-1. Build a concrete whitelist of the Topic, Concepts, notes, and claims proposed
-   for export.
-2. Show the candidate title, destination under `public-exports/`, included
-   material, and expected exclusions.
-3. Exclude private reflections, raw sessions, diagnostics, unsupported claims,
-   identifiers, and other private material unless separately approved.
-4. Obtain explicit confirmation of the exact export selection before writing.
-5. Treat the result as a candidate public document, not automatically as a
-   tutorial or canonical account of the learner's knowledge.
+Do not improvise schema migrations with free-form rewriting.
 
-Never change the private repository's visibility and never publish repository
-history.
+For V1 -> V2 use:
 
-## Health And Integrity
+- `../learning-coach/references/migrations/v1-to-v2.md`
+- `../../scripts/migrate_vault_v1_to_v2.py` as the deterministic reference
+  implementation
+- ADR 0015 and `docs/schema-v2-failure-model.md` as the authority/failure model.
 
-Use `review-checklist.md` to check referential and mastery integrity when relevant.
-Structural cleanup must never make the Vault less auditable.
+Migration rules:
 
-A Curator review may recommend fixing clear integrity defects, but mutations still
-require confirmation unless the learner explicitly asked to apply a previously
-previewed repair plan.
+1. read and validate the exact current V1 authority plus linked files;
+2. record the source V1 `vault.json` SHA/revision;
+3. dry-run the deterministic transform;
+4. do **not** reassess mastery/evidence/gaps/roadmap/next action;
+5. fail closed on extension fields not explicitly representable in V2;
+6. prepare and validate V2 Topic states, strategy state, and legacy update audit;
+7. reread V1 authority immediately before activation;
+8. activate V2 by replacing/switching the manifest only after preparation is
+   valid;
+9. reread and verify all manifest bindings and preserved semantics.
 
-Do not change mastery judgments merely to repair structure. If an integrity defect
-makes a mastery judgment unauditable, report it and preserve the distinction
-between structural repair and learning assessment.
+With conditional single-file writes, V1 `vault.json` replacement is the migration
+commit point and must happen last. With true atomic Git tree/commit/ref support,
+the complete V2 tree may be introduced in one fast-forward commit based on the
+reread current head.
 
-## Schema Migration Boundary
-
-Do not improvise schema migrations with free-form JSON rewriting.
-
-For a schema version change:
-
-1. identify the required migration;
-2. prefer a deterministic migration script or documented transform;
-3. preview the exact effects;
-4. obtain confirmation;
-5. migrate and validate;
-6. reread the resulting Vault.
-
-If no deterministic migration exists, stop at a migration proposal.
+Before activation, prepared V2 files are non-authoritative. After activation,
+never roll back to V1 merely because README repair or orphan cleanup fails.
 
 ## Write Safety
 
-Immediately before an approved write:
+Immediately before any approved write:
 
-- reread `.learning-vault/vault.json`;
-- compare its current SHA/revision with the review or operation base;
-- rebuild the plan if the Vault changed;
-- use a unique update ID when the existing Vault update protocol requires one;
-- validate schema and all rewritten references;
-- prefer one atomic multi-file commit;
-- otherwise follow the shared safe single-file fallback and write authoritative
-  state last.
+- reread the relevant authoritative domain(s);
+- verify expected SHA/revision and, in V2, relevant manifest bindings;
+- rebuild if authority changed;
+- use the owning idempotency domain and unique logical update ID when required;
+- validate schema and rewritten references;
+- prefer true atomic commits where useful;
+- otherwise obey the version-specific safe write ordering in
+  `github-operations.md`.
 
-After writing, reread the resulting state and report what changed. Never claim a
-maintenance operation succeeded solely because a write call returned
-successfully.
+After writing, reread authoritative state and verify the semantic result. Never
+claim success solely because a write call returned successfully.
 
 ## Boundaries
 
-- Do not teach routine lessons; hand that role to `learning-coach`.
-- Do not create routine evidence, adjust mastery from current-session teaching,
-  diagnose ordinary learning gaps, or select the learner's next learning action;
-  those belong to `learning-coach`.
-- Do not optimize for fewer files, fewer Topics, or prettier graphs as ends in
-  themselves.
-- Do not delete evidence merely to remove contradictions or make mastery look
-  cleaner.
-- Do not rewrite Git history.
-- Do not create a second learner-state database or curator metadata store.
-- Do not request PATs, private keys, tunnels, runtime API keys, or an always-on
-  computer for the ordinary workflow.
+- Do not teach routine lessons; use Learning Coach.
+- Do not create routine evidence or adjust mastery from current-session teaching.
+- Do not optimize for fewer files/Topics or prettier graphs as ends in themselves.
+- Do not delete evidence to hide contradictions.
+- Do not create a second learner-state database.
+- Do not request credentials or private infrastructure for the ordinary workflow.
