@@ -1,6 +1,6 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.6",
+  "version": "3.0.0-alpha.7",
   "description": "Learn, view, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
   "author": {
     "name": "SShending",
