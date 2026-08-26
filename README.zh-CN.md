@@ -41,7 +41,7 @@ Roadmap 连接长期目标与下一步行动。它以能力为单位、由证据
 
 ## 三个 Skill，共用一个 Vault
 
-Learning Coach 现在将学习、展示和维护拆成三个独立职责：
+Learning Coach 将学习、展示和维护拆成三个独立职责：
 
 ```text
                          Learning Vault
@@ -56,9 +56,9 @@ Learning Coach 现在将学习、展示和维护拆成三个独立职责：
 
 - **Learning Coach**：因为学习发生而改变 learner state。
 - **Learning View**：只展示已有 learner state，不修改它。
-- **Vault Curator**：在需要时检查、修复和重构 Vault。
+- **Vault Curator**：在需要时检查、修复、重构和迁移 Vault。
 
-因此用户不再需要为了查看学习状态而下载两个仓库、打开 `workbench.html` 再手动选择 `vault.json`。Learning View 可以直接读取已连接的 Learning Vault，并在当前 Agent 界面中整理和展示。
+因此用户不需要为了查看学习状态而下载两个仓库、打开 `workbench.html` 再手动选择 JSON。Learning View 可以直接解析已连接的 Learning Vault，并在当前 Agent 界面中整理和展示。
 
 ---
 
@@ -129,17 +129,33 @@ Learning View 不会：
 
 ## Learning Vault
 
+当前 schemaVersion 2 按 mutation domain 拆分 authority：
+
 ```text
 .learning-vault/
-└── vault.json                     权威 learner state
+├── vault.json                     权威 Vault manifest
+├── learning-strategy.json         权威跨 Topic 学习策略
+└── migrations/                    migration audit
 
 topics/<topic-id>/
+├── state.json                     权威 Topic learner state
 ├── README.md                      当前 Topic 的人类可读投影
 ├── notes/                         长期理解
 └── sessions/                      隐私最小化的学习 checkpoint
 ```
 
-`vault.json` 始终是 source of truth。Topic README 只是 derived projection。如果二者冲突，以 `vault.json` 为准。
+V2 中，Learning Vault 作为一组具有明确 ownership 的文档共同构成 authority：
+
+- `.learning-vault/vault.json` 只负责 Vault membership、Topic binding、strategy binding 和 lifecycle metadata；
+- manifest 绑定的 `topics/<topic-id>/state.json` 负责该 Topic 的 goal、roadmap、Concepts、evidence/mastery、gap、current focus、notes/sessions 索引和 next step；
+- `.learning-vault/learning-strategy.json` 负责跨 Topic 的 Learning Strategy；
+- Topic README 只是 derived projection，不会覆盖 Topic `state.json`。
+
+这样普通学习只需要替换当前 Topic 的 `state.json`，而不需要因为新增一条 evidence 就重写整个 Vault，从而减少 write amplification 和不同 Topic 之间的无意义 SHA 冲突。
+
+现有 schemaVersion 1 Vault 仍然受支持，只有显式执行 deterministic migration 后才会切换到 V2。
+
+详细协议见 [Vault Format](skills/learning-coach/references/vault-format.md)、[GitHub Operations](skills/learning-coach/references/github-operations.md) 和 [ADR 0016](docs/adr/0016-activate-sharded-learning-vault-schema-v2.md)。
 
 ---
 
@@ -156,7 +172,7 @@ Learning View 是 Learning Vault 的 read-only presentation layer。
 - Roadmap View：重点查看 milestone 状态；
 - Focused Slice：只看 notes、gaps、unassessed、evidence 等指定部分。
 
-它优先使用当前 Agent 环境原生的 Markdown、表格或 rich UI，而不是要求用户运行独立前端。
+V2 中，Learning View 会先读取 manifest，再读取实际需要的 Topic `state.json`，而不是假设一个大 `vault.json` 包含所有 Topic learner state。
 
 ### Vault Curator
 
@@ -166,6 +182,7 @@ Vault Curator 负责：
 - 引用和结构修复；
 - Topic merge / split；
 - Concept 整合；
+- schema migration；
 - archive / forget；
 - public export。
 
@@ -195,6 +212,8 @@ skills/
 ├── learning-view/
 └── vault-curator/
 ```
+
+V1 与 V2 schema 分别保存在 `skills/learning-coach/references/schemas/` 下，顶层 `vault.schema.json` 负责把不同版本/文档类型路由到相应 validator。
 
 ## 许可证
 
