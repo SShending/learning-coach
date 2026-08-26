@@ -1,0 +1,29 @@
+name: Vault schema smoke test
+
+on:
+  push:
+    paths:
+      - "skills/learning-coach/references/vault.schema.json"
+      - "skills/learning-coach/references/schemas/**"
+      - "scripts/validate_vault_schemas.py"
+      - ".github/workflows/schema-smoke.yml"
+  pull_request:
+    paths:
+      - "skills/learning-coach/references/vault.schema.json"
+      - "skills/learning-coach/references/schemas/**"
+      - "scripts/validate_vault_schemas.py"
+      - ".github/workflows/schema-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install validator
+        run: python -m pip install "jsonschema>=4.23,<5" "referencing>=0.35,<1"
+      - name: Validate schemas and dispatcher routing
+        run: python scripts/validate_vault_schemas.py
