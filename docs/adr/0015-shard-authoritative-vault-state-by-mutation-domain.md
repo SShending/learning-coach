@@ -1,6 +1,6 @@
-# Proposed: shard authoritative Learning Vault state by mutation domain
+# Accepted: shard authoritative Learning Vault state by mutation domain
 
-Status: **Proposed for schemaVersion 2. Not active on `main` persistence yet.**
+Status: **Accepted and activated by ADR 0016.**
 
 ## Context
 
@@ -206,12 +206,13 @@ See `skills/learning-coach/references/migrations/v1-to-v2.md`.
 
 ## Failure model
 
-The proposed protocol is stress-tested in `docs/schema-v2-failure-model.md`.
-That review injects same-domain and cross-domain concurrency, linked-document
-failure, manifest failure, unknown results, projection races, structural-operation
-failure, and mixed V1/V2 migration races.
+The protocol was stress-tested in `docs/schema-v2-failure-model.md` before
+activation. That review injects same-domain and cross-domain concurrency,
+linked-document failure, manifest failure, unknown results, projection races,
+structural-operation failure, and mixed V1/V2 migration races.
 
-The failure model is a design gate only. Passing it does not activate V2.
+ADR 0016 records activation after this design gate and deterministic migration
+checks passed.
 
 ## Consequences
 
