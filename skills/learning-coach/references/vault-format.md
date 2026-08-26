@@ -214,7 +214,9 @@ Use these distinctions carefully:
 Do not call an unassessed area a weakness.
 
 Keep concept prerequisites as IDs within the same Topic. References in
-`nextStepTargets` must also resolve to concept IDs within that Topic.
+`nextStepTargets` must also resolve to concept IDs within that Topic. Every
+evidence `sessionId` must resolve to a session entry within the same Topic so
+observable learner evidence retains auditable provenance.
 
 Learning Strategy observations require evidence across at least two distinct
 Topic IDs and must state the condition, approach, effect, evidence references,
@@ -373,8 +375,18 @@ learner state.
 ### Learning Notes
 
 Note files contain a title, a short explanation in the learner's own words, a
-small example or application when useful, and source links with one of these
-statuses: confirmed, working model, open question, or unsupported.
+small example or application when useful, and source links when relevant.
+
+The stored `claimStatus` enum uses these exact schema values:
+
+- `confirmed`
+- `working_model`
+- `open_question`
+- `unsupported`
+
+Human-facing views may render `working_model` as "working model" and
+`open_question` as "open question", but JSON writes must use the exact enum
+values above.
 
 Private reflections remain linked as `kind: "private_reflection"` and are
 excluded from public export by default.
