@@ -26,8 +26,16 @@ Use it when the learner wants to:
 - inspect stored gaps, unassessed areas, notes, reviews, or evidence;
 - compare existing Topic state without changing it.
 
-Learning View reads `.learning-vault/vault.json` as the source of truth and
-renders the smallest useful view directly in the current Agent interface.
+Learning View resolves authoritative state according to the Vault schema version:
+
+- schemaVersion 1: `.learning-vault/vault.json` contains the monolithic learner
+  state;
+- schemaVersion 2: `.learning-vault/vault.json` is the manifest, and Learning
+  View follows its bindings to the required `topics/<topic-id>/state.json`
+  documents and, when needed, `.learning-vault/learning-strategy.json`.
+
+It renders the smallest useful view directly in the current Agent interface and
+does not treat Topic README projections as learner-state authority.
 
 It does not:
 
@@ -59,11 +67,16 @@ It helps with:
 - merging or splitting Topics;
 - consolidating duplicate Concepts;
 - cleaning up or archiving learning structure;
+- migrating supported schema versions;
 - forgetting selected stored material;
 - preparing privacy-reviewed public exports.
 
 A normal structural review can be read-only. Writes are used only when an
 approved maintenance or lifecycle mutation is being applied.
+
+For schemaVersion 2, Curator treats the manifest plus its bound authoritative
+domain documents as the Learning Vault. Unbound preparation or leftover files
+are non-authoritative orphans until explicitly repaired or cleaned.
 
 ## Recommended Workflow
 
