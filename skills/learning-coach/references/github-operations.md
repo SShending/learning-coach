@@ -65,7 +65,9 @@ Every mutation begins from readable authoritative state.
    - concept prerequisites resolve within the Topic;
    - `nextStepTargets` resolve within the Topic when present;
    - `levelBasis` IDs refer to evidence on the same concept when present;
+   - every evidence `sessionId` resolves to a session entry within the same Topic;
    - note/session paths use the fixed Learning Vault layout;
+   - roadmap milestone IDs are unique within the Topic;
    - Topic README content is derived from the prepared Topic state rather than
      treated as an independent source of truth.
 5. When practical, validate the state against `vault.schema.json`.
@@ -117,8 +119,9 @@ Use this order instead:
    mutation.
 6. If the state is still current, update `vault.json` **last** with its expected
    SHA.
-7. Reread `vault.json` and verify the update ID and references. Verify a changed
-   Topic README against the resulting authoritative Topic when practical.
+7. Reread `vault.json` and verify the update ID and references, including evidence
+   session provenance. Verify a changed Topic README against the resulting
+   authoritative Topic when practical.
 
 The fallback deliberately prefers an orphaned projection over a dangling
 authoritative reference. All projections, including a fixed-path Topic README,
@@ -178,6 +181,8 @@ confirmation based on its own semantic rules.
 - Public repository: refuse durable learner-state writes.
 - Unsupported schema: stop mutation and explain that an explicit migration is
   required.
+- Broken evidence session provenance: do not persist the prepared state until
+  every evidence `sessionId` resolves within the same Topic.
 - Stale SHA/revision: reread and rebuild; never force a write.
 - Projection write failed before state: keep `vault.json` unchanged and report
   the partial result accurately.
