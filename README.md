@@ -73,7 +73,7 @@ The repository separates learning, presentation, and maintenance:
 
 - **Learning Coach** changes learner state because learning happened.
 - **Learning View** shows existing learner state without changing it.
-- **Vault Curator** maintains, repairs, and restructures the Vault when requested.
+- **Vault Curator** maintains, repairs, restructures, and migrates the Vault when requested.
 
 This keeps presentation logic out of the core learning workflow. A learner can ask to see current progress directly in the Agent interface without cloning repositories or opening a standalone dashboard.
 
@@ -136,7 +136,7 @@ Use Learning View.
 Show deepseek-harness.
 ```
 
-Learning View reads the authoritative Vault and presents the result directly in the current Agent interface. It does not create evidence, change mastery, or write to the Vault.
+Learning View reads authoritative Vault state and presents the result directly in the current Agent interface. It does not create evidence, change mastery, or write to the Vault.
 
 ## Skill-enabled Agents
 
@@ -150,19 +150,24 @@ Create a private GitHub repository:
 learning-vault
 ```
 
-The Vault separates machine-authoritative state from human-readable Topic views:
+The current schemaVersion 2 Vault partitions authority by mutation domain:
 
 ```text
 .learning-vault/
-└── vault.json                     authoritative learner state
+├── vault.json                     authoritative Vault manifest
+├── learning-strategy.json         authoritative cross-Topic strategy
+└── migrations/                    migration audit material
 
 topics/<topic-id>/
+├── state.json                     authoritative Topic learner state
 ├── README.md                      current human-readable Topic view
 ├── notes/                         durable understanding worth rereading
 └── sessions/                      privacy-minimized learning checkpoints
 ```
 
-`vault.json` remains the source of truth. Each Topic README is a derived projection so you can open a Topic in GitHub and immediately see its goal, roadmap, current focus, capability summary, gaps, notes, and next step. If a Topic README ever differs from `vault.json`, the JSON state wins and the README should be regenerated.
+The Learning Vault is authoritative as a set of domain-owned documents. `vault.json` owns Vault membership and bindings; each manifest-bound `topics/<topic-id>/state.json` owns that Topic's goal, roadmap, Concepts, evidence, mastery, gaps, current focus, linked notes/sessions, and next action. Topic README files are derived projections and never override the bound Topic state.
+
+V2 reduces write amplification and concurrency conflicts: ordinary learning on one Topic replaces only that Topic's `state.json`, rather than rewriting every Topic in one global JSON document. Existing V1 Vaults remain supported until explicitly migrated.
 
 The Vault stores durable learning progress, including:
 
@@ -173,6 +178,8 @@ The Vault stores durable learning progress, including:
 - gaps, review state, and next steps
 
 Raw conversations and sensitive information are not saved.
+
+See [Vault Format](skills/learning-coach/references/vault-format.md), [GitHub Operations](skills/learning-coach/references/github-operations.md), and [ADR 0016](docs/adr/0016-activate-sharded-learning-vault-schema-v2.md) for the authority and persistence contract.
 
 ## Prompt Templates
 
@@ -222,7 +229,7 @@ Review my Learning Vault like a codebase. Do not mutate anything yet.
 
 ## Optional standalone viewer
 
-`workbench.html` remains an optional local prototype for viewing `vault.json`. It is not required for normal use. Agent-native Learning View is the recommended presentation path because it reads the connected Vault directly and does not require cloning both repositories or manually selecting files.
+`workbench.html` remains an optional local prototype. Agent-native Learning View is the recommended presentation path because it resolves the connected Vault's schema and authoritative Topic state directly.
 
 ---
 
@@ -236,6 +243,8 @@ skills/
 ├── learning-view/
 └── vault-curator/
 ```
+
+V1 and V2 schemas are retained separately under `skills/learning-coach/references/schemas/`; the top-level `vault.schema.json` dispatches validation to the appropriate document schema.
 
 ## License
 
