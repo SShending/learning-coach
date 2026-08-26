@@ -1,0 +1,165 @@
+#!/usr/bin/env python3
+"""Smoke-test Learning Vault JSON Schema syntax, reference resolution, and routing."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from jsonschema import Draft202012Validator, ValidationError
+from referencing import Registry, Resource
+
+ROOT = Path(__file__).resolve().parents[1]
+REFS = ROOT / "skills" / "learning-coach" / "references"
+SCHEMA_PATHS = [
+    REFS / "vault.schema.json",
+    REFS / "schemas" / "v1" / "vault.schema.json",
+    REFS / "schemas" / "v2" / "vault-manifest.schema.json",
+    REFS / "schemas" / "v2" / "topic-state.schema.json",
+    REFS / "schemas" / "v2" / "learning-strategy.schema.json",
+]
+
+
+def load(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as f:
+        value = json.load(f)
+    if not isinstance(value, dict):
+        raise TypeError(f"Schema is not a JSON object: {path}")
+    return value
+
+
+def main() -> None:
+    schemas = [load(path) for path in SCHEMA_PATHS]
+
+    # First prove that every schema is itself a valid Draft 2020-12 schema.
+    for path, schema in zip(SCHEMA_PATHS, schemas, strict=True):
+        Draft202012Validator.check_schema(schema)
+        if "$id" not in schema:
+            raise AssertionError(f"Schema has no $id: {path}")
+
+    # Register every schema by its canonical $id so relative $ref resolution in
+    # the dispatcher is exercised by the real referencing implementation.
+    registry = Registry().with_resources(
+        (schema["$id"], Resource.from_contents(schema)) for schema in schemas
+    )
+    dispatcher = schemas[0]
+    validator = Draft202012Validator(
+        dispatcher,
+        registry=registry,
+        format_checker=Draft202012Validator.FORMAT_CHECKER,
+    )
+
+    timestamp = "2026-08-26T00:00:00Z"
+    valid_documents = {
+        "v1 monolithic Vault": {
+            "schemaVersion": 1,
+            "vaultId": "github:example/learning-vault",
+            "createdAt": timestamp,
+            "updatedAt": timestamp,
+            "topics": {},
+            "learningStrategy": {"observations": []},
+            "appliedUpdates": {},
+            "publicExports": {},
+        },
+        "v2 manifest": {
+            "schemaVersion": 2,
+            "documentType": "vault-manifest",
+            "vaultId": "github:example/learning-vault",
+            "createdAt": timestamp,
+            "updatedAt": timestamp,
+            "topics": {
+                "agent-memory": {
+                    "statePath": "topics/agent-memory/state.json"
+                }
+            },
+            "learningStrategy": {
+                "statePath": ".learning-vault/learning-strategy.json"
+            },
+            "appliedUpdates": {},
+            "publicExports": {},
+            "migrationHistory": [],
+        },
+        "v2 Topic state": {
+            "schemaVersion": 2,
+            "documentType": "topic-state",
+            "vaultId": "github:example/learning-vault",
+            "id": "agent-memory",
+            "title": "Agent Memory",
+            "goal": "Understand Agent Memory.",
+            "targetCapability": "Build a minimal memory-enabled agent.",
+            "scope": [],
+            "nonGoals": [],
+            "roadmap": [],
+            "currentFocus": "Memory lifecycle",
+            "knownGaps": [],
+            "unassessed": [],
+            "nextStep": "Explain write, retrieve, and reuse.",
+            "nextStepReason": "Test the current mental model.",
+            "nextStepTargets": [],
+            "concepts": {},
+            "notes": {},
+            "sessions": {},
+            "appliedUpdates": {},
+        },
+        "v2 Learning Strategy": {
+            "schemaVersion": 2,
+            "documentType": "learning-strategy",
+            "vaultId": "github:example/learning-vault",
+            "observations": [],
+            "appliedUpdates": {},
+        },
+    }
+
+    for name, document in valid_documents.items():
+        validator.validate(document)
+        print(f"PASS valid: {name}")
+
+    invalid_documents = {
+        "unsupported V2 documentType": {
+            "schemaVersion": 2,
+            "documentType": "unknown-state",
+        },
+        "invalid Topic mastery": {
+            "schemaVersion": 2,
+            "documentType": "topic-state",
+            "vaultId": "github:example/learning-vault",
+            "id": "agent-memory",
+            "title": "Agent Memory",
+            "goal": "Understand Agent Memory.",
+            "targetCapability": "Build a minimal memory-enabled agent.",
+            "scope": [],
+            "nonGoals": [],
+            "currentFocus": "Memory lifecycle",
+            "knownGaps": [],
+            "nextStep": "Continue.",
+            "concepts": {
+                "memory": {
+                    "id": "memory",
+                    "name": "Memory",
+                    "status": "learning",
+                    "prerequisites": [],
+                    "openQuestion": False,
+                    "level": 9,
+                    "evidence": [],
+                    "nextReview": None,
+                }
+            },
+            "notes": {},
+            "sessions": {},
+            "appliedUpdates": {},
+        },
+    }
+
+    for name, document in invalid_documents.items():
+        try:
+            validator.validate(document)
+        except ValidationError:
+            print(f"PASS rejected: {name}")
+        else:
+            raise AssertionError(f"Dispatcher incorrectly accepted invalid document: {name}")
+
+    print("SCHEMA SMOKE PASS")
+
+
+if __name__ == "__main__":
+    main()
