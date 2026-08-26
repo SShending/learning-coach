@@ -14,8 +14,8 @@ Three skills share one authoritative Learning Vault:
   produced by learning;
 - **Learning View**: reads and presents existing learner state without changing
   it;
-- **Vault Curator**: reviews, repairs, restructures, forgets, or exports Vault
-  material when explicitly requested.
+- **Vault Curator**: reviews, repairs, restructures, migrates, forgets, or exports
+  Vault material when explicitly requested.
 
 Canonical distinction:
 
@@ -25,18 +25,47 @@ Canonical distinction:
 >
 > Vault Curator maintains the Vault.
 
+## Authority Model
+
+Always resolve `.learning-vault/vault.json` first and inspect `schemaVersion`.
+
+- **V1:** `vault.json` is the monolithic authoritative structured learner state.
+- **V2:** `vault.json` is an authoritative manifest. Each bound
+  `topics/<topic-id>/state.json` owns that Topic's learner state, while
+  `.learning-vault/learning-strategy.json` owns cross-Topic strategy state.
+
+The V2 Learning Vault is authoritative **as a set of domain-owned documents**.
+The manifest owns membership and bindings, not Topic mastery/focus/gaps.
+
+Topic README files are always derived projections. V2 projections carry the
+source Topic-state SHA/revision so staleness can be detected mechanically.
+
 ## Language
 
 **Learning Vault**:
-The single authoritative, private body of a learner's history and current state
-across all of their topics, stored in the `learning-vault` GitHub repository.
+The authoritative, private body of a learner's history and current state across
+all topics, stored in the `learning-vault` GitHub repository. In V2 it is a set of
+explicitly bound authority domains rather than one giant state file.
 _Avoid_: Workspace, tutorial repository, knowledge base
+
+**Vault Manifest**:
+In schemaVersion 2, `.learning-vault/vault.json`: the small authoritative document
+that owns Vault membership, Topic state bindings, Learning Strategy binding,
+lifecycle metadata, and manifest-local idempotency. It does not cache Topic
+mastery, roadmap, current focus, or next steps.
+_Avoid_: Topic database, progress dashboard
 
 **Topic**:
 A bounded subject the learner is trying to understand or apply toward an
 observable capability. A Topic belongs to the learner's Learning Vault rather
-than constituting an independent learning record.
+than constituting an independent learning product.
 _Avoid_: Course, tutorial
+
+**Topic State**:
+In V2, the authoritative learner-state document at the path selected by the
+manifest, conventionally `topics/<topic-id>/state.json`. It contains the Topic's
+goal, target capability, roadmap, Concepts/evidence, gaps/unassessed areas,
+current focus, linked notes/sessions, next action, and Topic-local idempotency.
 
 **Learning State**:
 The current orientation for a Topic: goal, target capability, adaptive roadmap,
@@ -58,13 +87,13 @@ _Avoid_: Dashboard database, learner-state authority, assessment pass
 
 **Topic README**:
 A derived human-readable projection at `topics/<topic-id>/README.md`. It improves
-GitHub navigation but is never authoritative; `vault.json` wins if the two
-differ.
+GitHub navigation but is never authoritative. In V1 the Topic inside `vault.json`
+wins; in V2 the manifest-bound Topic `state.json` wins.
 _Avoid_: Source of truth, independent Topic state
 
 **Learning Update**:
-An atomic, distilled change to the Learning Vault caused by meaningful new
-learning state, evidence, review activity, or strategy insight.
+An atomic, distilled change to the owning Learning Vault authority domain caused
+by meaningful new learning state, evidence, review activity, or strategy insight.
 _Avoid_: Message, chat transcript, autosave event
 
 **Knowledge Map**:
@@ -84,7 +113,8 @@ _Avoid_: Reminder list, spaced-repetition score
 
 **Learning Strategy**:
 An explicit, revisable account of which learning approaches help or hinder this
-learner under particular conditions.
+learner under particular conditions. In V2 its authoritative state is separate
+from individual Topics.
 _Avoid_: Learning style, personality profile
 
 **Private Reflection**:
@@ -93,8 +123,8 @@ for publication by default.
 _Avoid_: Hidden reasoning, raw transcript
 
 **Forget**:
-Removal of material from the learner's active state and future learning use; it
-does not claim erasure from the GitHub repository's prior history.
+Removal of material from active authority and future learning use; it does not
+claim erasure from the GitHub repository's prior history.
 _Avoid_: Purge, permanent deletion, history erasure
 
 **Public Export**:
@@ -105,8 +135,9 @@ _Avoid_: Repository visibility change, automatic tutorial
 **Generic GitHub path**:
 The default read/write path using the host's existing GitHub connector or MCP
 tools. It is pragmatic and verifiable, but cannot enforce all domain invariants
-between separate generic tool calls.
+between separate generic tool calls. V2 reduces that risk by aligning files with
+semantic mutation domains and using expected-revision writes.
 
 **Dedicated Learning Vault MCP**:
-The future optional adapter with strict validation and transactional semantics.
+The future optional adapter with stricter validation and transactional semantics.
 It is preserved on the `v3-custom-mcp` branch and is not required by `main`.
