@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/vault.schema.json",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/schemas/v1/vault.schema.json",
   "title": "Learning Vault",
   "description": "Machine-checkable schema for Learning Coach schemaVersion 1. Optional extension fields preserve compatibility with earlier v1 Vaults.",
   "type": "object",
