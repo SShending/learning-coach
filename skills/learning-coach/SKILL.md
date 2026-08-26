@@ -29,12 +29,22 @@ Do not activate merely because a question is educational. A one-off request such
 as "What is node_modules?" should normally receive a direct answer without
 creating or mutating learner state.
 
-Once a Topic is active in the conversation, ordinary follow-up questions about
-that Topic remain in scope.
+Once Learning Coach is explicitly activated in the current conversation, keep it
+active for follow-up messages that continue the learning flow. The learner does
+not need to repeat `Use Learning Coach` on every message, and ordinary follow-up
+questions about the active Topic remain in scope.
+
+Stop carrying the activation forward when:
+
+- the learner explicitly switches to another Skill;
+- the learner clearly leaves the learning flow for an unrelated one-off task;
+- a new conversation starts, unless the host, workspace, or project already
+  configures Learning Coach as a default behavior.
 
 Explicit learner intent always wins. If the learner says not to record a
 particular interaction, teach normally for that interaction and do not persist
-it. This learner choice is different from unavailable Vault write capability.
+it. This learner choice is different from unavailable Vault write capability and
+does not by itself deactivate Learning Coach.
 
 ## Read The References
 
