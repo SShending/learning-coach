@@ -11,6 +11,7 @@ ChatGPT Project
       |
       +--> Learning Coach   learn / assess / update
       +--> Learning View    read-only presentation
+      +--> Ask Coach        read-only learning advice
       +--> Vault Curator    maintenance / repair
       |
       v
@@ -25,12 +26,13 @@ Each skill has a different repository capability requirement:
 | --- | --- | --- |
 | Learning Coach | required | required for normal learning |
 | Learning View | required | not needed and must not be used |
+| Ask Coach | required | not needed and must not be used |
 | Vault Curator review | required | not needed |
 | Vault Curator mutation | required | required |
 
 Learning Coach never blind-writes when authoritative Vault state cannot be read.
-Learning View is fully supported with read-only access because it never mutates
-learner state.
+Learning View and Ask Coach are fully supported with read-only access because
+they never mutate learner state.
 
 ## Setup
 
@@ -51,6 +53,8 @@ Use my private Learning Vault as the source of truth for durable learning state.
 
 Use Learning Coach when I am learning, practicing, or being assessed.
 Use Learning View when I ask to see or summarize my current learning state.
+Use Ask Coach when I ask what to learn, review, practice, connect, defer, or
+explore next.
 Use Vault Curator when I ask to review, repair, or reorganize the Vault itself.
 
 Do not save raw conversations.
@@ -63,6 +67,7 @@ Upload the skill directories you want to use:
 ```text
 skills/learning-coach/
 skills/learning-view/
+skills/ask-coach/
 skills/vault-curator/
 ```
 
@@ -71,6 +76,12 @@ skills/vault-curator/
 `learning-view` is recommended because it lets the learner inspect the connected
 Vault directly in ChatGPT without cloning repositories or opening
 `workbench.html`.
+
+`ask-coach` is recommended when the learner wants cross-Topic learning advice:
+what to study today, what to review, what to practice, which Topic to prioritize,
+how Topics connect, whether a bottleneck is blocking several areas, or what new
+Topic is worth learning next. It is read-only and does not turn a recommendation
+into learner state.
 
 `vault-curator` is optional and is only needed for Vault maintenance or lifecycle
 operations.
@@ -104,32 +115,30 @@ useful learning action.
 
 ## View Learning State
 
-Overall view:
-
 ```text
 Use Learning View.
 
 Show my current learning state.
 ```
 
-One Topic:
-
-```text
-Use Learning View.
-
-Show deepseek-harness.
-```
-
-Roadmap-only view:
-
-```text
-Use Learning View.
-
-Show the roadmap for agent-memory.
-```
-
 Learning View is read-only. It does not create evidence, alter mastery, update a
 roadmap, create notes, or write to the Vault.
+
+## Ask What To Do Next
+
+```text
+Use Ask Coach.
+
+I have 45 minutes today. Based on my Learning Vault, what should I learn, review,
+practice, connect, or defer? Is there a new Topic worth opening now?
+```
+
+Ask Coach may derive qualitative review urgency, cross-Topic relationships,
+bottleneck hypotheses, and new-Topic recommendations from authoritative state.
+These are advisory outputs, not persisted learner state.
+
+If the learner accepts a recommendation and wants to learn, practice, test
+retrieval, or create a Topic, switch to Learning Coach.
 
 ## Capture Existing Learning
 
