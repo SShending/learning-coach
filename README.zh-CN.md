@@ -2,7 +2,7 @@
 
 # Learning Coach
 
-**把零散的 AI 对话变成一棵持续生长的个人知识树，记录真正掌握的内容，并指导下一步学习。**
+**一个多 Skill 学习系统：把可持续的能力状态保存在私有 GitHub Learning Vault 中。**
 
 [English](README.md) | 简体中文
 
@@ -14,206 +14,181 @@
 
 ---
 
-## 让学习不再随对话结束
+## 产品与 Skills
 
-大多数 AI 助手只回答当前问题。对话结束后，你学到了什么、哪里存在误解、下一步应该学习什么，通常都会消失。
+**Learning Coach** 现在表示整个产品 / repository / package，不再是某一个 Skill 的名字。
 
-Learning Coach 将问题、解释、错误和实践结果转化为长期学习状态，并通过 GitHub-backed Learning Vault 保存。
+```text
+Learning Coach
+├── Ask Coach      跨 Topic 的学习组合规划
+├── Topic Coach    单个 Topic 内的教学、练习、评估和状态更新
+├── Learning View  只读展示
+└── Vault Curator  维护、生命周期、修复、迁移与导出
+```
 
-> AI 不只应该记住你问过什么，还应该记住你真正学会了什么。
+| Skill | 主要职责 |
+| --- | --- |
+| **Ask Coach** | 跨 Topic 决定学什么/复习什么/练什么，global review priority，Topic 关联与 bottleneck，候选 Topic，Coach State，Learning Strategy synthesis |
+| **Topic Coach** | 用户选择学习方向后的 Topic 边界判断、教学、练习、评估、Topic roadmap/currentFocus/nextStep、evidence/mastery/gaps、本 Topic review、notes/sessions |
+| **Learning View** | 只读展示 authoritative state |
+| **Vault Curator** | 结构检查、修复、merge/split、migration、forget/archive、export |
 
-## Topic 结构
+规划层次刻意分开：
+
+```text
+Ask Coach
+“接下来优先学 llm-evolution”
+        |
+        v
+Topic Coach
+“在 llm-evolution 内，下一步标出 pretraining/SFT 的 loss positions”
+```
+
+用户说“我想学 X”**不等于 X 自动成为一个 Topic**。Topic Coach 在初始化时判断这个学习区域更适合作为：
+
+- 已有 Topic 内的 Concept；
+- roadmap milestone / Concept cluster；
+- 已有 Topic 的扩展或重构；
+- 还是一个拥有独立、可观察 target capability 的新 Topic。
+
+## 共享 Contracts
+
+整个系统共用的 persistence / knowledge contract 不再挂在某个 Skill 目录下，而是位于 repo 根目录：
+
+```text
+references/
+├── vault-format.md
+├── github-operations.md
+├── knowledge-grounding.md
+├── coach-state.md
+├── vault.schema.json
+├── schemas/
+└── migrations/
+```
+
+各个 Skill 按需要读取这些 shared contracts。一个资源对 Agent runtime **可访问**，并不意味着它的内容已经自动进入某次 LLM call 的 model-visible context。
+
+## Topic Model
 
 ```text
 Topic
-├── Goal                  为什么学
-├── Target Capability     最终可观察的目标能力
-├── Roadmap               可动态调整的能力路径
-├── Concepts              领域知识结构
-├── Current Focus         当前正在学习什么
-├── Evidence / Mastery    已经真正证明会什么
-├── Gaps / Unassessed     已确认的困难与尚未评估的部分
-├── Notes                 对话结束后仍值得重读的长期理解
-└── Next Step             下一步具体行动
+├── Goal
+├── Target Capability
+├── Roadmap
+├── Concepts
+├── Current Focus
+├── Evidence / Mastery
+├── Gaps / Unassessed
+├── Notes
+└── Next Step
 ```
 
-## 四个 Skill，共用一个 Vault
+Topic roadmap、current focus、next step 是 Topic-local state，由 Topic Coach 负责。跨 Topic 的切换、全局 review 排序、新 Topic 推荐属于 Ask Coach。
+
+## Learning Vault
+
+schemaVersion 2 按 mutation domain 拆分 authority：
 
 ```text
-                           Learning Vault
-                                |
-          +---------------------+---------------------+
-          |                     |                     |
-          v                     v                     v
-   Learning View           Ask Coach             Vault Curator
-   展示 / 查看             建议 / 排优先级         维护 / 修复
-   read-only               read-only             read / write
-          \                     |                    /
-           \                    |                   /
-            +-------------------+------------------+
-                                |
-                                v
-                         Learning Coach
-                         学习 / 评估
-                         read + write
+.learning-vault/
+├── vault.json                     Vault manifest / topology
+├── learning-strategy.json         跨 Topic meta-learning strategy
+├── coach-state.json               可选的 durable portfolio advisory memory
+└── migrations/                    migration audit
+
+topics/<topic-id>/
+├── state.json                     authoritative Topic learner state
+├── README.md                      derived projection
+├── notes/
+└── sessions/
 ```
 
-- **Learning Coach**：教学、练习、评估，并因为学习发生而更新 learner state。
-- **Learning View**：只展示已有 learner state，不修改它。
-- **Ask Coach**：基于已有 learner state，建议接下来学什么、复习什么、练什么、连接什么、暂缓什么、探索什么，不修改 learner state。
-- **Vault Curator**：检查、修复、重构和迁移 Vault。
+Learning Vault 的 authority 是**一组 domain-owned documents**，不是单一大 JSON。普通 Topic 学习只更新对应 Topic authority。Ask Coach 只在必要时更新 Coach State 或有跨 Topic evidence 支撑的 Learning Strategy。Learning View 永远不写。
 
-Ask Coach 补上的是跨 Topic 的“学习决策层”：它可以帮助决定今天学什么、哪些内容值得复习、哪个 bottleneck 最关键、Topics 之间如何迁移，以及是否值得新增一个 Topic。
+详细协议见 [Vault Format](references/vault-format.md)、[GitHub Operations](references/github-operations.md)、[Coach State](references/coach-state.md) 与 [Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md)。
 
----
+## 使用
 
-## 推荐设置：ChatGPT Project
-
-创建一个 ChatGPT Project，并按需上传：
+### 学习或继续一个 Topic
 
 ```text
-skills/learning-coach/   学习时需要
-skills/learning-view/    推荐，用于只读学习状态展示
-skills/ask-coach/        推荐，用于学习建议与优先级决策
-skills/vault-curator/    可选，用于维护与修复
-```
-
-然后连接一个私有 GitHub 仓库作为 Learning Vault。
-
-权限要求：
-
-- Learning Coach：需要 read + write；
-- Learning View：只需要 read；
-- Ask Coach：只需要 read；
-- Vault Curator：只读 review 只需要 read，实际 mutation 才需要 write。
-
-详细说明见 [ChatGPT Project Setup](docs/chatgpt-project.md)。
-
-### 开始或继续学习
-
-```text
-Use Learning Coach.
+Use Topic Coach.
 
 Resume agent-memory.
 ```
 
-### 查看整体学习状态
+或者先判断学习区域的正确粒度：
 
 ```text
-Use Learning View.
+Use Topic Coach.
 
-Show my current learning state.
+我想系统学习 Agent Foundations。先判断合适的 Topic 边界、target capability 和 roadmap，然后从下一步开始。
 ```
 
-### 问 Coach 今天应该做什么
+### 跨 Topic 决定接下来做什么
 
 ```text
 Use Ask Coach.
 
-我今天有 45 分钟。根据我的 Learning Vault，告诉我应该学什么、复习什么、暂缓什么，以及现在是否值得新增一个 Topic。
+我今天有 45 分钟。根据 Learning Vault，告诉我应该学什么、复习什么、练什么、连接什么或暂缓什么。
 ```
 
-Ask Coach 是严格 read-only 的。它不会因为一次建议就：
+Ask Coach 可以把耐久的候选 Topic / connection / hypothesis 保存到 Coach State，并在至少两个 Topic 的 evidence 支持时综合 Learning Strategy；它绝不修改 Topic mastery/evidence/roadmap/currentFocus/nextStep。
 
-- 创建 evidence；
-- 修改 mastery；
-- 修改 roadmap / current focus / next step；
-- 写入“遗忘分数”；
-- 创建新 Topic。
-
-如果你接受建议并决定开始学习、练习、测试记忆或创建 Topic，再切换到 Learning Coach。
-
-常见问题包括：
-
-- 今天最值得学什么？
-- 哪些知识再不复习就容易遗忘？
-- 哪些内容应该练习而不是继续看解释？
-- 哪个 Topic 是当前最大的学习瓶颈？
-- 我的 Topics 之间有什么联系？
-- 哪些知识目前还是“孤岛”？
-- 现在应该暂缓什么？
-- 下一个最值得学习的新 Topic 是什么？
-- 现在是否适合新增 Topic？
-- 帮我做一次本周学习回顾和下周规划。
-
-第一版不会伪装成能精确计算记忆概率。Ask Coach 使用基于 evidence age/type、result、assistance、contradiction、`nextReview`、prerequisite relevance 等信号的定性 **review urgency**。当前 schema 不保存 FSRS-style 的 memory stability / retrievability。
-
----
-
-## Learning Vault
-
-当前 schemaVersion 2 按 mutation domain 拆分 authority：
+### 查看学习状态
 
 ```text
-.learning-vault/
-├── vault.json                     权威 Vault manifest
-├── learning-strategy.json         权威跨 Topic 学习策略
-└── migrations/                    migration audit
-
-topics/<topic-id>/
-├── state.json                     权威 Topic learner state
-├── README.md                      当前 Topic 的人类可读投影
-├── notes/                         长期理解
-└── sessions/                      隐私最小化的学习 checkpoint
+Use Learning View.
+Show my current learning state.
 ```
 
-V2 中，Learning Vault 作为一组具有明确 ownership 的文档共同构成 authority：
+### 维护 Vault
 
-- `.learning-vault/vault.json` 负责 Vault membership、Topic binding、strategy binding 和 lifecycle metadata；
-- manifest 绑定的 `topics/<topic-id>/state.json` 负责该 Topic 的 goal、roadmap、Concepts、evidence/mastery、gap、current focus、notes/sessions 索引和 next step；
-- `.learning-vault/learning-strategy.json` 负责跨 Topic 的 Learning Strategy；
-- Topic README 只是 derived projection，不会覆盖 Topic `state.json`。
+```text
+Use Vault Curator.
+Review my Learning Vault like a codebase. Do not mutate anything yet.
+```
 
-Ask Coach 不会为了建议修改 V2 schema。priority、review urgency、cross-topic connection、bottleneck hypothesis 和 new-topic recommendation 都是 derived advisory computation，而不是新的 authoritative learner state。
+## ChatGPT / Agent 设置
 
-详细协议见 [Vault Format](skills/learning-coach/references/vault-format.md)、[Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md)、[GitHub Operations](skills/learning-coach/references/github-operations.md) 和 [ADR 0016](docs/adr/0016-activate-sharded-learning-vault-schema-v2.md)。
+使用四个 Skill 目录以及共享 contracts：
 
----
+```text
+skills/topic-coach/
+skills/ask-coach/
+skills/learning-view/
+skills/vault-curator/
+references/
+```
 
-## Companion Skills
+权限要求按 Skill 区分：Topic Coach 正常学习需要 read + write；Learning View 只读；Ask Coach 始终需要 read，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护操作时才写。
 
-### Learning View
-
-Learning View 是 Learning Vault 的 read-only presentation layer，用于回答“我的 Vault 当前记录了什么？”
-
-### Ask Coach
-
-Ask Coach 是 read-only advisory layer，用于回答“基于这些状态，我现在应该做什么？”
-
-它支持：
-
-- today / next priority；
-- review urgency；
-- practice vs. more study；
-- cross-Topic connections；
-- bottleneck diagnosis；
-- new Topic recommendation；
-- deprioritization；
-- weekly / periodic review。
-
-### Vault Curator
-
-Vault Curator 负责 Vault 健康检查、引用和结构修复、Topic merge/split、Concept 整合、schema migration、archive/forget 和 public export。
-
----
-
-## Optional standalone viewer
-
-`workbench.html` 保留为可选的本地 viewer prototype，但不再是核心使用路径。
-
----
+详细设置见 [ChatGPT Project Setup](docs/chatgpt-project.md)。
 
 ## 开发
 
+当前 package 结构：
+
 ```text
 skills/
-├── learning-coach/
-├── learning-view/
 ├── ask-coach/
+├── topic-coach/
+├── learning-view/
 └── vault-curator/
+
+references/          shared system contracts
+scripts/             validator / migration tooling
+docs/                architecture / operating docs
 ```
 
-V1 与 V2 schema 分别保存在 `skills/learning-coach/references/schemas/` 下，顶层 `vault.schema.json` 负责把不同版本/文档类型路由到相应 validator。
+检查：
+
+```text
+python scripts/validate_vault_schemas.py
+python scripts/check_skill_architecture.py
+```
+
+GitHub Actions 会在 Skills、shared contracts、schemas 和核心 setup 文档变化时同时运行 schema 与 Skill-routing consistency checks。
 
 ## 许可证
 
