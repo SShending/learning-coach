@@ -1,422 +1,128 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/schemas/v1/vault.schema.json",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/v1/vault.schema.json",
   "title": "Learning Vault",
   "description": "Machine-checkable schema for Learning Coach schemaVersion 1. Optional extension fields preserve compatibility with earlier v1 Vaults.",
   "type": "object",
-  "required": [
-    "schemaVersion",
-    "vaultId",
-    "createdAt",
-    "updatedAt",
-    "topics",
-    "learningStrategy",
-    "appliedUpdates",
-    "publicExports"
-  ],
+  "required": ["schemaVersion", "vaultId", "createdAt", "updatedAt", "topics", "learningStrategy", "appliedUpdates", "publicExports"],
   "properties": {
-    "schemaVersion": {
-      "const": 1
-    },
-    "vaultId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "createdAt": {
-      "$ref": "#/$defs/timestamp"
-    },
-    "updatedAt": {
-      "$ref": "#/$defs/timestamp"
-    },
-    "topics": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/topic"
-      }
-    },
-    "learningStrategy": {
-      "$ref": "#/$defs/learningStrategy"
-    },
-    "appliedUpdates": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/appliedUpdate"
-      }
-    },
-    "publicExports": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/publicExport"
-      }
-    }
+    "schemaVersion": { "const": 1 },
+    "vaultId": { "type": "string", "minLength": 1 },
+    "createdAt": { "$ref": "#/$defs/timestamp" },
+    "updatedAt": { "$ref": "#/$defs/timestamp" },
+    "topics": { "type": "object", "additionalProperties": { "$ref": "#/$defs/topic" } },
+    "learningStrategy": { "$ref": "#/$defs/learningStrategy" },
+    "appliedUpdates": { "type": "object", "additionalProperties": { "$ref": "#/$defs/appliedUpdate" } },
+    "publicExports": { "type": "object", "additionalProperties": { "$ref": "#/$defs/publicExport" } }
   },
   "additionalProperties": true,
   "$defs": {
-    "timestamp": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "topic": {
       "type": "object",
-      "required": [
-        "id",
-        "title",
-        "goal",
-        "targetCapability",
-        "scope",
-        "nonGoals",
-        "currentFocus",
-        "knownGaps",
-        "nextStep",
-        "concepts",
-        "notes",
-        "sessions"
-      ],
+      "required": ["id", "title", "goal", "targetCapability", "scope", "nonGoals", "currentFocus", "knownGaps", "nextStep", "concepts", "notes", "sessions"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1
-        },
-        "goal": {
-          "type": "string",
-          "minLength": 1
-        },
-        "targetCapability": {
-          "type": "string",
-          "minLength": 1
-        },
-        "scope": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "nonGoals": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "currentFocus": {
-          "type": "string"
-        },
-        "knownGaps": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "unassessed": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "nextStep": {
-          "type": "string"
-        },
-        "nextStepReason": {
-          "type": "string"
-        },
-        "nextStepTargets": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/id"
-          },
-          "uniqueItems": true
-        },
-        "concepts": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/concept"
-          }
-        },
-        "notes": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/note"
-          }
-        },
-        "sessions": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/session"
-          }
-        },
-        "roadmap": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/roadmapMilestone"
-          }
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1 },
+        "goal": { "type": "string", "minLength": 1 },
+        "targetCapability": { "type": "string", "minLength": 1 },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "nonGoals": { "type": "array", "items": { "type": "string" } },
+        "currentFocus": { "type": "string" },
+        "knownGaps": { "type": "array", "items": { "type": "string" } },
+        "unassessed": { "type": "array", "items": { "type": "string" } },
+        "nextStep": { "type": "string" },
+        "nextStepReason": { "type": "string" },
+        "nextStepTargets": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "concepts": { "type": "object", "additionalProperties": { "$ref": "#/$defs/concept" } },
+        "notes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/note" } },
+        "sessions": { "type": "object", "additionalProperties": { "$ref": "#/$defs/session" } },
+        "roadmap": { "type": "array", "items": { "$ref": "#/$defs/roadmapMilestone" } }
       },
       "additionalProperties": true
     },
     "roadmapMilestone": {
       "type": "object",
-      "required": [
-        "id",
-        "title",
-        "targetCapability",
-        "status"
-      ],
+      "required": ["id", "title", "targetCapability", "status"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1
-        },
-        "targetCapability": {
-          "type": "string",
-          "minLength": 1
-        },
-        "status": {
-          "enum": [
-            "planned",
-            "active",
-            "demonstrated",
-            "blocked"
-          ]
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1 },
+        "targetCapability": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["planned", "active", "demonstrated", "blocked"] }
       },
       "additionalProperties": true
     },
     "concept": {
       "type": "object",
-      "required": [
-        "id",
-        "name",
-        "status",
-        "prerequisites",
-        "openQuestion",
-        "level",
-        "evidence",
-        "nextReview"
-      ],
+      "required": ["id", "name", "status", "prerequisites", "openQuestion", "level", "evidence", "nextReview"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "status": {
-          "enum": [
-            "unmapped",
-            "learning",
-            "blocked",
-            "practicing",
-            "demonstrated"
-          ]
-        },
-        "prerequisites": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/id"
-          },
-          "uniqueItems": true
-        },
-        "openQuestion": {
-          "type": "boolean"
-        },
-        "level": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 4
-        },
-        "levelBasis": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "uniqueItems": true
-        },
-        "evidence": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/evidence"
-          }
-        },
-        "nextReview": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/timestamp"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["unmapped", "learning", "blocked", "practicing", "demonstrated"] },
+        "prerequisites": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "openQuestion": { "type": "boolean" },
+        "level": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "levelBasis": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "nextReview": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] }
       },
       "additionalProperties": true
     },
     "evidence": {
       "type": "object",
-      "required": [
-        "id",
-        "observedAt",
-        "type",
-        "summary",
-        "sessionId",
-        "stale"
-      ],
+      "required": ["id", "observedAt", "type", "summary", "sessionId", "stale"],
       "properties": {
-        "id": {
-          "type": "string",
-          "minLength": 1
-        },
-        "observedAt": {
-          "$ref": "#/$defs/timestamp"
-        },
-        "type": {
-          "enum": [
-            "recognition",
-            "explanation",
-            "application",
-            "transfer",
-            "contradiction"
-          ]
-        },
-        "result": {
-          "enum": [
-            "pass",
-            "partial",
-            "fail"
-          ]
-        },
-        "assistance": {
-          "enum": [
-            "none",
-            "hinted",
-            "guided"
-          ]
-        },
-        "summary": {
-          "type": "string",
-          "minLength": 1
-        },
-        "sessionId": {
-          "$ref": "#/$defs/id"
-        },
-        "stale": {
-          "type": "boolean"
-        }
+        "id": { "type": "string", "minLength": 1 },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "type": { "enum": ["recognition", "explanation", "application", "transfer", "contradiction"] },
+        "result": { "enum": ["pass", "partial", "fail"] },
+        "assistance": { "enum": ["none", "hinted", "guided"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "sessionId": { "$ref": "#/$defs/id" },
+        "stale": { "type": "boolean" }
       },
       "additionalProperties": true
     },
     "note": {
       "type": "object",
-      "required": [
-        "id",
-        "path",
-        "updatedAt",
-        "kind",
-        "claimStatus",
-        "sources"
-      ],
+      "required": ["id", "path", "updatedAt", "kind", "claimStatus", "sources"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "path": {
-          "type": "string",
-          "minLength": 1
-        },
-        "updatedAt": {
-          "$ref": "#/$defs/timestamp"
-        },
-        "kind": {
-          "enum": [
-            "learning_note",
-            "private_reflection"
-          ]
-        },
-        "claimStatus": {
-          "enum": [
-            "confirmed",
-            "working_model",
-            "open_question",
-            "unsupported"
-          ]
-        },
-        "sources": {
-          "type": "array"
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "type": "string", "minLength": 1 },
+        "updatedAt": { "$ref": "#/$defs/timestamp" },
+        "kind": { "enum": ["learning_note", "private_reflection"] },
+        "claimStatus": { "enum": ["confirmed", "working_model", "open_question", "unsupported"] },
+        "sources": { "type": "array" }
       },
       "additionalProperties": true
     },
     "session": {
       "type": "object",
-      "required": [
-        "id",
-        "path",
-        "createdAt"
-      ],
+      "required": ["id", "path", "createdAt"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "path": {
-          "type": "string",
-          "minLength": 1
-        },
-        "createdAt": {
-          "$ref": "#/$defs/timestamp"
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "type": "string", "minLength": 1 },
+        "createdAt": { "$ref": "#/$defs/timestamp" }
       },
       "additionalProperties": true
     },
     "learningStrategy": {
       "type": "object",
-      "required": [
-        "observations"
-      ],
-      "properties": {
-        "observations": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        }
-      },
+      "required": ["observations"],
+      "properties": { "observations": { "type": "array", "items": { "type": "object" } } },
       "additionalProperties": true
     },
     "appliedUpdate": {
       "type": "object",
-      "required": [
-        "updateId",
-        "baseRevision",
-        "appliedAt"
-      ],
+      "required": ["updateId", "baseRevision", "appliedAt"],
       "properties": {
-        "updateId": {
-          "type": "string",
-          "minLength": 1
-        },
-        "baseRevision": {
-          "type": "string",
-          "minLength": 1
-        },
-        "appliedAt": {
-          "$ref": "#/$defs/timestamp"
-        }
+        "updateId": { "type": "string", "minLength": 1 },
+        "baseRevision": { "type": "string", "minLength": 1 },
+        "appliedAt": { "$ref": "#/$defs/timestamp" }
       },
       "additionalProperties": true
     },
-    "publicExport": {
-      "type": "object",
-      "additionalProperties": true
-    }
+    "publicExport": { "type": "object", "additionalProperties": true }
   }
 }
