@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/vault.schema.json",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/vault.schema.json",
   "title": "Learning Vault document dispatcher",
   "description": "Version-aware schema dispatcher for Learning Vault authoritative documents. V1 validates the legacy monolithic Vault; V2 validates the manifest, Topic state, Learning Strategy state, or Coach State according to documentType.",
   "oneOf": [
