@@ -17,6 +17,7 @@ SCHEMA_PATHS = [
     REFS / "schemas" / "v2" / "vault-manifest.schema.json",
     REFS / "schemas" / "v2" / "topic-state.schema.json",
     REFS / "schemas" / "v2" / "learning-strategy.schema.json",
+    REFS / "schemas" / "v2" / "coach-state.schema.json",
 ]
 
 
@@ -30,26 +31,21 @@ def load(path: Path) -> dict:
 
 def main() -> None:
     schemas = [load(path) for path in SCHEMA_PATHS]
-
-    # First prove that every schema is itself a valid Draft 2020-12 schema.
     for path, schema in zip(SCHEMA_PATHS, schemas, strict=True):
         Draft202012Validator.check_schema(schema)
         if "$id" not in schema:
             raise AssertionError(f"Schema has no $id: {path}")
 
-    # Register every schema by its canonical $id so relative $ref resolution in
-    # the dispatcher is exercised by the real referencing implementation.
     registry = Registry().with_resources(
         (schema["$id"], Resource.from_contents(schema)) for schema in schemas
     )
-    dispatcher = schemas[0]
     validator = Draft202012Validator(
-        dispatcher,
+        schemas[0],
         registry=registry,
         format_checker=Draft202012Validator.FORMAT_CHECKER,
     )
 
-    timestamp = "2026-08-26T00:00:00Z"
+    timestamp = "2026-08-27T00:00:00Z"
     valid_documents = {
         "v1 monolithic Vault": {
             "schemaVersion": 1,
@@ -68,13 +64,10 @@ def main() -> None:
             "createdAt": timestamp,
             "updatedAt": timestamp,
             "topics": {
-                "agent-memory": {
-                    "statePath": "topics/agent-memory/state.json"
-                }
+                "agent-memory": {"statePath": "topics/agent-memory/state.json"}
             },
-            "learningStrategy": {
-                "statePath": ".learning-vault/learning-strategy.json"
-            },
+            "learningStrategy": {"statePath": ".learning-vault/learning-strategy.json"},
+            "coachState": {"statePath": ".learning-vault/coach-state.json"},
             "appliedUpdates": {},
             "publicExports": {},
             "migrationHistory": [],
@@ -108,6 +101,27 @@ def main() -> None:
             "observations": [],
             "appliedUpdates": {},
         },
+        "v2 Coach State": {
+            "schemaVersion": 2,
+            "documentType": "coach-state",
+            "vaultId": "github:example/learning-vault",
+            "candidateTopics": {
+                "transformer-foundations": {
+                    "id": "transformer-foundations",
+                    "title": "Transformer and Neural Network Foundations",
+                    "status": "deferred",
+                    "rationale": "Useful foundation but currently fits inside an existing Topic.",
+                    "relatedTopics": ["llm-evolution", "deepseek-harness"],
+                    "targetCapability": "Explain core neural-network and Transformer computation well enough to support LLM and Agent-system learning.",
+                    "revisitWhen": ["Transformer internals start distorting the llm-evolution Topic boundary."],
+                    "observedAt": timestamp,
+                    "updatedAt": timestamp
+                }
+            },
+            "crossTopicConnections": {},
+            "advisoryHypotheses": {},
+            "appliedUpdates": {},
+        },
     }
 
     for name, document in valid_documents.items():
@@ -119,33 +133,25 @@ def main() -> None:
             "schemaVersion": 2,
             "documentType": "unknown-state",
         },
-        "invalid Topic mastery": {
+        "invalid Coach State candidate status": {
             "schemaVersion": 2,
-            "documentType": "topic-state",
+            "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
-            "id": "agent-memory",
-            "title": "Agent Memory",
-            "goal": "Understand Agent Memory.",
-            "targetCapability": "Build a minimal memory-enabled agent.",
-            "scope": [],
-            "nonGoals": [],
-            "currentFocus": "Memory lifecycle",
-            "knownGaps": [],
-            "nextStep": "Continue.",
-            "concepts": {
-                "memory": {
-                    "id": "memory",
-                    "name": "Memory",
-                    "status": "learning",
-                    "prerequisites": [],
-                    "openQuestion": False,
-                    "level": 9,
-                    "evidence": [],
-                    "nextReview": None,
+            "candidateTopics": {
+                "bad-topic": {
+                    "id": "bad-topic",
+                    "title": "Bad Topic",
+                    "status": "maybe",
+                    "rationale": "Invalid enum should be rejected.",
+                    "relatedTopics": [],
+                    "targetCapability": "Nothing",
+                    "revisitWhen": [],
+                    "observedAt": timestamp,
+                    "updatedAt": timestamp
                 }
             },
-            "notes": {},
-            "sessions": {},
+            "crossTopicConnections": {},
+            "advisoryHypotheses": {},
             "appliedUpdates": {},
         },
     }
