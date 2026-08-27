@@ -1,32 +1,47 @@
 # Learning Coach
 
-Learning Coach preserves a learner's evolving understanding in one private GitHub
-Learning Vault so future learning can resume from evidence rather than chat
-history.
+Learning Coach is the product/repository that preserves a learner's evolving capability state in a private GitHub Learning Vault.
+
+It is a multi-Skill system. **Learning Coach is no longer the name of an individual Skill.**
 
 ## System Roles
 
-Four skills share one authoritative Learning Vault:
-
-- **Learning Coach**: Topic-local learning controller. Teaches, practices,
-  assesses, updates Topic roadmap/focus/evidence/mastery/gaps/nextStep, and
-  creates a Topic after explicit learner choice.
-- **Ask Coach**: portfolio-level learning planner. Chooses what to learn/review/
-  practice across Topics, diagnoses cross-Topic bottlenecks, recommends/defer new
-  Topics, persists durable Coach State, and synthesizes evidence-backed Learning
-  Strategy across Topics.
-- **Learning View**: read-only presentation of stored state.
-- **Vault Curator**: maintenance/lifecycle/repair/migration layer.
+```text
+Learning Coach product
+├── Ask Coach      portfolio-level planning
+├── Topic Coach    one-Topic teaching, practice, assessment, and learner-state updates
+├── Learning View  read-only presentation
+└── Vault Curator  maintenance, lifecycle, repair, migration, and export
+```
 
 Canonical distinction:
 
 > Ask Coach decides **where learning attention should go**.
 >
-> Learning Coach decides **what to do next inside the chosen Topic**.
+> Topic Coach decides **what to do next inside the chosen Topic**.
 >
-> Learning View shows stored state.
+> Learning View shows authoritative state.
 >
 > Vault Curator maintains the Vault.
+
+## Shared Contracts
+
+System-wide persistence and knowledge contracts live at repository root:
+
+```text
+references/
+├── vault-format.md
+├── github-operations.md
+├── knowledge-grounding.md
+├── coach-state.md
+├── vault.schema.json
+├── schemas/
+└── migrations/
+```
+
+These files are not owned by Topic Coach. All Skills may read the shared contracts they need.
+
+A file being available to a Skill/runtime does not imply its contents are automatically present in an LLM's model-visible context; loading/context assembly is an Agent-runtime concern.
 
 ## Authority Model
 
@@ -40,87 +55,50 @@ Always resolve `.learning-vault/vault.json` first.
 
 The Learning Vault is authoritative as a set of mutation-domain-owned documents:
 
-- manifest -> membership/bindings/lifecycle;
+- manifest -> membership, bindings, lifecycle, manifest idempotency;
 - Topic state -> Topic-local learner state;
 - Learning Strategy -> cross-Topic meta-learning observations;
 - Coach State -> durable portfolio advisory memory;
 - Topic README -> derived projection only.
 
-## Core Language
+## Topic
 
-**Learning Vault**  
-The private durable state layer across all learning Topics.
+A Topic is a bounded learning unit with one coherent goal, observable target capability, adaptive roadmap, current focus, and useful next action.
 
-**Topic**  
-A bounded subject/capability the learner is actively trying to understand or
-apply.
+A learner naming a subject does not automatically make it a Topic. Topic Coach decides during initialization whether the learning area is better represented as:
 
-**Topic State**  
-Goal, target capability, roadmap, Concepts/evidence/mastery, gaps/unassessed,
-current focus, notes/sessions index, Topic-local review state, and next action.
+- a Concept inside an existing Topic;
+- a roadmap milestone or Concept cluster;
+- an extension/refinement of an existing Topic;
+- a genuinely new Topic.
 
-**Topic Roadmap**  
-Medium-term capability path inside one Topic. Owned by Learning Coach.
-
-**Learning Portfolio**  
-The set of active/deferred learning Topics plus their cross-Topic priorities,
-connections, review pressure, and candidate future Topics. Ask Coach reasons over
-this layer.
-
-**Ask Coach**  
-Request-scoped portfolio planner. It may persist only cross-Topic advisory/meta-
-learning domains; it never writes Topic learner-state judgments.
-
-**Coach State**  
-Durable portfolio advisory memory: candidate Topics, durable cross-Topic
-connections, and advisory hypotheses worth remembering across future Ask Coach
-runs.
-
-**Learning Strategy**  
-Evidence-backed cross-Topic observations about which learning approaches help or
-hinder this learner under particular conditions. Ask Coach owns synthesis;
-Learning Coach may read and apply it locally.
-
-**Review Urgency**  
-A qualitative portfolio/local signal for whether retrieval/reapplication is
-useful now. It is not calibrated recall probability, FSRS stability, or mastery.
-Global prioritization belongs to Ask Coach; Topic-local execution belongs to
-Learning Coach.
-
-**Learning View**  
-Read-only presentation of existing authoritative state. It does not advise,
-teach, assess, or mutate.
-
-**Vault Curator**  
-Maintenance/lifecycle layer for structural repair, merge/split, migration,
-archive/forget, and export.
-
-**Mastery Evidence**  
-Observable learner recognition, explanation, application, transfer, or
-contradiction used for Topic-local capability judgment.
-
-**Learning Update**  
-One distilled mutation in its owning authority domain, protected by expected
-revision and idempotency rules.
-
-**Topic README**  
-Derived human-readable projection. Never authority.
+System-initiated **recommendation** of a possible new Topic belongs to Ask Coach; final Topic boundary and initialization after learner choice belong to Topic Coach.
 
 ## Planning Hierarchy
 
-Use this hierarchy instead of one overloaded "next step" concept:
-
 ```text
 Ask Coach
-  Learning Portfolio decision
+  portfolio decision
   "Work on llm-evolution next"
         |
         v
-Learning Coach
+Topic Coach
   Topic roadmap/currentFocus/nextStep
   "Mark token-loss positions for pretraining vs SFT"
 ```
 
-Portfolio decisions must not be encoded into Topic `nextStep`. Topic-local next
-actions must not be promoted into global portfolio strategy unless Ask Coach
-explicitly compares them against alternatives across the Vault.
+Portfolio decisions must not be encoded into Topic `nextStep`. Topic-local next actions must not be promoted into global strategy without cross-Topic comparison.
+
+## Learning Strategy
+
+Learning Strategy contains evidence-backed cross-Topic observations about learning approaches that help or hinder under particular conditions.
+
+Ask Coach owns synthesis because it requires evidence across at least two Topics. Topic Coach may read strategy and adapt the current lesson, but ordinary Topic learning does not mutate Learning Strategy.
+
+## Coach State
+
+Coach State is durable portfolio advisory memory: candidate Topics, durable cross-Topic connections, and advisory hypotheses worth remembering. It is not learner mastery/evidence state.
+
+## Review
+
+Ask Coach prioritizes review across the portfolio. Topic Coach executes retrieval/reapplication within the chosen Topic and records the observed result as Topic evidence.
