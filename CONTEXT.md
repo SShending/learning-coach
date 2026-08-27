@@ -1,165 +1,126 @@
 # Learning Coach
 
-Learning Coach preserves a learner's evolving understanding in one private
-GitHub repository so future learning can resume from evidence instead of
-restarting from conversation history. The default implementation is a set of
-skills that use the host's existing GitHub repository tools; it is not a hosted
-Learning Coach service.
+Learning Coach preserves a learner's evolving understanding in one private GitHub
+Learning Vault so future learning can resume from evidence rather than chat
+history.
 
 ## System Roles
 
 Four skills share one authoritative Learning Vault:
 
-- **Learning Coach**: teaches, assesses, and writes durable learner-state changes
-  produced by learning;
-- **Learning View**: reads and presents existing learner state without changing
-  it;
-- **Ask Coach**: derives read-only learning advice from existing learner state,
-  including prioritization, review urgency, cross-Topic connections, bottleneck
-  diagnosis, and new-Topic exploration;
-- **Vault Curator**: reviews, repairs, restructures, migrates, forgets, or exports
-  Vault material when explicitly requested.
+- **Learning Coach**: Topic-local learning controller. Teaches, practices,
+  assesses, updates Topic roadmap/focus/evidence/mastery/gaps/nextStep, and
+  creates a Topic after explicit learner choice.
+- **Ask Coach**: portfolio-level learning planner. Chooses what to learn/review/
+  practice across Topics, diagnoses cross-Topic bottlenecks, recommends/defer new
+  Topics, persists durable Coach State, and synthesizes evidence-backed Learning
+  Strategy across Topics.
+- **Learning View**: read-only presentation of stored state.
+- **Vault Curator**: maintenance/lifecycle/repair/migration layer.
 
 Canonical distinction:
 
-> Learning Coach changes learner state because learning happened.
+> Ask Coach decides **where learning attention should go**.
 >
-> Learning View shows learner state.
+> Learning Coach decides **what to do next inside the chosen Topic**.
 >
-> Ask Coach recommends what to do with learner state.
+> Learning View shows stored state.
 >
 > Vault Curator maintains the Vault.
 
 ## Authority Model
 
-Always resolve `.learning-vault/vault.json` first and inspect `schemaVersion`.
+Always resolve `.learning-vault/vault.json` first.
 
-- **V1:** `vault.json` is the monolithic authoritative structured learner state.
-- **V2:** `vault.json` is an authoritative manifest. Each bound
-  `topics/<topic-id>/state.json` owns that Topic's learner state, while
-  `.learning-vault/learning-strategy.json` owns cross-Topic strategy state.
+### V1
 
-The V2 Learning Vault is authoritative **as a set of domain-owned documents**.
-The manifest owns membership and bindings, not Topic mastery/focus/gaps.
+`vault.json` is the monolithic authoritative structured document.
 
-Topic README files are always derived projections. V2 projections carry the
-source Topic-state SHA/revision so staleness can be detected mechanically.
+### V2
 
-## Language
+The Learning Vault is authoritative as a set of mutation-domain-owned documents:
 
-**Learning Vault**:
-The authoritative, private body of a learner's history and current state across
-all topics, stored in the `learning-vault` GitHub repository. In V2 it is a set of
-explicitly bound authority domains rather than one giant state file.
-_Avoid_: Workspace, tutorial repository, knowledge base
+- manifest -> membership/bindings/lifecycle;
+- Topic state -> Topic-local learner state;
+- Learning Strategy -> cross-Topic meta-learning observations;
+- Coach State -> durable portfolio advisory memory;
+- Topic README -> derived projection only.
 
-**Vault Manifest**:
-In schemaVersion 2, `.learning-vault/vault.json`: the small authoritative document
-that owns Vault membership, Topic state bindings, Learning Strategy binding,
-lifecycle metadata, and manifest-local idempotency. It does not cache Topic
-mastery, roadmap, current focus, or next steps.
-_Avoid_: Topic database, progress dashboard
+## Core Language
 
-**Topic**:
-A bounded subject the learner is trying to understand or apply toward an
-observable capability. A Topic belongs to the learner's Learning Vault rather
-than constituting an independent learning product.
-_Avoid_: Course, tutorial
+**Learning Vault**  
+The private durable state layer across all learning Topics.
 
-**Topic State**:
-In V2, the authoritative learner-state document at the path selected by the
-manifest, conventionally `topics/<topic-id>/state.json`. It contains the Topic's
-goal, target capability, roadmap, Concepts/evidence, gaps/unassessed areas,
-current focus, linked notes/sessions, next action, and Topic-local idempotency.
+**Topic**  
+A bounded subject/capability the learner is actively trying to understand or
+apply.
 
-**Learning State**:
-The current orientation for a Topic: goal, target capability, adaptive roadmap,
-knowledge structure, current focus, mastery evidence, known gaps, unassessed
-areas, durable notes, review state, and next useful action.
-_Avoid_: Progress score, transcript
+**Topic State**  
+Goal, target capability, roadmap, Concepts/evidence/mastery, gaps/unassessed,
+current focus, notes/sessions index, Topic-local review state, and next action.
 
-**Roadmap**:
-A lightweight, adaptive sequence of capability milestones between the Topic's
-current state and target capability. It is evidence-driven and revisable rather
-than a fixed curriculum.
-_Avoid_: Syllabus, completion checklist, project plan
+**Topic Roadmap**  
+Medium-term capability path inside one Topic. Owned by Learning Coach.
 
-**Learning View**:
-A read-only presentation of authoritative Learning Vault state in the current
-Agent interface. It may organize, summarize, compare, or visualize existing
-state but does not teach, assess new mastery, reprioritize learning, or mutate the
-Vault.
-_Avoid_: Dashboard database, learner-state authority, assessment pass
+**Learning Portfolio**  
+The set of active/deferred learning Topics plus their cross-Topic priorities,
+connections, review pressure, and candidate future Topics. Ask Coach reasons over
+this layer.
 
-**Ask Coach**:
-A request-scoped, read-only advisory layer over authoritative Learning Vault
-state. It recommends what to learn, review, practice, connect, defer, or explore
-next and may diagnose likely bottlenecks or useful new Topics. Its recommendations
-are derived decisions, not learner state, and must not silently change evidence,
-mastery, roadmap, current focus, next step, review state, or Topic lifecycle.
-_Avoid_: Hidden scheduler, automatic curriculum writer, second learner-state DB
+**Ask Coach**  
+Request-scoped portfolio planner. It may persist only cross-Topic advisory/meta-
+learning domains; it never writes Topic learner-state judgments.
 
-**Review Urgency**:
-A qualitative Ask Coach estimate of how useful retrieval/review is now, grounded
-in observable signals such as evidence age/type, result/assistance,
-contradictions, stored `nextReview`, and prerequisite relevance. It is not a
-calibrated recall probability and is not persisted as memory stability or
-retrievability in the current schema.
-_Avoid_: Memory probability, FSRS stability, mastery score
+**Coach State**  
+Durable portfolio advisory memory: candidate Topics, durable cross-Topic
+connections, and advisory hypotheses worth remembering across future Ask Coach
+runs.
 
-**Topic README**:
-A derived human-readable projection at `topics/<topic-id>/README.md`. It improves
-GitHub navigation but is never authoritative. In V1 the Topic inside `vault.json`
-wins; in V2 the manifest-bound Topic `state.json` wins.
-_Avoid_: Source of truth, independent Topic state
+**Learning Strategy**  
+Evidence-backed cross-Topic observations about which learning approaches help or
+hinder this learner under particular conditions. Ask Coach owns synthesis;
+Learning Coach may read and apply it locally.
 
-**Learning Update**:
-An atomic, distilled change to the owning Learning Vault authority domain caused
-by meaningful new learning state, evidence, review activity, or strategy insight.
-_Avoid_: Message, chat transcript, autosave event
+**Review Urgency**  
+A qualitative portfolio/local signal for whether retrieval/reapplication is
+useful now. It is not calibrated recall probability, FSRS stability, or mastery.
+Global prioritization belongs to Ask Coach; Topic-local execution belongs to
+Learning Coach.
 
-**Knowledge Map**:
-The learner's current model of the concepts, prerequisites, boundaries, and open
-questions that make up a topic.
-_Avoid_: Curriculum, syllabus
+**Learning View**  
+Read-only presentation of existing authoritative state. It does not advise,
+teach, assess, or mutate.
 
-**Mastery Evidence**:
-A specific observation that the learner recognized, explained, applied,
-transferred, or contradicted a concept.
-_Avoid_: Completion, confidence, exposure
+**Vault Curator**  
+Maintenance/lifecycle layer for structural repair, merge/split, migration,
+archive/forget, and export.
 
-**Review Queue**:
-Concepts that should be retrieved or reapplied next, ordered by the learner's
-evidence and current goals.
-_Avoid_: Reminder list, spaced-repetition score
+**Mastery Evidence**  
+Observable learner recognition, explanation, application, transfer, or
+contradiction used for Topic-local capability judgment.
 
-**Learning Strategy**:
-An explicit, revisable account of which learning approaches help or hinder this
-learner under particular conditions. In V2 its authoritative state is separate
-from individual Topics.
-_Avoid_: Learning style, personality profile
+**Learning Update**  
+One distilled mutation in its owning authority domain, protected by expected
+revision and idempotency rules.
 
-**Private Reflection**:
-Learner-specific material useful for diagnosis or adaptation but not eligible
-for publication by default.
-_Avoid_: Hidden reasoning, raw transcript
+**Topic README**  
+Derived human-readable projection. Never authority.
 
-**Forget**:
-Removal of material from active authority and future learning use; it does not
-claim erasure from the GitHub repository's prior history.
-_Avoid_: Purge, permanent deletion, history erasure
+## Planning Hierarchy
 
-**Public Export**:
-A deliberately selected, privacy-reviewed body of material derived from the
-Learning Vault for a public audience, without the Vault's private history.
-_Avoid_: Repository visibility change, automatic tutorial
+Use this hierarchy instead of one overloaded "next step" concept:
 
-**Generic GitHub path**:
-The default read/write path using the host's existing GitHub connector or MCP
-tools. It is pragmatic and verifiable, but cannot enforce all domain invariants
-between separate generic tool calls. V2 reduces that risk by aligning files with
-semantic mutation domains and using expected-revision writes.
+```text
+Ask Coach
+  Learning Portfolio decision
+  "Work on llm-evolution next"
+        |
+        v
+Learning Coach
+  Topic roadmap/currentFocus/nextStep
+  "Mark token-loss positions for pretraining vs SFT"
+```
 
-**Dedicated Learning Vault MCP**:
-The future optional adapter with stricter validation and transactional semantics.
-It is preserved on the `v3-custom-mcp` branch and is not required by `main`.
+Portfolio decisions must not be encoded into Topic `nextStep`. Topic-local next
+actions must not be promoted into global portfolio strategy unless Ask Coach
+explicitly compares them against alternatives across the Vault.
