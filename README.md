@@ -54,36 +54,43 @@ Topic
 └── Next Step             the next concrete action
 ```
 
-The roadmap provides medium-term direction between the Topic goal and the next action. It is capability-based, evidence-driven, and adaptive rather than a fixed course syllabus. Learning Coach can revise the path when evidence, gaps, or the learner's goal changes, and useful exploration is still allowed outside the roadmap.
+The roadmap provides medium-term direction between the Topic goal and the next action. It is capability-based, evidence-driven, and adaptive rather than a fixed course syllabus.
 
-## Three Skills, One Vault
+## Four Skills, One Vault
 
-The repository separates learning, presentation, and maintenance:
+The repository separates learning, presentation, advisory decisions, and maintenance:
 
 ```text
-                         Learning Vault
-                              |
-              +---------------+---------------+
-              |               |               |
-              v               v               v
-       Learning Coach    Learning View     Vault Curator
-       learn / assess    present / inspect maintain / repair
-       read + write      read-only         read or write
+                           Learning Vault
+                                |
+          +---------------------+---------------------+
+          |                     |                     |
+          v                     v                     v
+   Learning View           Ask Coach             Vault Curator
+   present / inspect       advise / prioritize   maintain / repair
+   read-only               read-only             read or write
+          \                     |                    /
+           \                    |                   /
+            +-------------------+------------------+
+                                |
+                                v
+                         Learning Coach
+                         learn / assess
+                         read + write
 ```
 
-- **Learning Coach** changes learner state because learning happened.
+- **Learning Coach** teaches, practices, assesses, and changes learner state because learning happened.
 - **Learning View** shows existing learner state without changing it.
+- **Ask Coach** recommends what to learn, review, practice, connect, defer, or explore next without changing learner state.
 - **Vault Curator** maintains, repairs, restructures, and migrates the Vault when requested.
 
-This keeps presentation logic out of the core learning workflow. A learner can ask to see current progress directly in the Agent interface without cloning repositories or opening a standalone dashboard.
+Ask Coach adds the missing cross-Topic decision layer: it can prioritize today's learning, estimate qualitative review urgency, identify bottlenecks and cross-Topic transfer opportunities, and recommend whether a new Topic is worth opening.
 
 # Usage
 
 Learning Coach is a portable Agent Skill system backed by a private GitHub Learning Vault.
 
 ## Recommended: ChatGPT Project
-
-The easiest setup is a ChatGPT Project with the skills you want to use.
 
 ### Setup
 
@@ -94,29 +101,21 @@ The easiest setup is a ChatGPT Project with the skills you want to use.
 ```text
 skills/learning-coach/   required for learning
 skills/learning-view/    recommended for read-only progress views
+skills/ask-coach/        recommended for learning advice and prioritization
 skills/vault-curator/    optional for maintenance and repair
 ```
 
 4. Connect a private GitHub repository as your Learning Vault.
 
-Learning Coach requires repository read and write access for normal operation. Learning View only requires read access. Vault Curator requires write access only when applying an approved mutation.
+Learning Coach requires repository read and write access for normal operation. Learning View and Ask Coach only require read access. Vault Curator requires write access only when applying an approved mutation.
 
 See [ChatGPT Project Setup](docs/chatgpt-project.md) for detailed instructions.
 
-### Start learning
+### Start or continue learning
 
 ```text
 Use Learning Coach.
 
-Initialize my Learning Vault.
-
-My goal:
-Understand Agent Memory deeply enough to implement a minimal memory-enabled agent.
-```
-
-### Continue learning
-
-```text
 Resume agent-memory.
 ```
 
@@ -128,27 +127,36 @@ Use Learning View.
 Show my current learning state.
 ```
 
-Or inspect one Topic:
+### Ask what to do next
 
 ```text
-Use Learning View.
+Use Ask Coach.
 
-Show deepseek-harness.
+I have 45 minutes today. What should I learn or review, what should I defer, and is there any new Topic worth opening now?
 ```
 
-Learning View reads authoritative Vault state and presents the result directly in the current Agent interface. It does not create evidence, change mastery, or write to the Vault.
+Ask Coach is read-only. A recommendation does not create evidence, change mastery, update roadmap/current focus/next step, or create a Topic. If you accept the recommendation and want to begin, switch to Learning Coach.
+
+Typical Ask Coach questions include:
+
+- What should I learn today?
+- What should I review before I forget it?
+- What should I practice instead of reading more?
+- Which Topic is currently my highest-leverage bottleneck?
+- How are my Topics connected?
+- What knowledge islands do I have?
+- What should I deprioritize?
+- What new Topic should I learn next?
+- Should I open a new Topic at all right now?
+- Give me a weekly learning review and plan.
+
+Review recommendations use qualitative **review urgency** from observable Vault signals. The current schema does not pretend to contain calibrated FSRS-style memory stability or recall probability.
 
 ## Skill-enabled Agents
 
 If your Agent environment supports Skills, load the skill directories appropriate to the workflow and provide the repository access each skill requires. The same private Learning Vault can be used across compatible Agent environments.
 
 ## Learning Vault
-
-Create a private GitHub repository:
-
-```text
-learning-vault
-```
 
 The current schemaVersion 2 Vault partitions authority by mutation domain:
 
@@ -169,17 +177,9 @@ The Learning Vault is authoritative as a set of domain-owned documents. `vault.j
 
 V2 reduces write amplification and concurrency conflicts: ordinary learning on one Topic replaces only that Topic's `state.json`, rather than rewriting every Topic in one global JSON document. Existing V1 Vaults remain supported until explicitly migrated.
 
-The Vault stores durable learning progress, including:
+Ask Coach does not add new authoritative fields to V2. Priority, review urgency, cross-Topic connections, bottleneck hypotheses, and new-Topic recommendations are derived advisory computations unless a future explicit schema introduces justified durable state.
 
-- learning goals and target capabilities
-- adaptive capability roadmaps
-- concepts and mastery evidence
-- durable learning notes
-- gaps, review state, and next steps
-
-Raw conversations and sensitive information are not saved.
-
-See [Vault Format](skills/learning-coach/references/vault-format.md), [GitHub Operations](skills/learning-coach/references/github-operations.md), and [ADR 0016](docs/adr/0016-activate-sharded-learning-vault-schema-v2.md) for the authority and persistence contract.
+See [Vault Format](skills/learning-coach/references/vault-format.md), [Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md), [GitHub Operations](skills/learning-coach/references/github-operations.md), and [ADR 0016](docs/adr/0016-activate-sharded-learning-vault-schema-v2.md).
 
 ## Prompt Templates
 
@@ -192,17 +192,6 @@ Resume my learning path for:
 <topic>
 ```
 
-Capture learning already in progress:
-
-```text
-Use Learning Coach.
-
-I have already been learning:
-<topic>
-
-Help me reconstruct my current learning state from what I have already studied, built, or explained. Distinguish previous exposure from demonstrated mastery, identify what is still unassessed, and continue from the next useful step.
-```
-
 Show an overall read-only view:
 
 ```text
@@ -211,12 +200,12 @@ Use Learning View.
 Show my current learning state.
 ```
 
-Show one Topic or roadmap:
+Ask for learning advice:
 
 ```text
-Use Learning View.
+Use Ask Coach.
 
-Show the roadmap for <topic>.
+Based on my current Learning Vault, tell me what to learn, review, practice, connect, defer, or explore next.
 ```
 
 Review Vault health:
@@ -241,6 +230,7 @@ The skill package is organized under:
 skills/
 ├── learning-coach/
 ├── learning-view/
+├── ask-coach/
 └── vault-curator/
 ```
 
