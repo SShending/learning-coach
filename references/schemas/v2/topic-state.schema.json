@@ -1,27 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/schemas/v2/topic-state.schema.json",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/v2/topic-state.schema.json",
   "title": "Learning Vault Topic State v2",
   "description": "Proposed schemaVersion 2 authoritative state for one Topic.",
   "type": "object",
-  "required": [
-    "schemaVersion",
-    "documentType",
-    "vaultId",
-    "id",
-    "title",
-    "goal",
-    "targetCapability",
-    "scope",
-    "nonGoals",
-    "currentFocus",
-    "knownGaps",
-    "nextStep",
-    "concepts",
-    "notes",
-    "sessions",
-    "appliedUpdates"
-  ],
+  "required": ["schemaVersion", "documentType", "vaultId", "id", "title", "goal", "targetCapability", "scope", "nonGoals", "currentFocus", "knownGaps", "nextStep", "concepts", "notes", "sessions", "appliedUpdates"],
   "properties": {
     "schemaVersion": { "const": 2 },
     "documentType": { "const": "topic-state" },
@@ -32,39 +15,17 @@
     "targetCapability": { "type": "string", "minLength": 1 },
     "scope": { "type": "array", "items": { "type": "string" } },
     "nonGoals": { "type": "array", "items": { "type": "string" } },
-    "roadmap": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/roadmapMilestone" }
-    },
+    "roadmap": { "type": "array", "items": { "$ref": "#/$defs/roadmapMilestone" } },
     "currentFocus": { "type": "string" },
     "knownGaps": { "type": "array", "items": { "type": "string" } },
     "unassessed": { "type": "array", "items": { "type": "string" } },
     "nextStep": { "type": "string" },
     "nextStepReason": { "type": "string" },
-    "nextStepTargets": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/id" },
-      "uniqueItems": true
-    },
-    "concepts": {
-      "type": "object",
-      "propertyNames": { "$ref": "#/$defs/id" },
-      "additionalProperties": { "$ref": "#/$defs/concept" }
-    },
-    "notes": {
-      "type": "object",
-      "propertyNames": { "$ref": "#/$defs/id" },
-      "additionalProperties": { "$ref": "#/$defs/note" }
-    },
-    "sessions": {
-      "type": "object",
-      "propertyNames": { "$ref": "#/$defs/id" },
-      "additionalProperties": { "$ref": "#/$defs/session" }
-    },
-    "appliedUpdates": {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/appliedUpdate" }
-    }
+    "nextStepTargets": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+    "concepts": { "type": "object", "propertyNames": { "$ref": "#/$defs/id" }, "additionalProperties": { "$ref": "#/$defs/concept" } },
+    "notes": { "type": "object", "propertyNames": { "$ref": "#/$defs/id" }, "additionalProperties": { "$ref": "#/$defs/note" } },
+    "sessions": { "type": "object", "propertyNames": { "$ref": "#/$defs/id" }, "additionalProperties": { "$ref": "#/$defs/session" } },
+    "appliedUpdates": { "type": "object", "additionalProperties": { "$ref": "#/$defs/appliedUpdate" } }
   },
   "additionalProperties": false,
   "$defs": {
@@ -83,42 +44,17 @@
     },
     "concept": {
       "type": "object",
-      "required": [
-        "id",
-        "name",
-        "status",
-        "prerequisites",
-        "openQuestion",
-        "level",
-        "evidence",
-        "nextReview"
-      ],
+      "required": ["id", "name", "status", "prerequisites", "openQuestion", "level", "evidence", "nextReview"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "name": { "type": "string", "minLength": 1 },
         "status": { "enum": ["unmapped", "learning", "blocked", "practicing", "demonstrated"] },
-        "prerequisites": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/id" },
-          "uniqueItems": true
-        },
+        "prerequisites": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
         "openQuestion": { "type": "boolean" },
         "level": { "type": "integer", "minimum": 0, "maximum": 4 },
-        "levelBasis": {
-          "type": "array",
-          "items": { "type": "string", "minLength": 1 },
-          "uniqueItems": true
-        },
-        "evidence": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/evidence" }
-        },
-        "nextReview": {
-          "anyOf": [
-            { "$ref": "#/$defs/timestamp" },
-            { "type": "null" }
-          ]
-        }
+        "levelBasis": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+        "nextReview": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] }
       },
       "additionalProperties": true
     },
