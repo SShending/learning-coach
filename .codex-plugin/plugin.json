@@ -1,7 +1,7 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.9",
-  "description": "Learn, inspect, prioritize, and maintain a private GitHub-backed learning state with auditable mastery evidence and durable coaching context.",
+  "version": "3.0.0-alpha.10",
+  "description": "Learn within Topics, plan across a learning portfolio, inspect progress, and maintain a private GitHub-backed Learning Vault.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
@@ -13,17 +13,17 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Learning Coach",
-    "shortDescription": "Learn, inspect, prioritize, and maintain a private knowledge tree",
-    "longDescription": "Learn through practice with auditable mastery evidence, inspect progress through Learning View, decide what to learn or review next through Ask Coach with a dedicated durable advisory-memory domain, and periodically maintain a private GitHub-backed Learning Vault.",
+    "shortDescription": "Learn inside Topics and plan across your learning portfolio",
+    "longDescription": "Use Learning Coach for Topic-local teaching, practice, assessment, roadmap, and learner-state updates; Ask Coach for portfolio-level prioritization, global review scheduling, cross-Topic reasoning, candidate Topics, durable Coach State, and evidence-backed Learning Strategy; Learning View for read-only presentation; Vault Curator for maintenance.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://github.com/SShending/learning-coach",
     "defaultPrompt": [
-      "Help me master agent memory and resume from my Learning Vault.",
-      "Show my current learning state without changing my Learning Vault.",
-      "Based on my Learning Vault, tell me what I should learn, review, practice, connect, defer, or explore next.",
-      "Recommend whether I should open a new Topic, remember durable candidate Topics when useful, and explain what they connect to.",
+      "Use Learning Coach to resume a chosen Topic and continue from its next useful within-Topic action.",
+      "Use Ask Coach to decide what I should learn, review, practice, connect, defer, or explore across my Topics.",
+      "Show my current learning state without changing it.",
+      "Recommend whether I should open a new Topic and remember durable candidate Topics when useful.",
       "Review my Learning Vault for structural issues and propose safe refactors."
     ]
   }
