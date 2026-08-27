@@ -1,107 +1,112 @@
 # Companion Skills
 
-Learning Coach focuses on guiding the learning process. Companion skills keep
-presentation, advisory decisions, and Vault maintenance out of the core learning
-loop.
+The system separates portfolio planning, Topic learning, presentation, and Vault
+maintenance.
 
 ```text
-                           Learning Vault
+                         Learning Portfolio
                                 |
-        +-----------------------+-----------------------+
-        |                       |                       |
-        v                       v                       v
- Learning View             Ask Coach              Vault Curator
- present / inspect         advise / prioritize    maintain / repair
- read-only                 coach-state write      read or write
-        \                       |                      /
-         \                      |                     /
-          +---------------------+--------------------+
+                                v
+                           Ask Coach
+                 prioritize / review / connect
+                 Coach State + Learning Strategy
                                 |
                                 v
                          Learning Coach
-                         learn / assess
-                         Topic-state write
+                       Topic-local learning
+                      Topic-state persistence
+                                |
+                                v
+                         Learning Vault
+                        /             \
+                       v               v
+                Learning View     Vault Curator
+                read-only         maintain / repair
 ```
 
-## Learning View
+## Learning Coach
 
-Learning View is the read-only presentation layer. It presents authoritative
-Topic/Learning Strategy state and, when requested, Coach State without changing
-any of them.
+Learning Coach is the **Topic-local learning controller**.
 
-Use it for current progress, Topic/roadmap views, gaps, evidence, notes, reviews,
-or stored advisory context such as candidate Topics.
+It owns:
+
+- teaching/explanation;
+- practice and assessment;
+- Topic roadmap/currentFocus/nextStep;
+- Topic evidence/mastery/gaps/unassessed;
+- Topic-local review execution;
+- learning notes/sessions;
+- Topic creation after explicit learner choice.
+
+It does **not** choose among Topics, build a Vault-wide review queue, recommend
+new Topics, diagnose cross-Topic bottlenecks, or synthesize cross-Topic Learning
+Strategy.
 
 ## Ask Coach
 
-Ask Coach is the learning-advisory layer.
+Ask Coach is the **portfolio-level learning planner**.
 
-Use it when the learner wants to decide:
+Use it for:
 
-- what to learn today or next;
-- what to review before retrieval becomes fragile;
-- what to practice instead of reading more;
-- which Topic to prioritize, switch to, or defer;
-- how Topics and Concepts connect;
-- what learning bottleneck has the highest leverage;
-- whether a new Topic is justified and, if so, which one;
-- what a useful weekly learning plan should emphasize.
+- what to learn today/next across Topics;
+- whether to continue or switch Topics;
+- global review prioritization;
+- practice-vs-study decisions across the portfolio;
+- cross-Topic connections and bottlenecks;
+- new Topic recommendation/defer decisions;
+- deprioritization;
+- weekly/periodic portfolio review;
+- Learning Strategy synthesis when evidence spans at least two Topics.
 
-Ask Coach reads authoritative learner state but may persist only **durable advisory
-memory** in the dedicated V2 Coach State domain:
+Ask Coach may persist only cross-Topic domains:
 
 ```text
 .learning-vault/coach-state.json
+.learning-vault/learning-strategy.json
 ```
 
-Allowed durable advisory memory:
+Coach State stores durable candidate Topics, cross-Topic connections, and
+advisory hypotheses. Learning Strategy stores evidence-backed observations about
+which learning approaches help/hinder under particular conditions.
 
-- candidate/deferred/recommended Topics;
-- durable cross-Topic connections;
-- persistent advisory hypotheses and revisit conditions.
+Ask Coach must never create Topic evidence, change mastery, update a Topic
+roadmap/currentFocus/nextStep, or create a Topic.
 
-It must not create evidence, change mastery, update Topic roadmap/currentFocus/
-nextStep, create learning notes/sessions, or create a Topic. Those remain Learning
-Coach responsibilities.
+Temporary daily priorities and review urgency remain ephemeral.
 
-Temporary advice stays ephemeral. Do not persist today's priority ranking, review
-urgency, forgetting scores, or inferred FSRS stability/retrievability.
+## Learning View
 
-If the learner accepts a recommendation and wants to learn, practice, test
-retrieval, or create a Topic, hand off to Learning Coach.
+Learning View presents authoritative Topic, Learning Strategy, and Coach State
+read-only. It does not advise, teach, assess, or mutate.
 
 ## Vault Curator
 
-Vault Curator is the maintenance and lifecycle skill for the Learning Vault.
+Vault Curator reviews and maintains manifest bindings, Topic state, Learning
+Strategy, Coach State, projections, and lifecycle structure under explicit
+maintenance operations.
 
-It reviews and maintains Topic state, Learning Strategy, Coach State, manifest
-bindings, projections, and lifecycle structure when relevant. Structural or
-lifecycle mutations follow explicit preview/confirmation rules.
-
-## Recommended Workflow
+## Planning Hierarchy
 
 ```text
 Ask Coach
-    |
-    | choose what is worth doing; remember durable advisory context when useful
-    v
+"Focus on llm-evolution next"
+        |
+        v
 Learning Coach
-    |
-    | learning changes learner state
-    v
-Learning Vault
-    |
-    +--> Learning View      read-only presentation
-    +--> Ask Coach          advisory decisions + Coach State only
-    +--> Vault Curator      periodic maintenance
+"Inside llm-evolution, mark pretraining/SFT loss positions next"
 ```
 
-Canonical division of responsibility:
+Use this boundary test:
 
-> Learning Coach changes learner state because learning happened.
+- candidates are inside one chosen Topic -> Learning Coach;
+- candidates span Topics/reviews/new Topics -> Ask Coach.
+
+Canonical responsibility split:
+
+> Ask Coach decides where learning attention should go.
 >
-> Learning View shows authoritative state.
+> Learning Coach runs the chosen Topic learning loop.
 >
-> Ask Coach recommends what to do and remembers only durable advisory context.
+> Learning View shows stored state.
 >
 > Vault Curator maintains the Vault.
