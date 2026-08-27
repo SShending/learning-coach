@@ -4,6 +4,7 @@
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+THIS_FILE = Path(__file__).resolve()
 
 REQUIRED = [
     "skills/topic-coach/SKILL.md",
@@ -54,14 +55,15 @@ def main() -> None:
             errors.append(f"missing required path: {rel}")
 
     if (ROOT / "skills" / "learning-coach").exists():
-        errors.append("retired skill directory still exists: skills/learning-coach")
+        errors.append("retired skill directory still exists")
 
     seen: set[Path] = set()
     for root in ACTIVE_TEXT_ROOTS:
         for path in iter_text_files(root) or []:
-            if path in seen:
+            resolved = path.resolve()
+            if resolved == THIS_FILE or resolved in seen:
                 continue
-            seen.add(path)
+            seen.add(resolved)
             text = path.read_text(encoding="utf-8")
             for pattern in STALE_PATTERNS:
                 if pattern in text:
