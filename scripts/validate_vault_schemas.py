@@ -10,7 +10,7 @@ from jsonschema import Draft202012Validator, ValidationError
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
-REFS = ROOT / "skills" / "learning-coach" / "references"
+REFS = ROOT / "references"
 SCHEMA_PATHS = [
     REFS / "vault.schema.json",
     REFS / "schemas" / "v1" / "vault.schema.json",
@@ -40,8 +40,7 @@ def main() -> None:
         (schema["$id"], Resource.from_contents(schema)) for schema in schemas
     )
     validator = Draft202012Validator(
-        schemas[0],
-        registry=registry,
+        schemas[0], registry=registry,
         format_checker=Draft202012Validator.FORMAT_CHECKER,
     )
 
@@ -63,9 +62,7 @@ def main() -> None:
             "vaultId": "github:example/learning-vault",
             "createdAt": timestamp,
             "updatedAt": timestamp,
-            "topics": {
-                "agent-memory": {"statePath": "topics/agent-memory/state.json"}
-            },
+            "topics": {"agent-memory": {"statePath": "topics/agent-memory/state.json"}},
             "learningStrategy": {"statePath": ".learning-vault/learning-strategy.json"},
             "coachState": {"statePath": ".learning-vault/coach-state.json"},
             "appliedUpdates": {},
@@ -80,47 +77,24 @@ def main() -> None:
             "title": "Agent Memory",
             "goal": "Understand Agent Memory.",
             "targetCapability": "Build a minimal memory-enabled agent.",
-            "scope": [],
-            "nonGoals": [],
-            "roadmap": [],
+            "scope": [], "nonGoals": [], "roadmap": [],
             "currentFocus": "Memory lifecycle",
-            "knownGaps": [],
-            "unassessed": [],
+            "knownGaps": [], "unassessed": [],
             "nextStep": "Explain write, retrieve, and reuse.",
             "nextStepReason": "Test the current mental model.",
-            "nextStepTargets": [],
-            "concepts": {},
-            "notes": {},
-            "sessions": {},
+            "nextStepTargets": [], "concepts": {}, "notes": {}, "sessions": {},
             "appliedUpdates": {},
         },
         "v2 Learning Strategy": {
-            "schemaVersion": 2,
-            "documentType": "learning-strategy",
+            "schemaVersion": 2, "documentType": "learning-strategy",
             "vaultId": "github:example/learning-vault",
-            "observations": [],
-            "appliedUpdates": {},
+            "observations": [], "appliedUpdates": {},
         },
         "v2 Coach State": {
-            "schemaVersion": 2,
-            "documentType": "coach-state",
+            "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
-            "candidateTopics": {
-                "transformer-foundations": {
-                    "id": "transformer-foundations",
-                    "title": "Transformer and Neural Network Foundations",
-                    "status": "deferred",
-                    "rationale": "Useful foundation but currently fits inside an existing Topic.",
-                    "relatedTopics": ["llm-evolution", "deepseek-harness"],
-                    "targetCapability": "Explain core neural-network and Transformer computation well enough to support LLM and Agent-system learning.",
-                    "revisitWhen": ["Transformer internals start distorting the llm-evolution Topic boundary."],
-                    "observedAt": timestamp,
-                    "updatedAt": timestamp
-                }
-            },
-            "crossTopicConnections": {},
-            "advisoryHypotheses": {},
-            "appliedUpdates": {},
+            "candidateTopics": {}, "crossTopicConnections": {},
+            "advisoryHypotheses": {}, "appliedUpdates": {},
         },
     }
 
@@ -129,30 +103,19 @@ def main() -> None:
         print(f"PASS valid: {name}")
 
     invalid_documents = {
-        "unsupported V2 documentType": {
-            "schemaVersion": 2,
-            "documentType": "unknown-state",
-        },
+        "unsupported V2 documentType": {"schemaVersion": 2, "documentType": "unknown-state"},
         "invalid Coach State candidate status": {
-            "schemaVersion": 2,
-            "documentType": "coach-state",
+            "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
             "candidateTopics": {
                 "bad-topic": {
-                    "id": "bad-topic",
-                    "title": "Bad Topic",
-                    "status": "maybe",
+                    "id": "bad-topic", "title": "Bad Topic", "status": "maybe",
                     "rationale": "Invalid enum should be rejected.",
-                    "relatedTopics": [],
-                    "targetCapability": "Nothing",
-                    "revisitWhen": [],
-                    "observedAt": timestamp,
-                    "updatedAt": timestamp
+                    "relatedTopics": [], "targetCapability": "Nothing",
+                    "revisitWhen": [], "observedAt": timestamp, "updatedAt": timestamp,
                 }
             },
-            "crossTopicConnections": {},
-            "advisoryHypotheses": {},
-            "appliedUpdates": {},
+            "crossTopicConnections": {}, "advisoryHypotheses": {}, "appliedUpdates": {},
         },
     }
 
