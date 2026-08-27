@@ -1,0 +1,4 @@
+interface:
+  display_name: "Topic Coach"
+  short_description: "Learn, practice, and advance one chosen Topic"
+  default_prompt: "Use $topic-coach to resume or start a chosen Topic from my private GitHub Learning Vault, teach and assess within that Topic, and preserve the next useful Topic-local step."
