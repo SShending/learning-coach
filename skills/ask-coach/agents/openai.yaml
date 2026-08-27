@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ask Coach"
+  short_description: "Decide what to learn, review, connect, or explore next"
+  default_prompt: "Use $ask-coach to read my private GitHub Learning Vault and advise what I should learn, review, practice, connect, defer, or explore next without modifying learner state."
