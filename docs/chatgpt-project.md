@@ -1,176 +1,131 @@
 # ChatGPT Project Setup
 
-This guide explains one way to use the Learning Coach skill set in ChatGPT.
-
-The system is not tied to ChatGPT. A ChatGPT Project is simply a convenient
-workspace for loading the skills while the private GitHub Learning Vault remains
-the durable learner-state layer.
+This guide shows one way to use the Learning Coach multi-Skill system in ChatGPT. The private GitHub Learning Vault remains the durable state layer.
 
 ```text
 ChatGPT Project
       |
-      +--> Learning Coach   learn / assess / update
-      +--> Learning View    read-only presentation
-      +--> Ask Coach        read-only learning advice
-      +--> Vault Curator    maintenance / repair
+      +--> Topic Coach     learn / assess / update one Topic
+      +--> Ask Coach       portfolio planning / review / strategy
+      +--> Learning View   read-only presentation
+      +--> Vault Curator   maintenance / repair
       |
       v
 GitHub Learning Vault
 ```
 
-## Requirements
-
-Each skill has a different repository capability requirement:
+## Repository Capability Requirements
 
 | Skill | Read | Write |
 | --- | --- | --- |
-| Learning Coach | required | required for normal learning |
-| Learning View | required | not needed and must not be used |
-| Ask Coach | required | not needed and must not be used |
+| Topic Coach | required | required for normal learning |
+| Ask Coach | required | Coach State / Learning Strategy only when supported |
+| Learning View | required | never used |
 | Vault Curator review | required | not needed |
 | Vault Curator mutation | required | required |
 
-Learning Coach never blind-writes when authoritative Vault state cannot be read.
-Learning View and Ask Coach are fully supported with read-only access because
-they never mutate learner state.
+No Skill should blind-write when its authoritative input state cannot be read.
+
+## Shared Contracts
+
+The Skill package also contains repository-root shared contracts:
+
+```text
+references/
+├── vault-format.md
+├── github-operations.md
+├── knowledge-grounding.md
+├── coach-state.md
+├── vault.schema.json
+├── schemas/
+└── migrations/
+```
+
+These are system-wide resources, not part of Topic Coach's private directory.
 
 ## Setup
 
 ### 1. Create a Project
 
-Create a ChatGPT Project, for example:
-
-```text
-Learning Coach
-```
+A Project named `Learning Coach` is reasonable because that is the product/system name.
 
 ### 2. Add Project Instructions
-
-Add concise instructions describing the overall workflow:
 
 ```text
 Use my private Learning Vault as the source of truth for durable learning state.
 
-Use Learning Coach when I am learning, practicing, or being assessed.
-Use Learning View when I ask to see or summarize my current learning state.
-Use Ask Coach when I ask what to learn, review, practice, connect, defer, or
-explore next.
-Use Vault Curator when I ask to review, repair, or reorganize the Vault itself.
+Use Topic Coach when I am learning, practicing, being assessed, or advancing one chosen Topic.
+Use Ask Coach when I ask what to learn, review, practice, connect, defer, or explore across Topics.
+Use Learning View when I ask to inspect stored state without changing it.
+Use Vault Curator when I ask to review, repair, migrate, or reorganize the Vault itself.
 
 Do not save raw conversations.
 ```
 
-### 3. Add Skill Files
-
-Upload the skill directories you want to use:
+### 3. Add Skills And Shared Contracts
 
 ```text
-skills/learning-coach/
-skills/learning-view/
+skills/topic-coach/
 skills/ask-coach/
+skills/learning-view/
 skills/vault-curator/
+references/
 ```
 
-`learning-coach` is the core learning skill.
+`Topic Coach` is the one-Topic learning controller. `Ask Coach` is the portfolio planner. `Learning View` is read-only. `Vault Curator` handles maintenance/lifecycle work.
 
-`learning-view` is recommended because it lets the learner inspect the connected
-Vault directly in ChatGPT without cloning repositories or opening
-`workbench.html`.
+A learner naming a subject does not automatically create a Topic: Topic Coach should decide whether it is a Concept, milestone/cluster, extension of an existing Topic, or a new Topic after the learner chooses to pursue it.
 
-`ask-coach` is recommended when the learner wants cross-Topic learning advice:
-what to study today, what to review, what to practice, which Topic to prioritize,
-how Topics connect, whether a bottleneck is blocking several areas, or what new
-Topic is worth learning next. It is read-only and does not turn a recommendation
-into learner state.
-
-`vault-curator` is optional and is only needed for Vault maintenance or lifecycle
-operations.
-
-### 4. Connect Learning Vault
-
-Create or use a private GitHub repository as the Learning Vault and provide the
-repository access required by the skills you intend to use.
-
-## Start Learning
+## Start Or Continue A Topic
 
 ```text
-Use Learning Coach.
+Use Topic Coach.
 
-Initialize my Learning Vault.
-
-My goal:
-Understand Agent Memory deeply enough to implement a minimal memory-enabled agent.
+I want to learn Agent Foundations. Help me define the right Topic boundary, target capability, and roadmap, then start from the next useful step.
 ```
 
-## Continue Learning
+Or:
 
 ```text
-Use Learning Coach.
-
+Use Topic Coach.
 Resume agent-memory.
 ```
 
-Learning Coach restores the authoritative state and continues from the next
-useful learning action.
-
-## View Learning State
-
-```text
-Use Learning View.
-
-Show my current learning state.
-```
-
-Learning View is read-only. It does not create evidence, alter mastery, update a
-roadmap, create notes, or write to the Vault.
-
-## Ask What To Do Next
+## Ask What To Do Next Across Topics
 
 ```text
 Use Ask Coach.
 
-I have 45 minutes today. Based on my Learning Vault, what should I learn, review,
-practice, connect, or defer? Is there a new Topic worth opening now?
+I have 45 minutes today. Based on my Learning Vault, what should I learn, review, practice, connect, or defer? Is there a new Topic worth opening now?
 ```
 
-Ask Coach may derive qualitative review urgency, cross-Topic relationships,
-bottleneck hypotheses, and new-Topic recommendations from authoritative state.
-These are advisory outputs, not persisted learner state.
+Ask Coach may persist durable Coach State and evidence-backed cross-Topic Learning Strategy, but never Topic mastery/evidence/roadmap/nextStep.
 
-If the learner accepts a recommendation and wants to learn, practice, test
-retrieval, or create a Topic, switch to Learning Coach.
+If the learner accepts a recommendation, hand off to Topic Coach for learning, assessment, or Topic initialization.
+
+## View State
+
+```text
+Use Learning View.
+Show my current learning state.
+```
 
 ## Capture Existing Learning
 
-Learning Coach can take over after learning has already begun:
-
 ```text
-Use Learning Coach.
+Use Topic Coach.
 
 I have already been learning:
 <topic>
 
-Help me reconstruct my current learning state from what I have already studied,
-built, or explained. Distinguish previous exposure from demonstrated mastery,
-identify what is still unassessed, and continue from the next useful step.
+Help me reconstruct my current learning state from what I have already studied, built, or explained. Distinguish previous exposure from demonstrated mastery, identify what is still unassessed, and continue from the next useful step.
 ```
-
-Previous exposure is not the same as mastery. Learning Coach should preserve
-observable evidence, keep uncertain capability unassessed, and avoid inventing
-evidence for earlier work.
-
-See [Capturing Existing Learning](capturing-existing-learning.md) for the full
-workflow.
 
 ## Maintain The Vault
 
-Read-only health review:
-
 ```text
 Use Vault Curator.
-
 Review my Learning Vault like a codebase. Do not mutate anything yet.
 ```
 
-Any structural or lifecycle mutation follows Vault Curator's preview and
-confirmation rules.
+Structural or lifecycle mutations follow Vault Curator's preview/confirmation rules.
