@@ -8,12 +8,15 @@ Learning Coach service.
 
 ## System Roles
 
-Three skills share one authoritative Learning Vault:
+Four skills share one authoritative Learning Vault:
 
 - **Learning Coach**: teaches, assesses, and writes durable learner-state changes
   produced by learning;
 - **Learning View**: reads and presents existing learner state without changing
   it;
+- **Ask Coach**: derives read-only learning advice from existing learner state,
+  including prioritization, review urgency, cross-Topic connections, bottleneck
+  diagnosis, and new-Topic exploration;
 - **Vault Curator**: reviews, repairs, restructures, migrates, forgets, or exports
   Vault material when explicitly requested.
 
@@ -22,6 +25,8 @@ Canonical distinction:
 > Learning Coach changes learner state because learning happened.
 >
 > Learning View shows learner state.
+>
+> Ask Coach recommends what to do with learner state.
 >
 > Vault Curator maintains the Vault.
 
@@ -82,8 +87,25 @@ _Avoid_: Syllabus, completion checklist, project plan
 **Learning View**:
 A read-only presentation of authoritative Learning Vault state in the current
 Agent interface. It may organize, summarize, compare, or visualize existing
-state but does not teach, assess new mastery, or mutate the Vault.
+state but does not teach, assess new mastery, reprioritize learning, or mutate the
+Vault.
 _Avoid_: Dashboard database, learner-state authority, assessment pass
+
+**Ask Coach**:
+A request-scoped, read-only advisory layer over authoritative Learning Vault
+state. It recommends what to learn, review, practice, connect, defer, or explore
+next and may diagnose likely bottlenecks or useful new Topics. Its recommendations
+are derived decisions, not learner state, and must not silently change evidence,
+mastery, roadmap, current focus, next step, review state, or Topic lifecycle.
+_Avoid_: Hidden scheduler, automatic curriculum writer, second learner-state DB
+
+**Review Urgency**:
+A qualitative Ask Coach estimate of how useful retrieval/review is now, grounded
+in observable signals such as evidence age/type, result/assistance,
+contradictions, stored `nextReview`, and prerequisite relevance. It is not a
+calibrated recall probability and is not persisted as memory stability or
+retrievability in the current schema.
+_Avoid_: Memory probability, FSRS stability, mastery score
 
 **Topic README**:
 A derived human-readable projection at `topics/<topic-id>/README.md`. It improves
