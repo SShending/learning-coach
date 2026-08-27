@@ -1,7 +1,7 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.8",
-  "description": "Learn, inspect, prioritize, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
+  "version": "3.0.0-alpha.9",
+  "description": "Learn, inspect, prioritize, and maintain a private GitHub-backed learning state with auditable mastery evidence and durable coaching context.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Learning Coach",
     "shortDescription": "Learn, inspect, prioritize, and maintain a private knowledge tree",
-    "longDescription": "Learn through practice with auditable mastery evidence, inspect progress through Learning View, decide what to learn or review next through read-only Ask Coach, and periodically maintain a private GitHub-backed Learning Vault.",
+    "longDescription": "Learn through practice with auditable mastery evidence, inspect progress through Learning View, decide what to learn or review next through Ask Coach with a dedicated durable advisory-memory domain, and periodically maintain a private GitHub-backed Learning Vault.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -23,7 +23,7 @@
       "Help me master agent memory and resume from my Learning Vault.",
       "Show my current learning state without changing my Learning Vault.",
       "Based on my Learning Vault, tell me what I should learn, review, practice, connect, defer, or explore next.",
-      "Recommend whether I should open a new Topic and explain what it would connect to.",
+      "Recommend whether I should open a new Topic, remember durable candidate Topics when useful, and explain what they connect to.",
       "Review my Learning Vault for structural issues and propose safe refactors."
     ]
   }
