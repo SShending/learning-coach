@@ -1,4 +1,4 @@
 interface:
   display_name: "Ask Coach"
-  short_description: "Decide what to learn, review, connect, or explore next"
-  default_prompt: "Use $ask-coach to read my private GitHub Learning Vault and advise what I should learn, review, practice, connect, defer, or explore next without modifying learner state."
+  short_description: "Plan what to learn, review, connect, or explore across Topics"
+  default_prompt: "Use $ask-coach as my portfolio-level learning planner: read my private GitHub Learning Vault, decide what I should learn/review/practice across Topics, reuse durable Coach State, and synthesize Learning Strategy only when cross-Topic evidence supports it. Do not modify Topic learner state."
