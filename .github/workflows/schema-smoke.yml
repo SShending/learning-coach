@@ -1,17 +1,31 @@
-name: Vault schema smoke test
+name: Vault schema and skill architecture smoke test
 
 on:
   push:
     paths:
-      - "skills/learning-coach/references/vault.schema.json"
-      - "skills/learning-coach/references/schemas/**"
+      - "references/**"
+      - "skills/**"
       - "scripts/validate_vault_schemas.py"
+      - "scripts/check_skill_architecture.py"
+      - "README.md"
+      - "README.zh-CN.md"
+      - "CONTEXT.md"
+      - "docs/chatgpt-project.md"
+      - "docs/companion-skills.md"
+      - ".codex-plugin/plugin.json"
       - ".github/workflows/schema-smoke.yml"
   pull_request:
     paths:
-      - "skills/learning-coach/references/vault.schema.json"
-      - "skills/learning-coach/references/schemas/**"
+      - "references/**"
+      - "skills/**"
       - "scripts/validate_vault_schemas.py"
+      - "scripts/check_skill_architecture.py"
+      - "README.md"
+      - "README.zh-CN.md"
+      - "CONTEXT.md"
+      - "docs/chatgpt-project.md"
+      - "docs/companion-skills.md"
+      - ".codex-plugin/plugin.json"
       - ".github/workflows/schema-smoke.yml"
   workflow_dispatch:
 
@@ -27,3 +41,5 @@ jobs:
         run: python -m pip install "jsonschema>=4.23,<5" "referencing>=0.35,<1"
       - name: Validate schemas and dispatcher routing
         run: python scripts/validate_vault_schemas.py
+      - name: Validate skill architecture and routing contracts
+        run: python scripts/check_skill_architecture.py
