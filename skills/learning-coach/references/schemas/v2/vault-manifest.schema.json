@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/schemas/v2/vault-manifest.schema.json",
   "title": "Learning Vault Manifest v2",
-  "description": "Proposed schemaVersion 2 Vault manifest. This is a topology and lifecycle document, not a cache of Topic learner state.",
+  "description": "Active schemaVersion 2 Vault manifest. This is a topology and lifecycle document, not a cache of Topic learner state.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -27,7 +27,8 @@
       "propertyNames": { "$ref": "#/$defs/id" },
       "additionalProperties": { "$ref": "#/$defs/topicBinding" }
     },
-    "learningStrategy": { "$ref": "#/$defs/stateBinding" },
+    "learningStrategy": { "$ref": "#/$defs/strategyBinding" },
+    "coachState": { "$ref": "#/$defs/coachBinding" },
     "appliedUpdates": {
       "type": "object",
       "additionalProperties": { "$ref": "#/$defs/appliedUpdate" }
@@ -56,12 +57,22 @@
       },
       "additionalProperties": false
     },
-    "stateBinding": {
+    "strategyBinding": {
       "type": "object",
       "required": ["statePath"],
       "properties": {
         "statePath": {
           "const": ".learning-vault/learning-strategy.json"
+        }
+      },
+      "additionalProperties": false
+    },
+    "coachBinding": {
+      "type": "object",
+      "required": ["statePath"],
+      "properties": {
+        "statePath": {
+          "const": ".learning-vault/coach-state.json"
         }
       },
       "additionalProperties": false
