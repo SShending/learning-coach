@@ -1,7 +1,7 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.7",
-  "description": "Learn, view, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
+  "version": "3.0.0-alpha.8",
+  "description": "Learn, inspect, prioritize, and maintain a private GitHub-backed learning state with auditable mastery evidence.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
@@ -9,12 +9,12 @@
   "homepage": "https://github.com/SShending/learning-coach",
   "repository": "https://github.com/SShending/learning-coach",
   "license": "Apache-2.0",
-  "keywords": ["learning", "knowledge-tree", "memory", "review", "github", "mcp"],
+  "keywords": ["learning", "knowledge-tree", "memory", "review", "coaching", "github", "mcp"],
   "skills": "./skills/",
   "interface": {
     "displayName": "Learning Coach",
-    "shortDescription": "Learn, inspect, and maintain a private knowledge tree",
-    "longDescription": "Learn through practice with auditable mastery evidence, inspect current progress through read-only Learning View, and periodically review or refactor a private GitHub-backed Learning Vault.",
+    "shortDescription": "Learn, inspect, prioritize, and maintain a private knowledge tree",
+    "longDescription": "Learn through practice with auditable mastery evidence, inspect progress through Learning View, decide what to learn or review next through read-only Ask Coach, and periodically maintain a private GitHub-backed Learning Vault.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -22,7 +22,8 @@
     "defaultPrompt": [
       "Help me master agent memory and resume from my Learning Vault.",
       "Show my current learning state without changing my Learning Vault.",
-      "Show the roadmap and stored evidence for my current Topic.",
+      "Based on my Learning Vault, tell me what I should learn, review, practice, connect, defer, or explore next.",
+      "Recommend whether I should open a new Topic and explain what it would connect to.",
       "Review my Learning Vault for structural issues and propose safe refactors."
     ]
   }
