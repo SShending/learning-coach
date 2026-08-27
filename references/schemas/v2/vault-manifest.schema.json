@@ -1,108 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/skills/learning-coach/references/schemas/v2/vault-manifest.schema.json",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/v2/vault-manifest.schema.json",
   "title": "Learning Vault Manifest v2",
   "description": "Active schemaVersion 2 Vault manifest. This is a topology and lifecycle document, not a cache of Topic learner state.",
   "type": "object",
-  "required": [
-    "schemaVersion",
-    "documentType",
-    "vaultId",
-    "createdAt",
-    "updatedAt",
-    "topics",
-    "learningStrategy",
-    "appliedUpdates",
-    "publicExports",
-    "migrationHistory"
-  ],
+  "required": ["schemaVersion", "documentType", "vaultId", "createdAt", "updatedAt", "topics", "learningStrategy", "appliedUpdates", "publicExports", "migrationHistory"],
   "properties": {
     "schemaVersion": { "const": 2 },
     "documentType": { "const": "vault-manifest" },
     "vaultId": { "type": "string", "minLength": 1 },
     "createdAt": { "$ref": "#/$defs/timestamp" },
     "updatedAt": { "$ref": "#/$defs/timestamp" },
-    "topics": {
-      "type": "object",
-      "propertyNames": { "$ref": "#/$defs/id" },
-      "additionalProperties": { "$ref": "#/$defs/topicBinding" }
-    },
+    "topics": { "type": "object", "propertyNames": { "$ref": "#/$defs/id" }, "additionalProperties": { "$ref": "#/$defs/topicBinding" } },
     "learningStrategy": { "$ref": "#/$defs/strategyBinding" },
     "coachState": { "$ref": "#/$defs/coachBinding" },
-    "appliedUpdates": {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/appliedUpdate" }
-    },
-    "publicExports": {
-      "type": "object",
-      "additionalProperties": { "type": "object" }
-    },
-    "migrationHistory": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/migrationRecord" }
-    }
+    "appliedUpdates": { "type": "object", "additionalProperties": { "$ref": "#/$defs/appliedUpdate" } },
+    "publicExports": { "type": "object", "additionalProperties": { "type": "object" } },
+    "migrationHistory": { "type": "array", "items": { "$ref": "#/$defs/migrationRecord" } }
   },
   "additionalProperties": false,
   "$defs": {
     "timestamp": { "type": "string", "format": "date-time" },
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "topicBinding": {
-      "type": "object",
-      "required": ["statePath"],
-      "properties": {
-        "statePath": {
-          "type": "string",
-          "pattern": "^topics/[a-z0-9]+(?:-[a-z0-9]+)*/state\\.json$"
-        }
-      },
-      "additionalProperties": false
-    },
-    "strategyBinding": {
-      "type": "object",
-      "required": ["statePath"],
-      "properties": {
-        "statePath": {
-          "const": ".learning-vault/learning-strategy.json"
-        }
-      },
-      "additionalProperties": false
-    },
-    "coachBinding": {
-      "type": "object",
-      "required": ["statePath"],
-      "properties": {
-        "statePath": {
-          "const": ".learning-vault/coach-state.json"
-        }
-      },
-      "additionalProperties": false
-    },
-    "appliedUpdate": {
-      "type": "object",
-      "required": ["updateId", "baseRevision", "appliedAt"],
-      "properties": {
-        "updateId": { "type": "string", "minLength": 1 },
-        "baseRevision": { "type": "string", "minLength": 1 },
-        "appliedAt": { "$ref": "#/$defs/timestamp" }
-      },
-      "additionalProperties": true
-    },
-    "migrationRecord": {
-      "type": "object",
-      "required": [
-        "fromSchemaVersion",
-        "toSchemaVersion",
-        "sourceVaultSha",
-        "migratedAt"
-      ],
-      "properties": {
-        "fromSchemaVersion": { "type": "integer", "minimum": 1 },
-        "toSchemaVersion": { "type": "integer", "minimum": 2 },
-        "sourceVaultSha": { "type": "string", "minLength": 1 },
-        "migratedAt": { "$ref": "#/$defs/timestamp" },
-        "legacyAppliedUpdatesPath": { "type": "string", "minLength": 1 }
-      },
-      "additionalProperties": true
-    }
+    "topicBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "type": "string", "pattern": "^topics/[a-z0-9]+(?:-[a-z0-9]+)*/state\\.json$" } }, "additionalProperties": false },
+    "strategyBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": ".learning-vault/learning-strategy.json" } }, "additionalProperties": false },
+    "coachBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": ".learning-vault/coach-state.json" } }, "additionalProperties": false },
+    "appliedUpdate": { "type": "object", "required": ["updateId", "baseRevision", "appliedAt"], "properties": { "updateId": { "type": "string", "minLength": 1 }, "baseRevision": { "type": "string", "minLength": 1 }, "appliedAt": { "$ref": "#/$defs/timestamp" } }, "additionalProperties": true },
+    "migrationRecord": { "type": "object", "required": ["fromSchemaVersion", "toSchemaVersion", "sourceVaultSha", "migratedAt"], "properties": { "fromSchemaVersion": { "type": "integer", "minimum": 1 }, "toSchemaVersion": { "type": "integer", "minimum": 2 }, "sourceVaultSha": { "type": "string", "minLength": 1 }, "migratedAt": { "$ref": "#/$defs/timestamp" }, "legacyAppliedUpdatesPath": { "type": "string", "minLength": 1 } }, "additionalProperties": true }
   }
 }
