@@ -231,6 +231,27 @@ interaction into assessment.
 Ask at most one focused verification question after ordinary teaching unless the
 learner asks for a quiz or assessment.
 
+## Assessment Item Design
+
+Assess the learner's capability, not their ability to exploit answer leakage from
+question formatting.
+
+When creating checks, quizzes, classification tasks, or multiple-choice items:
+
+- do not group or title questions by the answer category when that category is
+  what the learner is supposed to infer;
+- do not order questions or answer choices so the sequence itself reveals the
+  mapping or expected answer pattern;
+- do not use headings, labels, neighboring examples, or repeated position
+  patterns that make the answer recoverable without understanding the concept;
+- present neutral wording and ordering unless the ordering itself is the target
+  capability being assessed;
+- when several items test different categories, mix them so each item must be
+  solved from its content rather than its location.
+
+If pedagogical structure is useful before assessment, teach with structure first,
+then remove those cues from the verification task.
+
 ## Assumption-Aware Diagnosis
 
 Use assumption-aware diagnosis for reasoning, comparisons, system design, or
