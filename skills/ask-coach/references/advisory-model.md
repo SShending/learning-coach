@@ -4,7 +4,7 @@ Ask Coach derives recommendations from authoritative Learning Vault state.
 
 Read the shared Coach State contract when durable advisory memory is enabled:
 
-- `../../learning-coach/references/coach-state.md`
+- `../../../references/coach-state.md`
 
 ## Principle
 
@@ -25,141 +25,46 @@ Most advice is ephemeral and should be recomputed from current learner state:
 - a one-session time allocation;
 - temporary ranking among active Topics.
 
-Persist only advisory information that would still be useful roughly a week later
-because it avoids repeated reasoning or inconsistent decisions:
+Persist only advisory information that would still be useful roughly a week later because it avoids repeated reasoning or inconsistent decisions:
 
 - a candidate Topic intentionally deferred/recommended with clear rationale;
 - a durable cross-Topic connection useful for sequencing/transfer;
 - a persistent advisory hypothesis with explicit revisit conditions.
 
-Persist these only in the dedicated Coach State domain. Never convert them into
-Topic evidence, mastery, gaps, roadmap, current focus, or next step.
+Persist these only in Coach State. Never convert them into Topic evidence, mastery, gaps, roadmap, current focus, or next step.
 
 ## Signals
 
-### Goal relevance
+Use goal relevance, active-roadmap leverage, prerequisite leverage, evidence progression, review urgency, transfer leverage, context-switch cost, and opportunity cost.
 
-How directly does the action support a persisted target capability or an explicit
-current learner goal?
-
-### Roadmap leverage
-
-Does it unblock or validate the active capability milestone?
-
-### Prerequisite leverage
-
-Does one Concept/capability support several downstream Concepts or Topics?
-
-### Evidence progression
-
-Use this as a diagnostic ladder, not a mandatory curriculum:
+Use the evidence ladder diagnostically rather than as a mandatory curriculum:
 
 ```text
 recognition -> explanation -> independent application -> transfer
 ```
 
-### Review urgency
-
-Review urgency is a derived advisory estimate, not memory state. Consider:
-
-- elapsed time since meaningful evidence/retrieval;
-- evidence type and independence;
-- result/assistance;
-- contradictions/failure;
-- stored `nextReview`;
-- prerequisite/goal importance;
-- recent successful retrieval/application.
-
-Use ordinal labels such as `low`, `medium`, `high`, `urgent`. Do not persist them
-as calibrated memory facts.
-
-### Transfer leverage
-
-Does practicing one Topic provide useful application/transfer for another?
-
-### Context-switch cost
-
-When two actions have similar value, prefer a coherent active thread over
-unnecessary switching.
-
-### Opportunity cost
-
-Consider what an action displaces. It is valid to recommend waiting.
+Review urgency is a derived advisory estimate. Consider evidence age/type, independence, result/assistance, contradictions/failure, stored `nextReview`, prerequisite/goal importance, and recent successful retrieval/application. Use ordinal labels; do not persist calibrated recall claims.
 
 ## Stability And Retrievability
 
-Current schema versions do not contain enough calibrated retrieval-review history
-to infer FSRS-style memory state reliably.
+Current schema versions do not contain enough calibrated retrieval-review history to infer FSRS-style stability, retrievability, or difficulty reliably. Use explainable review urgency instead.
 
-Do not treat these as facts:
+## Cross-Topic Connections
 
-- memory stability;
-- retrievability/recall probability;
-- difficulty parameter.
-
-Until a future scheduler has sufficient review observations and an explicit
-model, use explainable review urgency instead.
-
-## Cross-Topic Connection Types
-
-Classify when useful:
-
-- `prerequisite`
-- `shared_abstraction`
-- `implementation_bridge`
-- `transfer_opportunity`
-- `shared_bottleneck`
-- `knowledge_island`
-
-Distinguish basis:
-
-- `stored` — directly supported by Vault structure/evidence;
-- `inferred` — semantic advisory inference;
-- `grounded` — supported by appropriate external evidence.
-
-Persist only connections likely to affect future coaching.
+Useful types include prerequisite, shared abstraction, implementation bridge, transfer opportunity, shared bottleneck, and knowledge island. Distinguish whether the basis is stored, inferred, or externally grounded. Persist only relationships likely to affect future coaching.
 
 ## New Topic Exploration
 
-Positive signals:
+A possible Topic should normally have a coherent observable target capability, fill a real prerequisite/capability need or materially advance goals, and not merely duplicate an existing Topic or expand vocabulary.
 
-- fills a real prerequisite/capability gap;
-- connects several existing Topics;
-- materially advances a learner goal/project;
-- owns a coherent target capability not already covered;
-- provides high transfer/foundational leverage.
+A learner naming an area does not itself establish Topic granularity. Ask Coach may recommend/defer a candidate at portfolio level; Topic Coach finalizes whether the chosen area is a Concept, milestone/cluster, existing-Topic extension, or genuinely new Topic during initialization.
 
-Negative signals:
-
-- duplicates an existing Topic;
-- mainly expands vocabulary without capability value;
-- depends on unfinished foundations;
-- adds context switching while a high-leverage thread is close to a meaningful
-  capability test;
-- cannot be expressed as a bounded observable target capability.
-
-It is valid to recommend **no new Topic yet**.
-
-If a Topic is valuable but premature, persist a `deferred` candidate with concrete
-`revisitWhen` conditions rather than rediscovering the same decision on every
-future Ask Coach run.
+It is valid to recommend **no new Topic yet**. Valuable-but-premature candidates should be `deferred` with concrete `revisitWhen` conditions.
 
 ## Bottleneck Diagnosis
 
-Prefer causal hypotheses over counts. Useful patterns include:
-
-- several Topics depending on the same unassessed prerequisite;
-- repeated explanation evidence without independent application;
-- contradictions around one abstraction;
-- roadmap milestones stalling at the same capability boundary;
-- repeated Topic creation before earlier foundations reach transfer.
-
-When evidence is insufficient, persist only a Coach State `advisoryHypothesis`
-when the hypothesis is durable enough to revisit. Do not turn it into a learner
-`knownGap`.
+Prefer causal hypotheses over counts. When evidence is insufficient, persist only a durable Coach State `advisoryHypothesis`; do not turn it directly into a learner `knownGap`.
 
 ## No Hidden Score
 
-Do not present pseudo-precise scores such as `82.4 priority` by default. If the
-learner explicitly asks for a scoring model, expose the heuristic/weights and
-state clearly that it is a decision aid rather than measured learner truth.
+Do not present pseudo-precise priority scores by default. If the learner explicitly asks for a scoring model, expose the heuristic and state that it is a decision aid rather than measured learner truth.
