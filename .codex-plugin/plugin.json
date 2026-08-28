@@ -11,20 +11,19 @@
   "license": "Apache-2.0",
   "keywords": ["learning", "knowledge-tree", "memory", "review", "coaching", "github", "mcp"],
   "skills": "./skills/",
+  "apps": "./.app.json",
   "interface": {
     "displayName": "Learning Coach",
     "shortDescription": "Learn inside Topics and plan across your learning portfolio",
-    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach handles one chosen Topic's teaching, practice, assessment, roadmap, and learner-state updates; Ask Coach handles portfolio prioritization, global review scheduling, cross-Topic reasoning, candidate Topics, Coach State, and evidence-backed Learning Strategy; Learning View presents state read-only; Vault Curator maintains the Vault. The Plugin declares the canonical GitHub app dependency and never requires PATs or private infrastructure.",
+    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach runs Topic-local learning, Ask Coach plans across the portfolio, Learning View presents state read-only, and Vault Curator maintains the Vault. The Plugin requires the canonical GitHub app and never requires PATs or private infrastructure.",
     "developerName": "SShending",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
+    "capabilities": ["Interactive", "Write"],
     "websiteURL": "https://github.com/SShending/learning-coach",
     "defaultPrompt": [
-      "Use Topic Coach to resume a chosen Topic and continue from its next useful within-Topic action.",
-      "Use Ask Coach to decide what I should learn, review, practice, connect, defer, or explore across my Topics.",
-      "Use Learning View to show my current learning state without changing it.",
-      "Use Ask Coach to recommend whether I should open a new Topic; if I choose it, hand off to Topic Coach to finalize the Topic boundary and initialize it.",
-      "Use Vault Curator to review my Learning Vault for structural issues and propose safe refactors."
+      "Resume one of my learning Topics and continue from the next useful step.",
+      "Based on my Learning Vault, what should I learn, review, practice, or defer next?",
+      "Show my current learning state without changing it."
     ]
   }
 }
