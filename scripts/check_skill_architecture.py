@@ -21,11 +21,11 @@ REQUIRED = [
 ACTIVE_TEXT_ROOTS = [
     ROOT / "skills",
     ROOT / "scripts",
+    ROOT / "references",
+    ROOT / "docs",
     ROOT / "README.md",
     ROOT / "README.zh-CN.md",
     ROOT / "CONTEXT.md",
-    ROOT / "docs" / "chatgpt-project.md",
-    ROOT / "docs" / "companion-skills.md",
     ROOT / ".codex-plugin" / "plugin.json",
 ]
 
@@ -34,6 +34,15 @@ STALE_PATTERNS = [
     "../learning-coach/references",
     "$learning-coach",
 ]
+
+HISTORICAL_PREFIXES = [
+    ROOT / "docs" / "adr",
+]
+
+
+def is_historical(path: Path) -> bool:
+    resolved = path.resolve()
+    return any(prefix.resolve() in resolved.parents for prefix in HISTORICAL_PREFIXES)
 
 
 def iter_text_files(path: Path):
@@ -61,7 +70,7 @@ def main() -> None:
     for root in ACTIVE_TEXT_ROOTS:
         for path in iter_text_files(root) or []:
             resolved = path.resolve()
-            if resolved == THIS_FILE or resolved in seen:
+            if resolved == THIS_FILE or resolved in seen or is_historical(path):
                 continue
             seen.add(resolved)
             text = path.read_text(encoding="utf-8")
@@ -71,12 +80,16 @@ def main() -> None:
 
     topic = (ROOT / "skills/topic-coach/SKILL.md").read_text(encoding="utf-8")
     ask = (ROOT / "skills/ask-coach/SKILL.md").read_text(encoding="utf-8")
+    github_ops = (ROOT / "references/github-operations.md").read_text(encoding="utf-8")
+    coach_state = (ROOT / "references/coach-state.md").read_text(encoding="utf-8")
+    vault_format = (ROOT / "references/vault-format.md").read_text(encoding="utf-8")
 
     required_topic_phrases = [
         "name: topic-coach",
         "Topic-local learning controller",
         "A learner naming an area does **not** automatically make that area a new Topic",
         "Do **not** build a Vault-wide review queue",
+        "Assessment Item Design",
     ]
     for phrase in required_topic_phrases:
         if phrase not in topic:
@@ -91,6 +104,26 @@ def main() -> None:
     for phrase in required_ask_phrases:
         if phrase not in ask:
             errors.append(f"Ask Coach contract missing: {phrase}")
+
+    required_shared_phrases = [
+        (github_ops, "Topic Coach\n  -> Topic state", "GitHub Operations Topic ownership"),
+        (github_ops, "A normal Topic Coach update touches one Topic", "GitHub Operations Topic mutation role"),
+        (coach_state, "Topic\nCoach must not treat Coach State", "Coach State Topic Coach boundary"),
+        (vault_format, "shared by Topic Coach,\nAsk Coach, Learning View, and Vault Curator", "Vault format four-Skill ownership"),
+        (vault_format, "coach-state.json", "Vault format Coach State domain"),
+    ]
+    for text, phrase, label in required_shared_phrases:
+        if phrase not in text:
+            errors.append(f"shared contract missing {label}: {phrase!r}")
+
+    forbidden_shared_phrases = [
+        (github_ops, "A normal Learning Coach update touches one Topic", "old Topic mutation role"),
+        (github_ops, "Learning Coach may read Learning Strategy as lesson context", "old Topic strategy role"),
+        (coach_state, "Learning Coach must not treat Coach State", "old Coach State Topic role"),
+    ]
+    for text, phrase, label in forbidden_shared_phrases:
+        if phrase in text:
+            errors.append(f"shared contract retains {label}: {phrase!r}")
 
     if errors:
         print("SKILL ARCHITECTURE CHECK FAILED")
