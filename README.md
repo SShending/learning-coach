@@ -20,7 +20,7 @@ English | [简体中文](README.zh-CN.md)
 
 ## Product and Skills
 
-**Learning Coach** is the product/repository/package name. It is no longer the name of an individual Skill.
+**Learning Coach** is the product/repository/Plugin name. It is not the name of an individual Skill.
 
 ```text
 Learning Coach
@@ -49,6 +49,32 @@ Topic Coach
 ```
 
 A learner naming an area does **not** automatically create a Topic. Topic Coach decides whether the chosen area is better represented as a Concept, roadmap milestone/cluster, extension of an existing Topic, or a genuinely new Topic with its own bounded observable target capability.
+
+## Plugin Package
+
+Learning Coach is packaged as **one multi-Skill Plugin**. The Plugin declares the canonical GitHub app dependency in `.app.json`; it does not require a PAT, private key, tunnel, or custom MCP server for the current alpha.
+
+```text
+learning-coach/
+├── .codex-plugin/plugin.json
+├── .app.json
+├── skills/
+│   ├── ask-coach/
+│   ├── topic-coach/
+│   ├── learning-view/
+│   └── vault-curator/
+└── references/
+```
+
+For a local Codex personal-marketplace test:
+
+```bash
+git clone https://github.com/SShending/learning-coach.git
+cd learning-coach
+bash scripts/install_personal_plugin.sh
+```
+
+The helper registers the local Plugin and, when the `codex` CLI is available, runs `codex plugin add learning-coach@personal`. Open a new Codex thread/session after installation. See [Releasing Learning Coach](docs/releasing.md) for the exact install/test contract.
 
 ## Shared Contracts
 
@@ -92,7 +118,7 @@ SchemaVersion 2 partitions authority by mutation domain:
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         cross-Topic meta-learning strategy
-├── coach-state.json               durable portfolio advisory memory, when enabled
+├── coach-state.json               optional durable portfolio advisory memory
 └── migrations/                    migration audit material
 
 topics/<topic-id>/
@@ -148,46 +174,23 @@ Use Vault Curator.
 Review my Learning Vault like a codebase. Do not mutate anything yet.
 ```
 
-## ChatGPT / Agent Setup
+## Repository Capability Requirements
 
-Use the four Skill directories plus the shared contracts:
+Requirements differ by Skill: Topic Coach needs read+write for normal stateful learning; Learning View uses read only; Ask Coach always needs readable authority and may write only its cross-Topic domains; Vault Curator writes only for explicit maintenance/lifecycle operations.
 
-```text
-skills/topic-coach/
-skills/ask-coach/
-skills/learning-view/
-skills/vault-curator/
-references/
-```
-
-Repository capability requirements differ by Skill: Topic Coach needs read+write for normal learning; Learning View uses read only; Ask Coach always needs read and may write only its cross-Topic domains; Vault Curator writes only for approved maintenance/lifecycle operations.
-
-See [ChatGPT Project Setup](docs/chatgpt-project.md).
+See [Pragmatic GitHub Runbook](docs/private-alpha-runbook.md) for runtime behavior and [ChatGPT Project Setup](docs/chatgpt-project.md) for manual Skill-oriented setup contexts.
 
 ## Development
 
-Current package structure:
-
-```text
-skills/
-├── ask-coach/
-├── topic-coach/
-├── learning-view/
-└── vault-curator/
-
-references/          shared system contracts
-scripts/             validation and migration tooling
-docs/                architecture and operating documentation
-```
-
-Run the schema and Skill-routing checks with:
+Run the full preflight with:
 
 ```text
 python scripts/validate_vault_schemas.py
 python scripts/check_skill_architecture.py
+python scripts/check_plugin_release.py
 ```
 
-GitHub Actions runs both checks for changes to Skills, shared contracts, schemas, and core setup documentation.
+GitHub Actions runs the checks for changes to Skills, shared contracts, scripts, active documentation, and Plugin metadata. Historical ADRs remain records of the architecture at the time they were written and are not mechanically rewritten by current-name consistency checks.
 
 ## License
 
