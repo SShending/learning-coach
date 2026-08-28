@@ -1,4 +1,4 @@
-name: Vault schema and skill architecture smoke test
+name: Vault schema, skill architecture, and plugin release smoke test
 
 on:
   push:
@@ -7,11 +7,14 @@ on:
       - "skills/**"
       - "scripts/validate_vault_schemas.py"
       - "scripts/check_skill_architecture.py"
+      - "scripts/check_plugin_release.py"
       - "README.md"
       - "README.zh-CN.md"
       - "CONTEXT.md"
       - "docs/chatgpt-project.md"
       - "docs/companion-skills.md"
+      - "docs/releasing.md"
+      - ".app.json"
       - ".codex-plugin/plugin.json"
       - ".github/workflows/schema-smoke.yml"
   pull_request:
@@ -20,11 +23,14 @@ on:
       - "skills/**"
       - "scripts/validate_vault_schemas.py"
       - "scripts/check_skill_architecture.py"
+      - "scripts/check_plugin_release.py"
       - "README.md"
       - "README.zh-CN.md"
       - "CONTEXT.md"
       - "docs/chatgpt-project.md"
       - "docs/companion-skills.md"
+      - "docs/releasing.md"
+      - ".app.json"
       - ".codex-plugin/plugin.json"
       - ".github/workflows/schema-smoke.yml"
   workflow_dispatch:
@@ -43,3 +49,5 @@ jobs:
         run: python scripts/validate_vault_schemas.py
       - name: Validate skill architecture and routing contracts
         run: python scripts/check_skill_architecture.py
+      - name: Validate plugin release package
+        run: python scripts/check_plugin_release.py
