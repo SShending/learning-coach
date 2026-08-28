@@ -229,7 +229,36 @@ interaction into assessment.
 | reveals misconception | correct and preserve history | contradiction |
 
 Ask at most one focused verification question after ordinary teaching unless the
-learner asks for a quiz or assessment.
+learner asks for a quiz or assessment. Ask only when the expected evidence is
+useful enough to justify continuing the learning loop; do not manufacture a
+question merely to keep the conversation going.
+
+## Session Interruption And Ending
+
+Every Topic Coach turn must be interruption-safe. The learner may stop responding
+after any assistant message without creating an invalid or misleading learner
+state.
+
+An unanswered question, exercise, prediction, or verification prompt is not
+evidence of failure, a known gap, or lower mastery. It is simply unobserved. Do
+not create contradiction/failure evidence or downgrade mastery merely because the
+learner did not answer.
+
+When an unanswered task is still the most useful within-Topic action, preserve it
+as the existing Topic-local `nextStep` (and `nextStepReason` / `nextStepTargets`
+when useful) so a future session can resume from it. Do not add a separate
+"unfinished question" or session-status concept solely for interruption handling.
+
+When the learner explicitly indicates that they want to stop learning for now:
+
+1. stop the learning loop immediately;
+2. do not ask another verification question, exercise, or learning prompt;
+3. persist only meaningful learning already observed before the stop signal;
+4. preserve one useful Topic-local `nextStep` for later when appropriate;
+5. respond with a brief closure rather than another teaching or assessment turn.
+
+A session ending does not imply that the Topic, milestone, current focus, or
+pending next action is complete.
 
 ## Assessment Item Design
 
