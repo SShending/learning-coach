@@ -28,6 +28,54 @@ The Plugin does not ship its own MCP server and does not request a PAT, private 
 
 A Learning Vault is user-owned data. The Plugin never bundles or publishes a learner's private Vault.
 
+## Personal Marketplace Test
+
+Use the personal marketplace as the first real installation test before a public submission. This validates Plugin discovery, installation, multi-Skill discovery/routing, GitHub dependency behavior, and access to repository-root shared contracts in a compatible Codex Plugin runtime.
+
+From a local clone of this repository, run:
+
+```bash
+bash scripts/install_personal_plugin.sh
+```
+
+The helper is intentionally conservative:
+
+- it symlinks the current repository to `~/plugins/learning-coach` rather than copying or modifying the repository;
+- it creates or updates only the `learning-coach` entry in `~/.agents/plugins/marketplace.json`;
+- it refuses to overwrite an unrelated existing `~/plugins/learning-coach` path;
+- it does not copy a Learning Vault, request credentials, or alter GitHub authorization;
+- it runs the Plugin release preflight after registration.
+
+The resulting catalog entry uses:
+
+```json
+{
+  "name": "learning-coach",
+  "source": {
+    "source": "local",
+    "path": "./plugins/learning-coach"
+  },
+  "policy": {
+    "installation": "AVAILABLE",
+    "authentication": "ON_INSTALL"
+  },
+  "category": "Productivity"
+}
+```
+
+After running the helper, restart or reopen a compatible Codex Plugin surface, install **Learning Coach** from the Personal marketplace, and connect GitHub when prompted.
+
+Verify at least these runtime behaviors:
+
+1. Learning Coach appears as one Plugin, not four independently installed products.
+2. Topic Coach, Ask Coach, Learning View, and Vault Curator are all discoverable inside the installed Plugin.
+3. A one-Topic learning request selects Topic Coach; a portfolio-level prioritization request selects Ask Coach.
+4. GitHub connection is requested/used according to `.app.json` rather than PAT/manual-secret instructions.
+5. Topic Coach can read shared contracts from repository-root `references/` in the installed Plugin package.
+6. Learning View stays read-only and Vault Curator does not mutate without an explicit maintenance operation.
+
+The personal marketplace test does **not** install the Plugin into an unrelated ChatGPT web session. It tests the local/personal Plugin runtime that consumes `~/.agents/plugins/marketplace.json`.
+
 ## Release Readiness
 
 Before publishing, verify:
@@ -41,6 +89,7 @@ Before publishing, verify:
 7. Plugin release checks pass.
 8. README accurately describes the current four-Skill architecture and GitHub dependency.
 9. No learner-specific Vault data, credentials, or private repository contents are included.
+10. The personal marketplace installation test has exercised real Plugin discovery and runtime behavior.
 
 ## Versioning
 
