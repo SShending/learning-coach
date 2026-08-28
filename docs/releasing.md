@@ -38,13 +38,21 @@ From a local clone of this repository, run:
 bash scripts/install_personal_plugin.sh
 ```
 
-The helper is intentionally conservative:
+The helper:
 
-- it symlinks the current repository to `~/plugins/learning-coach` rather than copying or modifying the repository;
-- it creates or updates only the `learning-coach` entry in `~/.agents/plugins/marketplace.json`;
-- it refuses to overwrite an unrelated existing `~/plugins/learning-coach` path;
-- it does not copy a Learning Vault, request credentials, or alter GitHub authorization;
-- it runs the Plugin release preflight after registration.
+- symlinks the current repository to `~/plugins/learning-coach` rather than copying or modifying the repository;
+- creates or updates only the `learning-coach` entry in `~/.agents/plugins/marketplace.json`;
+- refuses to overwrite an unrelated existing `~/plugins/learning-coach` path;
+- does not copy a Learning Vault, request credentials, or alter GitHub authorization;
+- runs the Plugin release preflight;
+- when the `codex` CLI is available, runs `codex plugin add learning-coach@personal` and then `codex plugin list`.
+
+If the helper cannot find the Codex CLI, registration still completes. Install manually with:
+
+```bash
+codex plugin add learning-coach@personal
+codex plugin list
+```
 
 The resulting catalog entry uses:
 
@@ -63,7 +71,7 @@ The resulting catalog entry uses:
 }
 ```
 
-After running the helper, restart or reopen a compatible Codex Plugin surface, install **Learning Coach** from the Personal marketplace, and connect GitHub when prompted.
+After installation, open a new Codex thread/session so the Plugin Skills are reloaded, and connect GitHub when the host requests authorization.
 
 Verify at least these runtime behaviors:
 
@@ -98,7 +106,7 @@ The package uses semantic-version-like prerelease versions while the Plugin cont
 Example:
 
 ```text
-3.0.0-alpha.12
+3.0.0-alpha.N
 ```
 
 Increment the prerelease revision for changes to Plugin packaging, Skill routing contracts, shared authority contracts, or install dependencies during alpha.
