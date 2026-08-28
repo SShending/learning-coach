@@ -90,6 +90,9 @@ def main() -> None:
         "A learner naming an area does **not** automatically make that area a new Topic",
         "Do **not** build a Vault-wide review queue",
         "Assessment Item Design",
+        "Every Topic Coach turn must be interruption-safe",
+        "An unanswered question, exercise, prediction, or verification prompt is not",
+        "do not manufacture a\nquestion merely to keep the conversation going",
     ]
     for phrase in required_topic_phrases:
         if phrase not in topic:
