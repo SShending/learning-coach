@@ -18,6 +18,7 @@ SHARED_CONTRACTS = [
     "references/coach-state.md",
     "references/vault.schema.json",
 ]
+GITHUB_CONNECTOR_ID = "connector_76869538009648d5b282a4bb21c3d157"
 
 
 def load_json(path: Path) -> dict:
@@ -53,6 +54,7 @@ def main() -> None:
         "repository",
         "license",
         "skills",
+        "apps",
         "interface",
     ]
     for field in required_plugin_fields:
@@ -63,6 +65,8 @@ def main() -> None:
         errors.append("plugin name must be learning-coach")
     if plugin.get("skills") != "./skills/":
         errors.append("plugin skills path must be ./skills/")
+    if plugin.get("apps") != "./.app.json":
+        errors.append("plugin apps path must be ./.app.json")
     if plugin.get("license") != "Apache-2.0":
         errors.append("plugin license must be Apache-2.0")
 
@@ -78,16 +82,23 @@ def main() -> None:
             if field not in interface:
                 errors.append(f"plugin interface missing field: {field}")
         prompts = interface.get("defaultPrompt")
-        if not isinstance(prompts, list) or len(prompts) < 4:
-            errors.append("plugin should expose at least four starter/default prompts")
+        if not isinstance(prompts, list) or not (1 <= len(prompts) <= 3):
+            errors.append("plugin defaultPrompt must contain 1 to 3 starter prompts")
+        elif any(not isinstance(prompt, str) or len(prompt) > 128 for prompt in prompts):
+            errors.append("each plugin defaultPrompt must be a string of at most 128 characters")
 
     apps = app.get("apps")
     if not isinstance(apps, dict):
         errors.append(".app.json must contain an apps object")
     else:
         github = apps.get("github")
-        if not isinstance(github, dict) or not isinstance(github.get("id"), str):
-            errors.append(".app.json must declare the canonical GitHub connector")
+        if not isinstance(github, dict):
+            errors.append(".app.json must declare the GitHub app")
+        else:
+            if github.get("id") != GITHUB_CONNECTOR_ID:
+                errors.append(".app.json must use the canonical GitHub connector id")
+            if github.get("required") is not True:
+                errors.append("GitHub app must be required for Learning Coach")
 
     for skill in SKILLS:
         skill_root = ROOT / "skills" / skill
