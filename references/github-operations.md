@@ -67,7 +67,7 @@ Validate V2 authority documents against the matching schemas under
 Normal ownership is:
 
 ```text
-Learning Coach
+Topic Coach
   -> Topic state + linked Topic notes/sessions + Topic README projection
 
 Ask Coach
@@ -81,7 +81,7 @@ Vault Curator
   -> explicit maintenance/lifecycle/repair/migration across domains
 ```
 
-Learning Coach may read Learning Strategy as lesson context but does not mutate it
+Topic Coach may read Learning Strategy as lesson context but does not mutate it
 in an ordinary Topic learning cycle.
 
 Ask Coach must not mutate Topic learner state while doing portfolio planning or
@@ -120,7 +120,7 @@ uses this whole-document protocol.
 
 ## V2 Topic Mutation Protocol
 
-A normal Learning Coach update touches one Topic authority domain plus required
+A normal Topic Coach update touches one Topic authority domain plus required
 linked content and derived README.
 
 1. read manifest and Topic binding;
