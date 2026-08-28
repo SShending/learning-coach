@@ -43,3 +43,5 @@ jobs:
         run: python scripts/check_skill_architecture.py
       - name: Validate plugin release package
         run: python scripts/check_plugin_release.py
+      - name: Validate personal plugin installer syntax
+        run: bash -n scripts/install_personal_plugin.sh
