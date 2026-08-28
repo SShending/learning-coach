@@ -21,8 +21,10 @@ The bound document is authoritative only for durable advisory memory:
 - persistent advisory hypotheses that should be revisited later;
 - Coach-State-local idempotency.
 
-A V2 manifest may omit `coachState`; such a Vault remains valid and Ask Coach can
-operate read-only.
+A V2 manifest may omit `coachState`; such a Vault remains valid. Ask Coach may
+still advise from readable Vault authority, but it cannot persist Coach State
+until a binding is explicitly initialized. Learning Strategy remains a separate
+authority domain with its own write rules.
 
 ## What To Persist
 
@@ -101,6 +103,6 @@ is non-authoritative.
 ## Lifecycle
 
 Vault Curator may repair, migrate, archive, or remove Coach State under an explicit
-maintenance operation. Learning View may present Coach State read-only. Learning
+maintenance operation. Learning View may present Coach State read-only. Topic
 Coach must not treat Coach State as mastery evidence or mutate it as part of an
 ordinary Topic learning cycle.
