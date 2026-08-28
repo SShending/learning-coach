@@ -16,7 +16,7 @@
 
 ## 产品与 Skills
 
-**Learning Coach** 现在表示整个产品 / repository / package，不再是某一个 Skill 的名字。
+**Learning Coach** 表示整个产品 / repository / Plugin，不再是某一个 Skill 的名字。
 
 ```text
 Learning Coach
@@ -44,16 +44,37 @@ Topic Coach
 “在 llm-evolution 内，下一步标出 pretraining/SFT 的 loss positions”
 ```
 
-用户说“我想学 X”**不等于 X 自动成为一个 Topic**。Topic Coach 在初始化时判断这个学习区域更适合作为：
+用户说“我想学 X”**不等于 X 自动成为一个 Topic**。Topic Coach 在初始化时判断这个学习区域更适合作为 Concept、roadmap milestone / Concept cluster、已有 Topic 的扩展，还是拥有独立可观察 target capability 的新 Topic。
 
-- 已有 Topic 内的 Concept；
-- roadmap milestone / Concept cluster；
-- 已有 Topic 的扩展或重构；
-- 还是一个拥有独立、可观察 target capability 的新 Topic。
+## Plugin Package
+
+Learning Coach 作为**一个 multi-Skill Plugin**分发。Plugin 通过 `.app.json` 声明 canonical GitHub app dependency；当前 alpha 不要求 PAT、private key、tunnel，也不要求自建 MCP server。
+
+```text
+learning-coach/
+├── .codex-plugin/plugin.json
+├── .app.json
+├── skills/
+│   ├── ask-coach/
+│   ├── topic-coach/
+│   ├── learning-view/
+│   └── vault-curator/
+└── references/
+```
+
+在本地 Codex personal marketplace 中测试安装：
+
+```bash
+git clone https://github.com/SShending/learning-coach.git
+cd learning-coach
+bash scripts/install_personal_plugin.sh
+```
+
+这个 helper 会注册本地 Plugin；如果环境中可以找到 `codex` CLI，还会执行 `codex plugin add learning-coach@personal`。安装后新开一个 Codex thread/session，让 Plugin Skills 重新加载。完整安装与验证契约见 [Releasing Learning Coach](docs/releasing.md)。
 
 ## 共享 Contracts
 
-整个系统共用的 persistence / knowledge contract 不再挂在某个 Skill 目录下，而是位于 repo 根目录：
+系统共用的 persistence / knowledge contract 位于 repo 根目录：
 
 ```text
 references/
@@ -149,46 +170,23 @@ Use Vault Curator.
 Review my Learning Vault like a codebase. Do not mutate anything yet.
 ```
 
-## ChatGPT / Agent 设置
+## Repository 权限要求
 
-使用四个 Skill 目录以及共享 contracts：
+权限要求按 Skill 区分：Topic Coach 正常 stateful learning 需要 read + write；Learning View 只读；Ask Coach 始终需要可读 authority，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护/生命周期操作时才写。
 
-```text
-skills/topic-coach/
-skills/ask-coach/
-skills/learning-view/
-skills/vault-curator/
-references/
-```
-
-权限要求按 Skill 区分：Topic Coach 正常学习需要 read + write；Learning View 只读；Ask Coach 始终需要 read，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护操作时才写。
-
-详细设置见 [ChatGPT Project Setup](docs/chatgpt-project.md)。
+运行时行为见 [Pragmatic GitHub Runbook](docs/private-alpha-runbook.md)；需要手动按 Skill 配置的场景见 [ChatGPT Project Setup](docs/chatgpt-project.md)。
 
 ## 开发
 
-当前 package 结构：
-
-```text
-skills/
-├── ask-coach/
-├── topic-coach/
-├── learning-view/
-└── vault-curator/
-
-references/          shared system contracts
-scripts/             validator / migration tooling
-docs/                architecture / operating docs
-```
-
-检查：
+完整 preflight：
 
 ```text
 python scripts/validate_vault_schemas.py
 python scripts/check_skill_architecture.py
+python scripts/check_plugin_release.py
 ```
 
-GitHub Actions 会在 Skills、shared contracts、schemas 和核心 setup 文档变化时同时运行 schema 与 Skill-routing consistency checks。
+GitHub Actions 会在 Skills、shared contracts、scripts、当前有效文档和 Plugin metadata 变化时运行这些检查。历史 ADR 保留当时的架构表述，不会为了当前命名被机械重写。
 
 ## 许可证
 
