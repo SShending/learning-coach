@@ -58,13 +58,11 @@ plugins = data.setdefault("plugins", [])
 if not isinstance(plugins, list):
     raise SystemExit(f"Expected 'plugins' array in {path}")
 
-replaced = False
 for index, plugin in enumerate(plugins):
     if isinstance(plugin, dict) and plugin.get("name") == "learning-coach":
         plugins[index] = entry
-        replaced = True
         break
-if not replaced:
+else:
     plugins.append(entry)
 
 path.parent.mkdir(parents=True, exist_ok=True)
@@ -77,5 +75,19 @@ echo
 echo "Personal marketplace registration prepared."
 echo "Plugin source: ${PLUGIN_HOME} -> ${ROOT}"
 echo "Marketplace:   ${MARKETPLACE_FILE}"
+
+if command -v codex >/dev/null 2>&1; then
+  echo
+  echo "Installing Learning Coach into Codex..."
+  codex plugin add learning-coach@personal
+  echo
+  echo "Installed plugins:"
+  codex plugin list
+else
+  echo
+  echo "Codex CLI was not found on PATH. Registration is complete; install manually with:"
+  echo "  codex plugin add learning-coach@personal"
+fi
+
 echo
-echo "Next: restart/reopen a compatible Codex plugin surface, install Learning Coach from the Personal marketplace, and connect GitHub when prompted."
+echo "Open a new Codex thread/session after installation so plugin Skills are reloaded."
