@@ -1,7 +1,7 @@
 # Learning Vault Format
 
-This reference defines the durable Learning Vault model shared by Learning Coach,
-Learning View, and Vault Curator.
+This reference defines the durable Learning Vault model shared by Topic Coach,
+Ask Coach, Learning View, and Vault Curator.
 
 The learner model is stable across schema versions. Schema changes may change
 persistence boundaries, but must not silently reinterpret learner evidence,
@@ -64,6 +64,7 @@ Vault merely to backfill optional structure and never invent evidence.
 .learning-vault/
 ├── vault.json                         authoritative Vault manifest
 ├── learning-strategy.json             authoritative cross-Topic strategy
+├── coach-state.json                   optional authoritative advisory memory
 └── migrations/
     └── ...                            migration audit material
 
@@ -76,17 +77,22 @@ topics/<topic-id>/
 public-exports/
 ```
 
+`coach-state.json` is authoritative only when the V2 manifest contains the
+corresponding `coachState` binding. An unbound prepared file is non-authoritative.
+
 Validate the authority documents with the schemas under `schemas/v2/`.
 
 ### Authority ownership
 
 - `.learning-vault/vault.json` owns Vault membership, Topic bindings,
-  Learning-Strategy binding, Vault-level lifecycle metadata, and manifest-local
-  idempotency.
+  Learning-Strategy binding, optional Coach-State binding, Vault-level lifecycle
+  metadata, and manifest-local idempotency.
 - `topics/<topic-id>/state.json` owns that Topic's learner state and Topic-local
   `appliedUpdates`.
 - `.learning-vault/learning-strategy.json` owns cross-Topic Learning Strategy and
   strategy-local `appliedUpdates`.
+- bound `.learning-vault/coach-state.json` owns durable portfolio advisory memory
+  and Coach-State-local `appliedUpdates`.
 - note/session Markdown bodies contain durable content selected by metadata in
   Topic state.
 - Topic README is always derived and non-authoritative.
