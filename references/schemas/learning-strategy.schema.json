@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/v2/learning-strategy.schema.json",
-  "title": "Learning Strategy State v2",
-  "description": "Proposed schemaVersion 2 authoritative cross-Topic learning strategy state.",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/learning-strategy.schema.json",
+  "title": "Learning Strategy State",
+  "description": "Current authoritative cross-Topic learning strategy state.",
   "type": "object",
   "required": ["schemaVersion", "documentType", "vaultId", "observations", "appliedUpdates"],
   "properties": {
@@ -15,15 +15,6 @@
   "additionalProperties": false,
   "$defs": {
     "timestamp": { "type": "string", "format": "date-time" },
-    "appliedUpdate": {
-      "type": "object",
-      "required": ["updateId", "baseRevision", "appliedAt"],
-      "properties": {
-        "updateId": { "type": "string", "minLength": 1 },
-        "baseRevision": { "type": "string", "minLength": 1 },
-        "appliedAt": { "$ref": "#/$defs/timestamp" }
-      },
-      "additionalProperties": true
-    }
+    "appliedUpdate": { "type": "object", "required": ["updateId", "baseRevision", "appliedAt"], "properties": { "updateId": { "type": "string", "minLength": 1 }, "baseRevision": { "type": "string", "minLength": 1 }, "appliedAt": { "$ref": "#/$defs/timestamp" } }, "additionalProperties": true }
   }
 }

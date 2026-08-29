@@ -13,33 +13,21 @@ Show what the Learning Vault currently says.
 
 Learning View requires readable authoritative state. Write capability is neither required nor used.
 
-Read `../../references/vault-format.md` before interpreting the Vault. Use `../../references/github-operations.md` to resolve the authoritative GitHub state. Read `../../references/coach-state.md` only when Coach State is requested or materially relevant.
+Read `../../references/vault-format.md` for the current data model and `../../references/github/read-authority.md` for authoritative resolution.
 
-1. Read `.learning-vault/vault.json` and inspect `schemaVersion`.
+1. Read `.learning-vault/vault.json` and validate the current manifest.
 2. Resolve only the authority domains required by the requested view.
+3. Topic request -> follow `topics[topicId].statePath`.
+4. Learning Strategy -> follow `learningStrategy.statePath`.
+5. Stored advisory context -> follow `coachState.statePath` when bound.
 
-### V1
-
-`vault.json` contains the monolithic learner state. V1 has no dedicated Coach State domain.
-
-### V2
-
-`vault.json` is the manifest.
-
-- Topic request -> follow `topics[topicId].statePath`.
-- Vault overview/comparison -> read only the bound Topic states actually needed.
-- Learning Strategy -> follow `learningStrategy.statePath`.
-- Stored advisory context -> if `coachState` is bound, follow its `statePath`.
-
-If Coach State is absent, say there is no durable advisory-memory domain rather than reconstructing one from conversation history.
+If the Vault does not match the current schema, report that it needs upgrading rather than inferring an older layout. If Coach State is absent, say there is no durable advisory-memory domain rather than reconstructing one from conversation history.
 
 ## Read-Only Invariant
 
-Never append evidence, change mastery, create gaps/unassessed entries, alter roadmap/currentFocus/nextStep, create/update notes or sessions, mutate Coach State/Learning Strategy, add `appliedUpdates`, regenerate projections, repair references, or migrate schema.
+Never append evidence, change mastery, create gaps/unassessed entries, alter roadmap/currentFocus/nextStep, create/update notes or sessions, mutate Coach State/Learning Strategy, add `appliedUpdates`, regenerate projections, repair references, or change schema.
 
-Current-conversation demonstrations do not become evidence in Learning View.
-
-If the learner asks to turn inspection into teaching/assessment, portfolio advice, or maintenance, hand off to the corresponding Skill.
+Current-conversation demonstrations do not become evidence in Learning View. If the learner asks to turn inspection into teaching/assessment, portfolio advice, or maintenance, hand off to the corresponding Skill.
 
 ## Views
 
@@ -61,25 +49,15 @@ For notes, gaps, reviews, or evidence, show only the requested slice plus minimu
 
 ### Coach State View
 
-Present durable advisory memory separately from learner state: candidate Topics/statuses, rationale and `revisitWhen`, durable cross-Topic connections, and advisory hypotheses.
-
-Label Coach State as advisory memory, not mastery evidence, roadmap, or learner truth. Do not reinterpret `deferred` as a current recommendation; a fresh Ask Coach run owns that decision.
+Present durable advisory memory separately from learner state: candidate Topics/statuses, rationale and `revisitWhen`, durable cross-Topic connections, and advisory hypotheses. Label Coach State as advisory memory, not mastery evidence, roadmap, or learner truth. Do not reinterpret `deferred` as a current recommendation; a fresh Ask Coach run owns that decision.
 
 ## Mastery Explanation
 
-Stored mastery levels mean:
-
-- `0`: unassessed/no supporting evidence;
-- `1`: recognition;
-- `2`: explanation;
-- `3`: independent application;
-- `4`: transfer.
-
-Explain existing judgments using stored evidence/`levelBasis` only; never upgrade or downgrade here.
+Stored mastery levels mean 0 unassessed/no supporting evidence, 1 recognition, 2 explanation, 3 independent application, and 4 transfer. Explain existing judgments using stored evidence/`levelBasis` only; never upgrade or downgrade here.
 
 ## Notes, Sessions, And Projections
 
-Read linked bodies only when requested or necessary. Topic README is derived; V1 Topic state inside `vault.json` or V2 bound Topic `state.json` always wins. In V2, source-SHA mismatch means a stale projection, not changed learner state.
+Read linked bodies only when requested or necessary. Topic README is derived; bound Topic `state.json` always wins. A source-SHA mismatch means a stale projection, not changed learner state.
 
 ## Presentation And Privacy
 

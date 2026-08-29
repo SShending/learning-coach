@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Smoke-test Learning Vault JSON Schema syntax, reference resolution, and routing."""
+"""Smoke-test the current Learning Vault JSON Schemas and dispatcher."""
 
 from __future__ import annotations
 
@@ -13,11 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 REFS = ROOT / "references"
 SCHEMA_PATHS = [
     REFS / "vault.schema.json",
-    REFS / "schemas" / "v1" / "vault.schema.json",
-    REFS / "schemas" / "v2" / "vault-manifest.schema.json",
-    REFS / "schemas" / "v2" / "topic-state.schema.json",
-    REFS / "schemas" / "v2" / "learning-strategy.schema.json",
-    REFS / "schemas" / "v2" / "coach-state.schema.json",
+    REFS / "schemas" / "vault-manifest.schema.json",
+    REFS / "schemas" / "topic-state.schema.json",
+    REFS / "schemas" / "learning-strategy.schema.json",
+    REFS / "schemas" / "coach-state.schema.json",
 ]
 
 
@@ -44,19 +43,9 @@ def main() -> None:
         format_checker=Draft202012Validator.FORMAT_CHECKER,
     )
 
-    timestamp = "2026-08-27T00:00:00Z"
+    timestamp = "2026-08-29T00:00:00Z"
     valid_documents = {
-        "v1 monolithic Vault": {
-            "schemaVersion": 1,
-            "vaultId": "github:example/learning-vault",
-            "createdAt": timestamp,
-            "updatedAt": timestamp,
-            "topics": {},
-            "learningStrategy": {"observations": []},
-            "appliedUpdates": {},
-            "publicExports": {},
-        },
-        "v2 manifest": {
+        "manifest": {
             "schemaVersion": 2,
             "documentType": "vault-manifest",
             "vaultId": "github:example/learning-vault",
@@ -69,7 +58,7 @@ def main() -> None:
             "publicExports": {},
             "migrationHistory": [],
         },
-        "v2 Topic state": {
+        "Topic state": {
             "schemaVersion": 2,
             "documentType": "topic-state",
             "vaultId": "github:example/learning-vault",
@@ -85,12 +74,12 @@ def main() -> None:
             "nextStepTargets": [], "concepts": {}, "notes": {}, "sessions": {},
             "appliedUpdates": {},
         },
-        "v2 Learning Strategy": {
+        "Learning Strategy": {
             "schemaVersion": 2, "documentType": "learning-strategy",
             "vaultId": "github:example/learning-vault",
             "observations": [], "appliedUpdates": {},
         },
-        "v2 Coach State": {
+        "Coach State": {
             "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
             "candidateTopics": {}, "crossTopicConnections": {},
@@ -103,7 +92,8 @@ def main() -> None:
         print(f"PASS valid: {name}")
 
     invalid_documents = {
-        "unsupported V2 documentType": {"schemaVersion": 2, "documentType": "unknown-state"},
+        "unsupported documentType": {"schemaVersion": 2, "documentType": "unknown-state"},
+        "unsupported schema version": {"schemaVersion": 1, "documentType": "vault-manifest"},
         "invalid Coach State candidate status": {
             "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",

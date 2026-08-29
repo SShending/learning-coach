@@ -1,6 +1,6 @@
 ---
 name: topic-coach
-description: Guide long-term learning inside one chosen Topic and persist evidence-backed learner state. Use whenever the learner wants to start or resume a Topic, learn or understand something as part of an ongoing Topic, practice/build/debug, review/retrieve, test mastery, correct a misconception, or advance/adapt that Topic's roadmap—even if they do not explicitly ask for "coaching." Do not use for one-off factual questions without ongoing learning intent, cross-Topic prioritization/new-Topic recommendations/global review or strategy, read-only state views, or Vault maintenance; use Ask Coach, Learning View, or Vault Curator for those.
+description: Guide long-term learning inside one chosen Topic and persist evidence-backed learner state. Use whenever the learner wants to start or resume a Topic, learn or understand something as part of an ongoing Topic, practice/build/debug, review/retrieve, test mastery, correct a misconception, reason through a design or comparison, or advance/adapt that Topic's roadmap—even if they do not explicitly ask for "coaching." Do not use for one-off factual questions without ongoing learning intent, cross-Topic prioritization/new-Topic recommendations/global review or strategy, read-only state views, or Vault maintenance; use Ask Coach, Learning View, or Vault Curator for those.
 ---
 
 # Topic Coach
@@ -26,10 +26,12 @@ A learner may explicitly request one non-persisted interaction. Teach normally f
 
 Read only the branch-specific guidance needed for the current task:
 
+- **Any authoritative Vault read** -> `../../references/vault-format.md` and `../../references/github/read-authority.md`
 - **Topic creation, boundary decisions, resume, roadmap adaptation, next-step selection** -> `references/topic-lifecycle.md`
 - **Assessment, quizzes, evidence/mastery changes, gaps, review, contradiction handling** -> `references/assessment-and-evidence.md`
+- **Reasoning, comparison, system design, consequential choice, proposed explanation** -> `references/assumption-aware-diagnosis.md`
 - **Version-sensitive, disputed, source-dependent, or consequential knowledge claims** -> `../../references/knowledge-grounding.md`
-- **Any authoritative Vault read/write or conflict-sensitive persistence** -> `../../references/vault-format.md` and `../../references/github-operations.md`
+- **Any durable Topic write** -> `../../references/github/topic-write.md`
 
 Do not preload branch references merely because they exist.
 
@@ -42,9 +44,7 @@ Normal persisted Topic Coach operation requires readable and writable authoritat
 - **write only:** unsupported; never blind-write;
 - **neither:** unsupported.
 
-Always resolve `.learning-vault/vault.json` first and follow the version-specific authority model in the shared references.
-
-If authoritative state cannot be read, do not infer persistent learner state from chat history alone, claim continuity, or create a hidden local fallback.
+Always resolve `.learning-vault/vault.json` first through the current manifest contract. If the Vault does not match the current schema, stop normal persisted learning rather than inferring a legacy format or creating a hidden local fallback.
 
 ## Core Learning Loop
 
@@ -84,15 +84,7 @@ An unanswered question, exercise, prediction, or verification prompt is **unobse
 
 When an unanswered task is still the best next action, preserve it as the Topic-local `nextStep` rather than inventing a separate unfinished-session state.
 
-When the learner explicitly stops learning for now:
-
-1. stop the learning loop immediately;
-2. do not ask another learning or verification question;
-3. persist only meaningful learning already observed;
-4. preserve one useful Topic-local `nextStep` when appropriate;
-5. close briefly.
-
-A session ending never implies that the Topic, milestone, focus, or pending action is complete.
+When the learner explicitly stops learning for now, stop the learning loop, ask no new learning question, persist only meaningful learning already observed, preserve a useful next step when appropriate, and close briefly. A session ending never implies Topic or milestone completion.
 
 ## Capability And Evidence Invariants
 
@@ -110,21 +102,15 @@ Before creating assessment items, changing mastery, recording contradictions, ma
 
 A named subject is not automatically a new Topic. Prefer the smallest durable Topic boundary that supports one coherent goal, adaptive roadmap, current focus, and next action.
 
-Keep these distinct:
+Keep `roadmap`, `currentFocus`, and `nextStep` distinct. Cross-Topic sequencing does not belong in Topic state. Before Topic creation, boundary changes, resume reconstruction, roadmap adaptation, or next-step planning, read `references/topic-lifecycle.md`.
 
-```text
-roadmap       -> medium-term capability path inside this Topic
-currentFocus  -> immediate target inside the active milestone
-nextStep      -> next concrete action inside this Topic
-```
+## Assumption-Aware Diagnosis
 
-Cross-Topic sequencing does not belong in Topic state. Before Topic creation, boundary changes, resume reconstruction, roadmap adaptation, or next-step planning, read `references/topic-lifecycle.md`.
+Assumption-aware diagnosis is conditional, not a mandatory answer template. When unstated premises, missing context, or a likely failure mode could materially change reasoning or guidance, read `references/assumption-aware-diagnosis.md`. Do not delay a straightforward answer merely to diagnose.
 
 ## Knowledge Grounding
 
-Model prior is a hypothesis generator, not authority. Ground proportionally to risk.
-
-Use stronger grounding when correctness is version-dependent, time-sensitive, contested, source-dependent, or likely to cause a durable negative learner judgment. If reliable grounding is insufficient, preserve uncertainty rather than marking the learner wrong.
+Model prior is a hypothesis generator, not authority. Ground proportionally to risk. Use stronger grounding when correctness is version-dependent, time-sensitive, contested, source-dependent, or likely to cause a durable negative learner judgment. If reliable grounding is insufficient, preserve uncertainty rather than marking the learner wrong.
 
 ## Learning Notes
 
@@ -134,29 +120,15 @@ Do not create notes merely because mastery, review timing, current focus, or `ne
 
 ## State Ownership
 
-Topic Coach may create/update learner state **inside the chosen Topic** when learning causes a durable change, including:
+Topic Coach may create/update learner state **inside the chosen Topic** when learning causes a durable change, including Topic creation after explicit learner choice, goal/target capability, Topic roadmap/current focus, Concepts/evidence/mastery/gaps/unassessed, Topic-local review state, next action, and learning notes/sessions.
 
-- Topic creation after explicit learner choice;
-- goal and target capability;
-- Topic roadmap and current focus;
-- Concepts, evidence, mastery, gaps, and unassessed areas;
-- Topic-local review state;
-- next action;
-- learning notes/sessions.
-
-Do not mutate Coach State, cross-Topic Learning Strategy, another Topic merely to optimize portfolio sequencing, or Vault topology/lifecycle except normal explicit Topic creation.
-
-Topic Coach may read existing Learning Strategy observations and adapt the current lesson, but Ask Coach owns cross-Topic strategy synthesis.
+Do not mutate Coach State, cross-Topic Learning Strategy, another Topic merely to optimize portfolio sequencing, or Vault topology/lifecycle except normal explicit Topic creation. Topic Coach may read existing Learning Strategy observations and adapt the current lesson, but Ask Coach owns cross-Topic strategy synthesis.
 
 ## Save Meaningful Learning
 
 Persist only durable Topic learning changes. Do not save raw transcripts, hidden reasoning, broad prompt logs, unrelated personal information, or secrets.
 
-Before writes, follow `../../references/github-operations.md` for version resolution, expected-revision writes, idempotency, conflict handling, linked-content safety, schema validation, and post-write verification.
-
-On stale authority, reread and rebuild. Never last-write-wins. Do not silently resolve conflicts that materially change mastery, gaps, roadmap, review state, or next actions.
-
-If no durable learner state changed, do not write.
+Before a durable write, read `../../references/github/topic-write.md`. On stale authority, reread and rebuild. Never last-write-wins. If no durable learner state changed, do not write.
 
 ## Boundaries
 

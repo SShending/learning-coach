@@ -27,26 +27,15 @@ Learning Coach
 ├── Ask Coach      portfolio-level planning
 ├── Topic Coach    one-Topic teaching, practice, assessment, and persistence
 ├── Learning View  read-only state presentation
-└── Vault Curator  maintenance, lifecycle, repair, migration, and export
+└── Vault Curator  maintenance, lifecycle, repair, and export
 ```
 
 | Skill | Owns |
 | --- | --- |
 | **Ask Coach** | what to learn/review/practice across Topics, global review priority, cross-Topic connections/bottlenecks, candidate Topics, Coach State, Learning Strategy synthesis |
-| **Topic Coach** | Topic boundary after learner choice, teaching, practice, assessment, Topic roadmap/currentFocus/nextStep, evidence/mastery/gaps, local review, notes/sessions |
+| **Topic Coach** | Topic boundary after learner choice, teaching, practice, assessment, reasoning diagnosis, Topic roadmap/currentFocus/nextStep, evidence/mastery/gaps, local review, notes/sessions |
 | **Learning View** | read-only presentation of authoritative state |
-| **Vault Curator** | structural review, repair, merge/split, migration, forget/archive, export |
-
-The planning hierarchy is intentional:
-
-```text
-Ask Coach
-"Work on llm-evolution next"
-        |
-        v
-Topic Coach
-"Inside llm-evolution, mark pretraining/SFT loss positions next"
-```
+| **Vault Curator** | structural review, repair, merge/split/rename, forget/archive, export |
 
 A learner naming an area does **not** automatically create a Topic. Topic Coach decides whether the chosen area is better represented as a Concept, roadmap milestone/cluster, extension of an existing Topic, or a genuinely new Topic with its own bounded observable target capability.
 
@@ -74,24 +63,28 @@ cd learning-coach
 bash scripts/install_personal_plugin.sh
 ```
 
-The helper registers the local Plugin and, when the `codex` CLI is available, runs `codex plugin add learning-coach@personal`. Open a new Codex thread/session after installation. See [Releasing Learning Coach](docs/releasing.md) for the exact install/test contract.
+See [Releasing Learning Coach](docs/releasing.md) for the exact install/test contract.
 
-## Shared Contracts
+## Shared Contracts And Progressive Disclosure
 
-System-wide persistence and knowledge contracts live at repository root rather than inside any Skill:
+System-wide persistence and knowledge contracts live under `references/`. Skills load branch-specific contracts only when the operation needs them:
 
 ```text
 references/
 ├── vault-format.md
 ├── github-operations.md
+├── github/
+│   ├── read-authority.md
+│   ├── topic-write.md
+│   ├── advisory-write.md
+│   └── structural-write.md
 ├── knowledge-grounding.md
 ├── coach-state.md
 ├── vault.schema.json
-├── schemas/
-└── migrations/
+└── schemas/
 ```
 
-Skills may read the shared contracts they need. A resource being available to an Agent runtime does not by itself mean its contents are automatically present in the LLM-visible context.
+Topic Coach also routes conditional teaching behavior into Topic-local references such as `topic-lifecycle.md`, `assessment-and-evidence.md`, and `assumption-aware-diagnosis.md`.
 
 ## Topic Model
 
@@ -112,14 +105,13 @@ Topic roadmap, current focus, and next step are Topic-local state owned by Topic
 
 ## Learning Vault
 
-SchemaVersion 2 partitions authority by mutation domain:
+Learning Coach supports the **current manifest-based Learning Vault schema**:
 
 ```text
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         cross-Topic meta-learning strategy
-├── coach-state.json               optional durable portfolio advisory memory
-└── migrations/                    migration audit material
+└── coach-state.json               optional durable portfolio advisory memory
 
 topics/<topic-id>/
 ├── state.json                     authoritative Topic learner state
@@ -130,6 +122,8 @@ topics/<topic-id>/
 
 The Learning Vault is authoritative as a **set of domain-owned documents**. Ordinary Topic learning updates only the relevant Topic authority domain. Ask Coach writes only cross-Topic Coach State or evidence-backed Learning Strategy when appropriate. Learning View never writes.
 
+Older unsupported Vault layouts are not interpreted by the runtime; upgrade them separately before normal learning operations.
+
 See [Vault Format](references/vault-format.md), [GitHub Operations](references/github-operations.md), [Coach State](references/coach-state.md), and [Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md).
 
 ## Usage
@@ -138,27 +132,15 @@ See [Vault Format](references/vault-format.md), [GitHub Operations](references/g
 
 ```text
 Use Topic Coach.
-
 Resume agent-memory.
-```
-
-Or initialize a chosen learning area with boundary assessment:
-
-```text
-Use Topic Coach.
-
-I want to learn Agent Foundations. Decide the right Topic boundary, target capability, and roadmap, then start from the next useful step.
 ```
 
 ### Decide what to learn across Topics
 
 ```text
 Use Ask Coach.
-
 I have 45 minutes. What should I learn, review, practice, connect, or defer next?
 ```
-
-Ask Coach may remember durable candidate Topics/connections/hypotheses in Coach State and synthesize Learning Strategy from evidence across at least two Topics. It never mutates Topic mastery/evidence/roadmap/currentFocus/nextStep.
 
 ### Inspect state
 
@@ -176,9 +158,7 @@ Review my Learning Vault like a codebase. Do not mutate anything yet.
 
 ## Repository Capability Requirements
 
-Requirements differ by Skill: Topic Coach needs read+write for normal stateful learning; Learning View uses read only; Ask Coach always needs readable authority and may write only its cross-Topic domains; Vault Curator writes only for explicit maintenance/lifecycle operations.
-
-See [Pragmatic GitHub Runbook](docs/private-alpha-runbook.md) for runtime behavior and [ChatGPT Project Setup](docs/chatgpt-project.md) for manual Skill-oriented setup contexts.
+Topic Coach needs read+write for normal stateful learning; Learning View uses read only; Ask Coach always needs readable authority and may write only its cross-Topic domains; Vault Curator writes only for explicit maintenance/lifecycle operations.
 
 ## Development
 
@@ -190,7 +170,7 @@ python scripts/check_skill_architecture.py
 python scripts/check_plugin_release.py
 ```
 
-GitHub Actions runs the checks for changes to Skills, shared contracts, scripts, active documentation, and Plugin metadata. Historical ADRs remain records of the architecture at the time they were written and are not mechanically rewritten by current-name consistency checks.
+GitHub Actions runs the checks for changes to Skills, shared contracts, scripts, active documentation, and Plugin metadata. Historical ADRs remain records of the architecture at the time they were written.
 
 ## License
 

@@ -1,6 +1,6 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.16",
+  "version": "3.0.0-alpha.17",
   "description": "A multi-Skill learning system with Topic-local coaching, portfolio planning, read-only views, and a private GitHub-backed Learning Vault.",
   "author": {
     "name": "SShending",

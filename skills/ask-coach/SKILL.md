@@ -18,20 +18,21 @@ Learning View   -> What does the Vault currently say?
 Vault Curator   -> How should the Vault structure/lifecycle be maintained?
 ```
 
-Ask Coach is request-scoped. If the request becomes Topic-local teaching/assessment, read-only inspection, or maintenance, hand off to the owning Skill rather than stretching this one beyond its authority.
+Ask Coach is request-scoped. If the request becomes Topic-local teaching/assessment, read-only inspection, or maintenance, hand off to the owning Skill.
+
+## Progressive Reference Map
+
+- **Any authoritative Vault read** -> `../../references/vault-format.md` and `../../references/github/read-authority.md`
+- **Portfolio ranking, review scheduling, cross-Topic bottlenecks, candidate Topics, strategy synthesis** -> `references/advisory-model.md`
+- **Coach State semantics** -> `../../references/coach-state.md`
+- **Version-sensitive or externally grounded claims** -> `../../references/knowledge-grounding.md`
+- **Durable Coach State or Learning Strategy write** -> `../../references/github/advisory-write.md`
+
+Do not load write protocols for advice that remains ephemeral.
 
 ## Resolve Authoritative State
 
-Ask Coach requires readable authoritative learner state.
-
-1. Resolve the private Learning Vault using actual host capabilities.
-2. Read `.learning-vault/vault.json` and inspect `schemaVersion`.
-3. Resolve Topic and Learning Strategy authority according to `../../references/vault-format.md` and `../../references/github-operations.md`.
-4. In V2, read bound Coach State when present before advice that may reuse prior advisory decisions. Read `../../references/coach-state.md` when that domain is present or will be written.
-
-For portfolio ranking, review scheduling, cross-Topic bottlenecks, candidate Topics, or strategy synthesis, read `references/advisory-model.md` before making the decision.
-
-For externally grounded new-Topic or cross-Topic claims, follow `../../references/knowledge-grounding.md`.
+Ask Coach requires readable current Learning Vault authority. Resolve the manifest first, then read only the Topic/strategy/advisory domains needed for the decision. If the Vault does not match the current schema, stop normal portfolio planning rather than guessing a legacy layout.
 
 Authoritative Topic state always wins over Coach State, Learning Strategy, conversation memory, or README projections.
 
@@ -50,13 +51,11 @@ Ask Coach may write only:
 
 Only when evidence across at least two distinct Topics supports a durable meta-learning observation about which learning approach helps or hinders under a condition.
 
-Never write Topic evidence, mastery, gaps/unassessed, Topic roadmap/currentFocus/nextStep, Topic notes/sessions, Topic-local review results, or Topic lifecycle state.
-
-Temporary rankings, daily review urgency, forgetting scores, stability, and retrievability remain ephemeral.
+Never write Topic evidence, mastery, gaps/unassessed, Topic roadmap/currentFocus/nextStep, Topic notes/sessions, Topic-local review results, or Topic lifecycle state. Temporary rankings and review urgency remain ephemeral.
 
 ## Candidate Topics
 
-A learner naming a subject does not itself justify a new Topic. Recommend or defer candidates at portfolio level; Topic Coach finalizes the Topic boundary and initialization only after the learner chooses to pursue it.
+A learner naming a subject does not itself justify a new Topic. Recommend or defer candidates at portfolio level; Topic Coach finalizes Topic boundary and initialization only after the learner chooses to pursue it.
 
 Persist a candidate only when it is likely to matter later. Preserve rationale, related Topics, target capability, status, and concrete `revisitWhen` conditions. Recommendation or acceptance never creates the Topic.
 
@@ -66,13 +65,9 @@ Persist only relationships or hypotheses likely to matter in future sequencing, 
 
 ## Learning Strategy Synthesis
 
-Learning Strategy answers:
+Learning Strategy answers: **Which learning approaches help or hinder this learner under which conditions?**
 
-> Which learning approaches help or hinder this learner under which conditions?
-
-A valid observation requires evidence from at least two distinct Topics and should preserve condition, approach, observed effect, supporting evidence references, observation time, and supersession when applicable.
-
-Do not infer fixed personality or learning-style labels. Do not create strategy from one lesson, preference alone, generic theory, transient advice, or activity counts.
+A valid observation requires evidence from at least two distinct Topics. Do not infer fixed personality or learning-style labels or create strategy from one lesson, preference alone, generic theory, transient advice, or activity counts.
 
 ## Portfolio Decision Loop
 
@@ -82,51 +77,25 @@ Do not infer fixed personality or learning-style labels. Do not create strategy 
 4. Prefer demonstrated capability growth over content coverage or activity counts.
 5. If a cross-Topic bottleneck is only a hypothesis, propose a small Topic Coach assessment instead of treating it as fact.
 6. Choose a recommendation, explain why now, and identify what should wait when useful.
-7. Persist only durable Coach State or Learning Strategy changes; keep transient ranking logic ephemeral.
+7. Persist only durable advisory/strategy changes; keep transient ranking logic ephemeral.
 
 It is valid to recommend no new Topic and to recommend practice/review instead of more study.
 
 ## Global Review Scheduling
 
-Ask Coach chooses **which Topic deserves review attention**. Topic Coach executes retrieval/reapplication and records the result inside that Topic.
-
-Use the evidence ladder only as a diagnostic aid:
-
-```text
-recognition -> explanation -> independent application -> transfer
-```
-
-Do not perform the Topic-local assessment here.
+Ask Coach chooses **which Topic deserves review attention**. Topic Coach executes retrieval/reapplication and records the result inside that Topic. Do not perform Topic-local assessment here.
 
 ## Periodic Portfolio Review
 
 Focus on actual capability movement, exposure-only areas, global review pressure, Topic stalls, transfer, bottlenecks, what to continue/review/practice/defer, whether a new Topic is justified, and whether cross-Topic evidence supports a Learning Strategy observation.
 
-## Mutation Safety
+## Persistence
 
-Before Coach State or Learning Strategy writes, follow the expected-revision/idempotency contract in `../../references/github-operations.md`:
-
-1. read manifest and owning binding;
-2. read current owning state and revision;
-3. read the minimum Topic authorities needed;
-4. prepare one logical mutation + unique update ID;
-5. validate against the matching schema under `../../references/schemas/`;
-6. reread manifest/binding and owning state;
-7. rebuild if stale;
-8. conditionally replace using expected SHA;
-9. reread and verify the update ID and semantic result.
-
-Never mutate Topic state as part of cross-Topic synthesis.
+When a durable Coach State or Learning Strategy change is justified, read `../../references/github/advisory-write.md`. Do not duplicate its mutation protocol here.
 
 ## Output
 
-Prefer:
-
-1. recommendation;
-2. why now;
-3. what not to do yet when relevant;
-4. remembered Coach State/Strategy context when it materially affected the decision;
-5. concrete handoff to Topic Coach.
+Prefer recommendation, why now, what not to do yet when relevant, remembered advisory/strategy context when it materially affected the decision, and a concrete handoff to Topic Coach.
 
 ## Privacy
 

@@ -14,7 +14,7 @@
   {"query":"Show me my current agent-memory roadmap without changing anything.","should_trigger":false},
   {"query":"List the evidence supporting my current mastery levels.","should_trigger":false},
   {"query":"Merge my two duplicate Python Topics.","should_trigger":false},
-  {"query":"Migrate my Learning Vault from schema V1 to V2.","should_trigger":false},
+  {"query":"My Vault uses an unsupported old schema; convert it to the current format.","should_trigger":false},
   {"query":"Explain what Git rebase does.","should_trigger":false},
   {"query":"Archive the old transformers Topic.","should_trigger":false},
   {"query":"Show the candidate Topics currently stored in Coach State.","should_trigger":false},
