@@ -25,6 +25,10 @@ REQUIRED = [
     "references/github/advisory-write.md",
     "references/github/structural-write.md",
     "references/knowledge-grounding.md",
+    "references/grounding/technical.md",
+    "references/grounding/research.md",
+    "references/grounding/humanities.md",
+    "references/grounding/current-products.md",
     "references/coach-state.md",
     "references/vault.schema.json",
     "references/schemas/vault-manifest.schema.json",
@@ -125,6 +129,7 @@ def main() -> None:
     curator = read_text("skills/vault-curator/SKILL.md")
     github_router = read_text("references/github-operations.md")
     topic_write = read_text("references/github/topic-write.md")
+    grounding = read_text("references/knowledge-grounding.md")
     coach_state = read_text("references/coach-state.md")
     vault_format = read_text("references/vault-format.md")
 
@@ -176,6 +181,13 @@ def main() -> None:
         "github/topic-write.md",
         "github/advisory-write.md",
         "github/structural-write.md",
+    ])
+    require_phrases(errors, "Knowledge grounding router", grounding, [
+        "grounding/technical.md",
+        "grounding/research.md",
+        "grounding/humanities.md",
+        "grounding/current-products.md",
+        "## Assessment Safeguards",
     ])
     require_phrases(errors, "Topic write", topic_write, ["A normal Topic Coach update touches one Topic"])
     require_phrases(errors, "Coach State", coach_state, ["Topic Coach must not treat Coach State"])
