@@ -63,6 +63,7 @@ STALE_PATTERNS = [
     "migrationHistory",
     "migrationRecord",
     "legacyAppliedUpdatesPath",
+    "## Save Meaningful Learning",
 ]
 
 HISTORICAL_PREFIXES = [ROOT / "docs" / "adr"]
@@ -150,6 +151,9 @@ def main() -> None:
         "references/assumption-aware-diagnosis.md",
         "../../references/github/topic-write.md",
         "## Interruption Safety",
+        "## Learning Notes",
+        "## Persistence Boundary",
+        "A learning note is one possible persisted artifact, not the default output.",
         "do not manufacture a question merely to keep the conversation going.",
     ])
     require_phrases(errors, "Topic lifecycle reference", lifecycle, [
