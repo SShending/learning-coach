@@ -1,0 +1,22 @@
+[
+  {"query":"Resume my DeepSeek harness Topic from where I stopped and continue teaching me.","should_trigger":true},
+  {"query":"Let's continue learning transformers; start with the next useful thing in that Topic.","should_trigger":true},
+  {"query":"In my Git foundations Topic, explain again why blobs do not store filenames.","should_trigger":true},
+  {"query":"Quiz me on Git objects and update my mastery from what I actually demonstrate.","should_trigger":true},
+  {"query":"I want to start reinforcement learning as a real learning Topic and build the roadmap with me.","should_trigger":true},
+  {"query":"Help me implement a minimal memory agent as part of my agent-memory Topic and track what I can do independently.","should_trigger":true},
+  {"query":"I got this concept wrong. Diagnose the misconception, teach it, and preserve the evidence appropriately.","should_trigger":true},
+  {"query":"Review actor and critic with retrieval practice before we move on in RL.","should_trigger":true},
+  {"query":"Adapt this Topic's roadmap based on what I just demonstrated.","should_trigger":true},
+  {"query":"I understand blobs and trees now; what's the next useful step inside this Git Topic?","should_trigger":true},
+  {"query":"Which of all my Topics should I study today?","should_trigger":false},
+  {"query":"Show me the roadmap and current focus for agent-memory, read only.","should_trigger":false},
+  {"query":"Give me a weekly portfolio review and tell me which Topic to switch to.","should_trigger":false},
+  {"query":"Merge my overlapping LLM and transformer Topics.","should_trigger":false},
+  {"query":"What is the capital of France?","should_trigger":false},
+  {"query":"List all known gaps in my RL Topic without teaching or changing anything.","should_trigger":false},
+  {"query":"What new Topic would have the highest leverage across my current portfolio?","should_trigger":false},
+  {"query":"Prepare a public export of my Learning Vault.","should_trigger":false},
+  {"query":"What learning strategy appears to work across my different Topics?","should_trigger":false},
+  {"query":"Repair stale README projections in the Vault.","should_trigger":false}
+]

@@ -1,0 +1,22 @@
+[
+  {"query":"Show me my current learning progress across the whole Vault.","should_trigger":true},
+  {"query":"Summarize where I currently am in the agent-memory Topic.","should_trigger":true},
+  {"query":"Show the roadmap for DeepSeek harness without changing anything.","should_trigger":true},
+  {"query":"Compare my current progress in Python, PyTorch, and RL.","should_trigger":true},
+  {"query":"List the known gaps and unassessed areas in my Git Topic.","should_trigger":true},
+  {"query":"What evidence currently supports mastery level 3 for this concept?","should_trigger":true},
+  {"query":"Show me the Learning Strategy observations stored in my Vault.","should_trigger":true},
+  {"query":"What candidate Topics and hypotheses are currently stored in Coach State?","should_trigger":true},
+  {"query":"Visualize my Topic roadmap statuses in a compact table.","should_trigger":true},
+  {"query":"Show the notes and recent review evidence for agent-memory.","should_trigger":true},
+  {"query":"Quiz me on Git blobs and trees.","should_trigger":false},
+  {"query":"What should I study next across all my Topics?","should_trigger":false},
+  {"query":"I just solved this independently; update my mastery to reflect the evidence.","should_trigger":false},
+  {"query":"Merge the two Topics that cover the same material.","should_trigger":false},
+  {"query":"Archive my old RL Topic.","should_trigger":false},
+  {"query":"Create a new Topic for PyTorch and start teaching me.","should_trigger":false},
+  {"query":"Give me a weekly plan based on what is most urgent to review.","should_trigger":false},
+  {"query":"Fix the stale generated Topic README files.","should_trigger":false},
+  {"query":"Explain actor-critic and check whether I understand it.","should_trigger":false},
+  {"query":"Forget the stored material for an archived Topic.","should_trigger":false}
+]

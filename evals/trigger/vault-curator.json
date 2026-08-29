@@ -1,0 +1,22 @@
+[
+  {"query":"Review my Learning Vault for structural problems and technical debt.","should_trigger":true},
+  {"query":"Merge these two overlapping Topics without losing evidence history.","should_trigger":true},
+  {"query":"This Topic has become a miscellaneous bucket. Split it into coherent Topics.","should_trigger":true},
+  {"query":"Consolidate duplicate Concepts across this Topic's stored structure.","should_trigger":true},
+  {"query":"Repair stale README projections and broken references in my Vault.","should_trigger":true},
+  {"query":"Migrate my Learning Vault schema from V1 to V2.","should_trigger":true},
+  {"query":"Archive this Topic while preserving the right historical state.","should_trigger":true},
+  {"query":"Forget this stored Topic and clean up any references to it.","should_trigger":true},
+  {"query":"Prepare a privacy-safe public export of selected learning material.","should_trigger":true},
+  {"query":"Find orphaned state files and invalid Coach State references.","should_trigger":true},
+  {"query":"Teach me the next thing in my Git Topic.","should_trigger":false},
+  {"query":"Quiz me on actor-critic and update my evidence.","should_trigger":false},
+  {"query":"What Topic should I study today?","should_trigger":false},
+  {"query":"Which new Topic should I add to my portfolio?","should_trigger":false},
+  {"query":"Show my current roadmap without making changes.","should_trigger":false},
+  {"query":"List my known gaps and evidence as a read-only view.","should_trigger":false},
+  {"query":"I just demonstrated transfer; record the new mastery evidence in this Topic.","should_trigger":false},
+  {"query":"Review which Topic is most urgent before I forget it.","should_trigger":false},
+  {"query":"Explain how Git trees point to blobs.","should_trigger":false},
+  {"query":"Show me the current Coach State candidates and hypotheses.","should_trigger":false}
+]

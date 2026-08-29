@@ -1,24 +1,22 @@
 ---
 name: vault-curator
-description: Review, maintain, and refactor a private GitHub Learning Vault. Use when the learner explicitly asks to inspect Vault health, repair references/projections, organize or restructure Topics, merge or split Topics, consolidate Concepts, maintain Coach State, archive/forget stored material, migrate schema versions, or prepare public exports. Do not trigger for ordinary teaching, advice, or routine learner-state updates.
+description: Maintain and refactor the Learning Vault as a long-lived data/codebase. Use whenever the learner asks to inspect Vault health, repair stale references or projections, reorganize Topic structure, merge/split/rename/archive Topics, consolidate Concepts, repair Coach State references, forget stored material, migrate schema versions, clean orphaned state, or prepare a privacy-safe public export—even if they call it "cleanup" or "reorganize my learning." Do not use for ordinary teaching/assessment, portfolio advice, routine Topic-state updates, or read-only progress views.
 ---
 
 # Vault Curator
 
 Treat the Learning Vault like a long-lived codebase: inspect it periodically, report structural debt clearly, and mutate it only when a concrete maintenance, lifecycle, or migration operation improves future continuity or fulfills an explicit request.
 
-Curator is maintenance-operation scoped.
+> Curator is maintenance-operation scoped.
 
-## Shared Contract
+## Resolve Version And Authority
 
 Before reviewing/changing a Vault, read:
 
 - `../../references/vault-format.md`
 - `../../references/github-operations.md`
 - `../../references/coach-state.md` when Coach State exists or is relevant
-- [review-checklist.md](references/review-checklist.md)
-
-## Resolve Version And Authority
+- `references/review-checklist.md`
 
 Read `.learning-vault/vault.json` first.
 
@@ -41,8 +39,6 @@ Unbound prepared files are non-authoritative orphan candidates.
 ## Review Before Refactoring
 
 A normal structural review is read-only. Report findings before mutation and rank by consequence: `blocking`, `important`, `suggestion`. Do not manufacture cleanup work when the Vault is healthy.
-
-## Structural Review
 
 Check Topic overlap/coherence, target-capability boundaries, Concept duplication, prerequisites, roadmap integrity, evidence/`levelBasis` provenance, whether one current focus/next step still represents the Topic, projection freshness, and Coach State reference integrity.
 
@@ -85,10 +81,10 @@ Immediately before an approved write, reread relevant authority domains/bindings
 
 Never force-write, use last-write-wins, or claim success solely from a write-call return value.
 
-## Boundaries
+## Runtime Handoffs
 
-- Teaching/assessment -> Topic Coach.
-- Learning prioritization/advice -> Ask Coach.
-- Presentation-only inspection -> Learning View.
-- Curator does not create a second learner-state database or hide contradictions.
-- Do not request credentials/private infrastructure for ordinary operation.
+- teaching/assessment -> Topic Coach;
+- learning prioritization/advice -> Ask Coach;
+- presentation-only inspection -> Learning View.
+
+Curator does not create a second learner-state database or hide contradictions. Do not request credentials/private infrastructure for ordinary operation.
