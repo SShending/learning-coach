@@ -60,9 +60,15 @@ STALE_PATTERNS = [
     "### V2",
     " V1 ",
     " V2 ",
+    "migrationHistory",
+    "migrationRecord",
+    "legacyAppliedUpdatesPath",
 ]
 
 HISTORICAL_PREFIXES = [ROOT / "docs" / "adr"]
+STALE_PATTERN_EXEMPTIONS = {
+    (ROOT / "scripts" / "validate_vault_schemas.py").resolve(): {"migrationHistory"},
+}
 
 
 def is_historical(path: Path) -> bool:
@@ -117,7 +123,10 @@ def main() -> None:
                 continue
             seen.add(resolved)
             text = path.read_text(encoding="utf-8")
+            exemptions = STALE_PATTERN_EXEMPTIONS.get(resolved, set())
             for pattern in STALE_PATTERNS:
+                if pattern in exemptions:
+                    continue
                 if pattern in text:
                     errors.append(f"stale reference {pattern!r} in {path.relative_to(ROOT)}")
 
