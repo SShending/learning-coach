@@ -60,6 +60,9 @@ STALE_PATTERNS = [
     "### V2",
     " V1 ",
     " V2 ",
+    "migrationHistory",
+    "migrationRecord",
+    "legacyAppliedUpdatesPath",
 ]
 
 HISTORICAL_PREFIXES = [ROOT / "docs" / "adr"]
