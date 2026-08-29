@@ -1,0 +1,22 @@
+[
+  {"query":"Based on everything in my Learning Vault, what should I study today?","should_trigger":true},
+  {"query":"Should I keep going with agent-memory or switch to PyTorch this week?","should_trigger":true},
+  {"query":"What across my Topics is most urgent to review before I forget it?","should_trigger":true},
+  {"query":"Which prerequisite seems to be blocking progress across several Topics?","should_trigger":true},
+  {"query":"Should I start distributed systems now or defer it until later?","should_trigger":true},
+  {"query":"Give me a weekly review of my learning portfolio and a plan for next week.","should_trigger":true},
+  {"query":"What learning approach seems to work best for me across different Topics?","should_trigger":true},
+  {"query":"Which Topic should I deprioritize right now?","should_trigger":true},
+  {"query":"How are my DeepSeek harness and agent-memory Topics connected, and does that change what I should learn next?","should_trigger":true},
+  {"query":"I only have 45 minutes today. What should I practice from my whole Vault?","should_trigger":true},
+  {"query":"Resume my agent-memory Topic and teach me the next concept.","should_trigger":false},
+  {"query":"Quiz me on Git blobs, trees, commits, and HEAD.","should_trigger":false},
+  {"query":"Show me my current agent-memory roadmap without changing anything.","should_trigger":false},
+  {"query":"List the evidence supporting my current mastery levels.","should_trigger":false},
+  {"query":"Merge my two duplicate Python Topics.","should_trigger":false},
+  {"query":"Migrate my Learning Vault from schema V1 to V2.","should_trigger":false},
+  {"query":"Explain what Git rebase does.","should_trigger":false},
+  {"query":"Archive the old transformers Topic.","should_trigger":false},
+  {"query":"Show the candidate Topics currently stored in Coach State.","should_trigger":false},
+  {"query":"Correct my misconception about actor-critic and update the RL Topic if warranted.","should_trigger":false}
+]

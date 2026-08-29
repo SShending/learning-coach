@@ -1,34 +1,22 @@
 ---
 name: learning-view
-description: Present a learner's existing Learning Vault state as clear read-only views. Use when the learner asks to see, summarize, inspect, compare, or visualize current learning progress, a Topic, roadmap, gaps, notes, reviews, evidence, Learning Strategy, or stored Ask Coach advisory context. Never assess new mastery or mutate any Vault authority domain.
+description: Show and explain the learner's existing Learning Vault state without changing it. Use whenever the learner asks to see, summarize, inspect, compare, list, or visualize current progress, a Topic, roadmap, gaps, unassessed areas, notes, reviews, evidence, mastery basis, Learning Strategy, or stored Ask Coach advisory context—even if they only ask "where am I?" or "show my progress." Never teach/assess new mastery, reprioritize what to learn next, or mutate any Vault authority domain; hand those to Topic Coach, Ask Coach, or Vault Curator.
 ---
 
 # Learning View
 
 Show what the Learning Vault currently says.
 
-Core invariant:
-
 > Read, organize, explain, and visualize authoritative state. Never assess or mutate it.
 
-## Shared Contract
-
-Before interpreting a Vault, read:
-
-- `../../references/vault-format.md`
-- `../../references/github-operations.md`
-- `../../references/coach-state.md` when Coach State is requested or relevant.
-
-Learning View is request-scoped.
-
-Use Topic Coach for learning/assessment/Topic-state changes, Ask Coach for prioritization/advice, and Vault Curator for maintenance/lifecycle work.
-
-## Resolve The Vault
+## Resolve Authoritative State
 
 Learning View requires readable authoritative state. Write capability is neither required nor used.
 
+Read `../../references/vault-format.md` before interpreting the Vault. Use `../../references/github-operations.md` to resolve the authoritative GitHub state. Read `../../references/coach-state.md` only when Coach State is requested or materially relevant.
+
 1. Read `.learning-vault/vault.json` and inspect `schemaVersion`.
-2. Resolve the requested authority domains.
+2. Resolve only the authority domains required by the requested view.
 
 ### V1
 
@@ -51,6 +39,8 @@ Never append evidence, change mastery, create gaps/unassessed entries, alter roa
 
 Current-conversation demonstrations do not become evidence in Learning View.
 
+If the learner asks to turn inspection into teaching/assessment, portfolio advice, or maintenance, hand off to the corresponding Skill.
+
 ## Views
 
 ### Vault Overview
@@ -63,7 +53,7 @@ Present goal, target capability, roadmap, current focus, compact mastery/evidenc
 
 ### Roadmap View
 
-Render persisted milestone statuses only: `demonstrated`, `active`, `planned`, `blocked`. Do not convert them into completion percentages.
+Render persisted milestone statuses only: `demonstrated`, `active`, `planned`, and `blocked`. Do not convert them into completion percentages.
 
 ### Focused Slice
 
@@ -71,13 +61,21 @@ For notes, gaps, reviews, or evidence, show only the requested slice plus minimu
 
 ### Coach State View
 
-When requested, present durable advisory memory separately from learner state: candidate Topics/statuses, rationale and `revisitWhen`, durable cross-Topic connections, and advisory hypotheses.
+Present durable advisory memory separately from learner state: candidate Topics/statuses, rationale and `revisitWhen`, durable cross-Topic connections, and advisory hypotheses.
 
 Label Coach State as advisory memory, not mastery evidence, roadmap, or learner truth. Do not reinterpret `deferred` as a current recommendation; a fresh Ask Coach run owns that decision.
 
 ## Mastery Explanation
 
-Stored mastery levels mean 0 unassessed/no supporting evidence, 1 recognition, 2 explanation, 3 independent application, 4 transfer. Explain existing judgments using stored evidence/`levelBasis` only; never upgrade or downgrade here.
+Stored mastery levels mean:
+
+- `0`: unassessed/no supporting evidence;
+- `1`: recognition;
+- `2`: explanation;
+- `3`: independent application;
+- `4`: transfer.
+
+Explain existing judgments using stored evidence/`levelBasis` only; never upgrade or downgrade here.
 
 ## Notes, Sessions, And Projections
 
