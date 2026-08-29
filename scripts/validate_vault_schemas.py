@@ -56,7 +56,6 @@ def main() -> None:
             "coachState": {"statePath": ".learning-vault/coach-state.json"},
             "appliedUpdates": {},
             "publicExports": {},
-            "migrationHistory": [],
         },
         "Topic state": {
             "schemaVersion": 2,
@@ -94,6 +93,10 @@ def main() -> None:
     invalid_documents = {
         "unsupported documentType": {"schemaVersion": 2, "documentType": "unknown-state"},
         "unsupported schema version": {"schemaVersion": 1, "documentType": "vault-manifest"},
+        "retired migration history": {
+            **valid_documents["manifest"],
+            "migrationHistory": [],
+        },
         "invalid Coach State candidate status": {
             "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
