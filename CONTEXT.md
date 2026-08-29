@@ -11,7 +11,7 @@ Learning Coach product
 ├── Ask Coach      portfolio-level planning
 ├── Topic Coach    one-Topic teaching, practice, assessment, and learner-state updates
 ├── Learning View  read-only presentation
-└── Vault Curator  maintenance, lifecycle, repair, migration, and export
+└── Vault Curator  maintenance, lifecycle, repair, and export
 ```
 
 Canonical distinction:
@@ -26,32 +26,28 @@ Canonical distinction:
 
 ## Shared Contracts
 
-System-wide persistence and knowledge contracts live at repository root:
+System-wide contracts live under `references/` and use progressive disclosure:
 
 ```text
 references/
 ├── vault-format.md
 ├── github-operations.md
+├── github/
+│   ├── read-authority.md
+│   ├── topic-write.md
+│   ├── advisory-write.md
+│   └── structural-write.md
 ├── knowledge-grounding.md
 ├── coach-state.md
 ├── vault.schema.json
-├── schemas/
-└── migrations/
+└── schemas/
 ```
 
-These files are not owned by Topic Coach. All Skills may read the shared contracts they need.
-
-A file being available to a Skill/runtime does not imply its contents are automatically present in an LLM's model-visible context; loading/context assembly is an Agent-runtime concern.
+Skills load only the branch-specific contracts needed for the current operation. A resource being available to a runtime does not imply it should be placed in every LLM-visible context.
 
 ## Authority Model
 
-Always resolve `.learning-vault/vault.json` first.
-
-### V1
-
-`vault.json` is the monolithic authoritative structured document.
-
-### V2
+Always resolve `.learning-vault/vault.json` first. Learning Coach supports the current manifest-based schema only.
 
 The Learning Vault is authoritative as a set of mutation-domain-owned documents:
 
@@ -61,39 +57,32 @@ The Learning Vault is authoritative as a set of mutation-domain-owned documents:
 - Coach State -> durable portfolio advisory memory;
 - Topic README -> derived projection only.
 
+An unsupported older Vault is not interpreted heuristically during learning. It must be upgraded separately before normal operation.
+
 ## Topic
 
 A Topic is a bounded learning unit with one coherent goal, observable target capability, adaptive roadmap, current focus, and useful next action.
 
-A learner naming a subject does not automatically make it a Topic. Topic Coach decides during initialization whether the learning area is better represented as:
+A learner naming a subject does not automatically make it a Topic. Topic Coach decides during initialization whether the learning area is better represented as a Concept, roadmap milestone/Concept cluster, an extension of an existing Topic, or a genuinely new Topic.
 
-- a Concept inside an existing Topic;
-- a roadmap milestone or Concept cluster;
-- an extension/refinement of an existing Topic;
-- a genuinely new Topic.
-
-System-initiated **recommendation** of a possible new Topic belongs to Ask Coach; final Topic boundary and initialization after learner choice belong to Topic Coach.
+System-initiated recommendation of a possible new Topic belongs to Ask Coach; final Topic boundary and initialization after learner choice belong to Topic Coach.
 
 ## Planning Hierarchy
 
 ```text
 Ask Coach
   portfolio decision
-  "Work on llm-evolution next"
         |
         v
 Topic Coach
   Topic roadmap/currentFocus/nextStep
-  "Mark token-loss positions for pretraining vs SFT"
 ```
 
 Portfolio decisions must not be encoded into Topic `nextStep`. Topic-local next actions must not be promoted into global strategy without cross-Topic comparison.
 
 ## Learning Strategy
 
-Learning Strategy contains evidence-backed cross-Topic observations about learning approaches that help or hinder under particular conditions.
-
-Ask Coach owns synthesis because it requires evidence across at least two Topics. Topic Coach may read strategy and adapt the current lesson, but ordinary Topic learning does not mutate Learning Strategy.
+Learning Strategy contains evidence-backed cross-Topic observations about learning approaches that help or hinder under particular conditions. Ask Coach owns synthesis because it requires evidence across at least two Topics. Topic Coach may read strategy and adapt the current lesson, but ordinary Topic learning does not mutate Learning Strategy.
 
 ## Coach State
 

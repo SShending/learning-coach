@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/v2/vault-manifest.schema.json",
-  "title": "Learning Vault Manifest v2",
-  "description": "Active schemaVersion 2 Vault manifest. This is a topology and lifecycle document, not a cache of Topic learner state.",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/vault-manifest.schema.json",
+  "title": "Learning Vault Manifest",
+  "description": "Current Learning Vault manifest. This is a topology and lifecycle document, not a cache of Topic learner state.",
   "type": "object",
   "required": ["schemaVersion", "documentType", "vaultId", "createdAt", "updatedAt", "topics", "learningStrategy", "appliedUpdates", "publicExports", "migrationHistory"],
   "properties": {

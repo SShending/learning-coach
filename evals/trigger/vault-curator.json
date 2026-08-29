@@ -4,7 +4,7 @@
   {"query":"This Topic has become a miscellaneous bucket. Split it into coherent Topics.","should_trigger":true},
   {"query":"Consolidate duplicate Concepts across this Topic's stored structure.","should_trigger":true},
   {"query":"Repair stale README projections and broken references in my Vault.","should_trigger":true},
-  {"query":"Migrate my Learning Vault schema from V1 to V2.","should_trigger":true},
+  {"query":"Rename this Topic and preserve all bindings and evidence references.","should_trigger":true},
   {"query":"Archive this Topic while preserving the right historical state.","should_trigger":true},
   {"query":"Forget this stored Topic and clean up any references to it.","should_trigger":true},
   {"query":"Prepare a privacy-safe public export of selected learning material.","should_trigger":true},

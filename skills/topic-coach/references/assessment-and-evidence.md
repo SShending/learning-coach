@@ -4,20 +4,9 @@ Read this reference when Topic Coach is assessing capability, designing a quiz/c
 
 ## Assessment Principle
 
-Assess capability from observable evidence, not confidence language, activity counts, or answer-format leakage.
+Assess capability from observable evidence, not confidence language, activity counts, or answer-format leakage. Missing evidence is not inability. Verify when the distinction changes the useful next action.
 
-Missing evidence is not inability. Verify when the distinction changes the useful next action.
-
-Useful evidence forms include:
-
-- own-word explanation;
-- prediction;
-- small independent application;
-- debugging;
-- comparison;
-- redesign;
-- transfer to a meaningfully new context;
-- teaching/explaining under changed conditions.
+Useful evidence forms include own-word explanation, prediction, small independent application, debugging, comparison, redesign, transfer to a meaningfully new context, and teaching under changed conditions.
 
 ## Evidence-Based Mastery
 
@@ -29,25 +18,13 @@ Mastery is a judgment over evidence:
 - `3`: independent application;
 - `4`: transfer/comparison/debugging/design/teaching in a meaningfully new context.
 
-When observable, record:
+When observable, record `result` (`pass`, `partial`, `fail`) and `assistance` (`none`, `hinted`, `guided`). Guided completion alone does not justify level 3. "I understand" is not mastery evidence.
 
-- `result`: `pass`, `partial`, or `fail`;
-- `assistance`: `none`, `hinted`, or `guided`.
-
-Guided completion alone does not justify level 3. "I understand" is not mastery evidence.
-
-Maintain `levelBasis` as the smallest useful set of non-stale evidence IDs that justifies the current level when supported. Preserve contradictions; stale old evidence rather than deleting inconvenient history.
+Maintain `levelBasis` as the smallest useful set of non-stale evidence IDs that justifies the current level. Preserve contradictions; stale old evidence rather than deleting inconvenient history.
 
 ## Exposure Versus Demonstration
 
-Keep separate:
-
-- previous exposure;
-- demonstrated recognition/explanation/application/transfer;
-- relevant but unassessed areas;
-- evidence-backed difficulty.
-
-Do not upgrade mastery because content was taught or discussed.
+Keep separate previous exposure, demonstrated recognition/explanation/application/transfer, relevant but unassessed areas, and evidence-backed difficulty. Do not upgrade mastery because content was taught or discussed.
 
 ## Gap Management
 
@@ -61,39 +38,23 @@ Missing evidence is not a gap. Uncertain external knowledge is not a learner fai
 
 ## Contradictions
 
-A current demonstration may contradict older evidence. Preserve both the history and the new observation, then reassess the current mastery basis. Do not delete evidence merely to make the state internally tidy.
-
-An unanswered task is never contradiction/failure evidence.
+A current demonstration may contradict older evidence. Preserve both history and the new observation, then reassess the current mastery basis. An unanswered task is never contradiction/failure evidence.
 
 ## Assessment Item Design
 
 Assess the learner's capability, not their ability to infer the answer from formatting.
 
-When creating checks, quizzes, classification tasks, or multiple-choice items:
+- do not group/title questions by the category the learner must infer;
+- do not order questions or choices so sequence reveals the mapping;
+- do not use headings, neighboring examples, or repeated answer positions that leak answers;
+- use neutral wording/order unless ordering itself is the target capability;
+- mix categories so each item must be solved from its content.
 
-- do not group or title questions by the answer category when that category is what the learner must infer;
-- do not order questions or answer choices so the sequence reveals a mapping or expected pattern;
-- do not use headings, labels, neighboring examples, or repeated answer positions that leak the answer;
-- use neutral wording and ordering unless ordering itself is the target capability;
-- when several items test different categories, mix them so each item must be solved from its content.
-
-Pedagogical structure may be useful while teaching. Remove those cues when they would leak the assessment answer.
-
-## Assumption-Aware Diagnosis
-
-For reasoning, comparisons, system design, or consequential choices inside the Topic, surface only assumptions that materially affect the conclusion. Ask a clarification only when it changes the guidance.
-
-If the suspected cause spans multiple Topics or portfolio decisions, hand the bottleneck hypothesis to Ask Coach instead of turning it into a Topic-local fact.
+Pedagogical structure may be useful while teaching. Remove those cues when they would leak an assessment answer.
 
 ## Topic-Local Review
 
-Topic Coach executes review inside the active Topic. Use signals such as:
-
-- due `nextReview`;
-- recent contradiction;
-- prerequisite relevance;
-- evidence age;
-- evidence quality.
+Topic Coach executes review inside the active Topic. Use signals such as due `nextReview`, recent contradiction, prerequisite relevance, evidence age, and evidence quality.
 
 Prefer retrieval/reapplication before reteaching when possible. Match the task to the capability level being tested. Save the observed result as evidence and adjust mastery from performance.
 

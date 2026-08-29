@@ -1,72 +1,16 @@
 # Learning Vault Format
 
-This reference defines the durable Learning Vault model shared by Topic Coach,
-Ask Coach, Learning View, and Vault Curator.
+This reference defines the **current** durable Learning Vault model shared by Topic Coach, Ask Coach, Learning View, and Vault Curator.
 
-The learner model is stable across schema versions. Schema changes may change
-persistence boundaries, but must not silently reinterpret learner evidence,
-mastery, gaps, roadmap, or notes.
+Learning Coach supports one active schema. Read `.learning-vault/vault.json` first and validate it against `schemas/vault-manifest.schema.json`. If it does not match the current schema, stop normal operation and report that the Vault must be upgraded outside the learning flow. Do not guess a legacy layout.
 
-## Resolve Version First
-
-Always read `.learning-vault/vault.json` first and inspect `schemaVersion`.
-
-- `schemaVersion: 1` -> single authoritative structured document.
-- `schemaVersion: 2` -> authoritative state is sharded by mutation domain and
-  `vault.json` is a manifest.
-- any unsupported version -> stop mutation; do not guess.
-
-Ordinary learning turns must never perform an implicit schema migration.
-
-## Shared Learner Model
-
-A Topic may contain:
-
-- bounded goal and observable `targetCapability`;
-- adaptive capability `roadmap`;
-- `currentFocus`;
-- `knownGaps` and optional `unassessed` areas;
-- Concepts and mastery evidence;
-- note/session indexes;
-- `nextStep`, optional `nextStepReason`, and optional `nextStepTargets`.
-
-The semantic rules below apply to both V1 and V2 unless explicitly stated
-otherwise.
-
-## schemaVersion 1
-
-### Layout
-
-```text
-.learning-vault/vault.json              authoritative structured learner state
-README.md
-topics/<topic-id>/README.md             derived Topic projection
-topics/<topic-id>/notes/<note-id>.md
-topics/<topic-id>/sessions/<session-id>.md
-public-exports/<export-id>/README.md
-```
-
-`vault.json` owns Topics, Learning Strategy, root `appliedUpdates`, and public
-export metadata.
-
-Validate with `vault.schema.json`.
-
-V1 is intentionally extensible. Older V1 Vaults may lack optional richer fields
-such as `roadmap`, `unassessed`, `levelBasis`, `result`, `assistance`,
-`nextStepReason`, `nextStepTargets`, or Topic README projections. Do not rewrite a
-Vault merely to backfill optional structure and never invent evidence.
-
-## schemaVersion 2
-
-### Layout
+## Current Layout
 
 ```text
 .learning-vault/
-├── vault.json                         authoritative Vault manifest
+├── vault.json                         authoritative manifest
 ├── learning-strategy.json             authoritative cross-Topic strategy
-├── coach-state.json                   optional authoritative advisory memory
-└── migrations/
-    └── ...                            migration audit material
+└── coach-state.json                   optional authoritative advisory memory
 
 topics/<topic-id>/
 ├── state.json                         authoritative Topic learner state
@@ -77,226 +21,53 @@ topics/<topic-id>/
 public-exports/
 ```
 
-`coach-state.json` is authoritative only when the V2 manifest contains the
-corresponding `coachState` binding. An unbound prepared file is non-authoritative.
+Validate authoritative documents with the schemas under `references/schemas/`.
 
-Validate the authority documents with the schemas under `schemas/v2/`.
+## Authority Ownership
 
-### Authority ownership
+- `.learning-vault/vault.json` owns Vault membership, Topic bindings, Learning Strategy binding, optional Coach State binding, lifecycle/topology metadata, and manifest-local idempotency.
+- `topics/<topic-id>/state.json` owns one Topic's learner state and Topic-local `appliedUpdates`.
+- `.learning-vault/learning-strategy.json` owns cross-Topic Learning Strategy and strategy-local `appliedUpdates`.
+- bound `.learning-vault/coach-state.json` owns durable portfolio advisory memory and Coach-State-local `appliedUpdates`.
+- note/session Markdown bodies contain durable content selected by Topic state.
+- Topic README is derived and non-authoritative.
 
-- `.learning-vault/vault.json` owns Vault membership, Topic bindings,
-  Learning-Strategy binding, optional Coach-State binding, Vault-level lifecycle
-  metadata, and manifest-local idempotency.
-- `topics/<topic-id>/state.json` owns that Topic's learner state and Topic-local
-  `appliedUpdates`.
-- `.learning-vault/learning-strategy.json` owns cross-Topic Learning Strategy and
-  strategy-local `appliedUpdates`.
-- bound `.learning-vault/coach-state.json` owns durable portfolio advisory memory
-  and Coach-State-local `appliedUpdates`.
-- note/session Markdown bodies contain durable content selected by metadata in
-  Topic state.
-- Topic README is always derived and non-authoritative.
+The Learning Vault is authoritative as a **set of domain-owned documents**. Do not create a second learner-state database in conversation memory, README projections, or another file.
 
-The **Learning Vault as a set of domain-owned documents** is authoritative in V2.
-No single file contains every learner-state domain.
+## Shared Learner Model
 
-### Manifest discipline
-
-A Topic manifest binding contains only the authoritative `statePath`. Do not
-cache title, current focus, mastery, roadmap status, gaps, or next step in the
-manifest. Ordinary Topic learning must therefore not rewrite the manifest.
-
-### Topic consistency boundary
-
-Keep Concepts, evidence, roadmap, gaps/unassessed, note/session indexes,
-`currentFocus`, and next-action state together in one Topic `state.json`. Do not
-split them into separate authoritative files in V2 merely to reduce file size;
-they are frequently reasoned about and updated together.
-
-### Linked content and copy-on-write
-
-A new note/session body may be created before Topic state references it.
-
-Do not overwrite already referenced note/session content in place as preparation
-for a Topic-state mutation. For changed content, create a new body at a new
-revision path and switch Topic metadata to that path in the authoritative
-Topic-state write. Session bodies should normally be immutable once registered.
-
-### Projection source revision
-
-V2 Topic README should record the source Topic-state path and source blob
-SHA/revision in a machine-readable header. A mismatch with the current Topic-state
-revision means the README is stale. Projection staleness never changes learner
-state.
-
-## Topic And Evidence Rules
-
-Every Topic has a stable lowercase-hyphenated ID, bounded goal, and observable
-target capability.
+A Topic may contain a bounded goal and observable `targetCapability`, adaptive capability `roadmap`, `currentFocus`, `knownGaps`, `unassessed`, Concepts and mastery evidence, note/session indexes, and `nextStep` with optional reason/targets.
 
 Keep these distinctions:
 
-- `knownGaps`: observable evidence supports a difficulty, misconception, or
-  failure relevant to the target capability;
+- `knownGaps`: observable evidence supports a difficulty, misconception, or failure;
 - `unassessed`: relevant area with insufficient evidence;
-- `openQuestion`: uncertainty belongs to the knowledge/claim/concept itself.
+- `openQuestion`: uncertainty belongs to the knowledge or claim itself.
 
 Missing evidence is not a weakness.
 
-Concept prerequisites and `nextStepTargets` resolve to Concept IDs within the
-same Topic. Every evidence `sessionId` resolves to a session entry within the same
-Topic. `levelBasis` refers only to evidence IDs on the same Concept.
+Mastery levels are 0 unassessed, 1 recognition, 2 explanation, 3 independent application, and 4 transfer. Levels above 0 require observable evidence. Guided completion alone does not justify level 3. Preserve contradictions; stale old evidence rather than deleting inconvenient history.
 
-Preserve contradictions. Later evidence may make older evidence `stale: true` but
-must not erase inconvenient history.
+Keep `roadmap`, `currentFocus`, and `nextStep` distinct. Roadmap milestones are capability-based and use `planned`, `active`, `demonstrated`, or `blocked`. Do not infer completion from coverage, time spent, or average Concept mastery.
 
-## Mastery Evidence
+## Referential Invariants
 
-Mastery levels:
+Within one Topic:
 
-- `0`: unassessed or no supporting evidence;
-- `1`: recognition in context;
-- `2`: accurate own-word explanation;
-- `3`: independent application;
-- `4`: transfer, comparison, debugging, design, or teaching in a meaningfully new
-  context.
+- Concept prerequisites and `nextStepTargets` resolve to Concept IDs;
+- evidence `sessionId` resolves to a Topic session;
+- `levelBasis` refers only to evidence on the same Concept;
+- note/session IDs and registered paths agree;
+- roadmap milestone IDs are unique.
 
-Any level above 0 requires specific observable evidence.
+## Notes, Sessions, And Projections
 
-Evidence types:
-
-- `recognition`
-- `explanation`
-- `application`
-- `transfer`
-- `contradiction`
-
-When observable:
-
-- `result`: `pass`, `partial`, or `fail`;
-- `assistance`: `none`, `hinted`, or `guided`.
-
-Guided completion may be application evidence but does not by itself justify
-mastery level 3.
-
-`levelBasis` is the smallest useful set of current non-stale evidence IDs that
-justifies the mastery judgment. Do not invent basis evidence for legacy records.
-
-## Roadmap State
-
-`roadmap` is a lightweight adaptive capability path, not a fixed curriculum or a
-second Concept list.
-
-Each milestone has:
-
-- stable `id`;
-- human-readable `title`;
-- observable `targetCapability`;
-- status `planned`, `active`, `demonstrated`, or `blocked`.
-
-Normally keep one primary `active` milestone. Do not infer milestone completion
-from coverage, time spent, or average Concept mastery. The milestone's own target
-capability must have appropriate evidence.
-
-Keep `roadmap`, `currentFocus`, and `nextStep` distinct:
-
-- roadmap -> medium-term capability path;
-- currentFocus -> immediate learning target;
-- nextStep -> next concrete action.
-
-## Next-Action State
-
-`nextStep` should be concrete and executable. Optional:
-
-- `nextStepReason` explains why it is useful now;
-- `nextStepTargets` names Concepts to assess or strengthen.
-
-Good reasons refer to learner state, such as explanation evidence existing while
-independent application remains unassessed. Do not optimize next actions for note
-counts, commits, or completion percentages.
+Notes store durable understanding worth rereading. Session files are privacy-minimized provenance/checkpoints, never raw transcripts. Topic README presents a useful view of authoritative Topic state and should record its source Topic-state revision/SHA. A mismatch means a stale projection, not changed learner state.
 
 ## Learning Strategy
 
-Learning Strategy observations require evidence across at least two distinct
-Topics and should state the condition, approach, effect, evidence references,
-observation time, and any superseded observation.
-
-Do not turn Learning Strategy into fixed personality or learning-style labels.
-
-## Learning Notes
-
-A note is durable understanding worth rereading after the conversation is gone.
-Its metadata lives in authoritative Topic state; its body lives at the registered
-path.
-
-Stored `claimStatus` values are exactly:
-
-- `confirmed`
-- `working_model`
-- `open_question`
-- `unsupported`
-
-Human views may render friendly labels, but JSON uses exact enum values.
-
-Private reflections use `kind: "private_reflection"` and are excluded from public
-export by default.
-
-## Session Projections
-
-Session files are privacy-minimized provenance/checkpoint documents, not raw
-transcripts. They may contain:
-
-- learner request in minimized form;
-- observable evidence and assistance/result when useful;
-- gaps/unassessed areas;
-- next action and reason;
-- update ID and base revision.
-
-Do not store raw transcripts, hidden reasoning, credentials, tokens, private keys,
-or unrelated personal information.
-
-## Topic README Projection
-
-Each active Topic should have:
-
-```text
-topics/<topic-id>/README.md
-```
-
-Present when available:
-
-- Topic title and goal;
-- target capability;
-- roadmap;
-- current focus;
-- compact Concept/mastery status;
-- known gaps;
-- important unassessed areas;
-- links to learning notes;
-- next step and reason.
-
-Do not copy raw evidence logs or full session history.
-
-Authority on disagreement:
-
-- V1 -> `vault.json` wins;
-- V2 -> the bound Topic `state.json` wins.
-
-Manual README edits alone never change learner state.
+Learning Strategy observations require evidence across at least two distinct Topics and describe condition, approach, observed effect, evidence references, observation time, and supersession when applicable. Do not turn Learning Strategy into fixed personality or learning-style labels.
 
 ## Initialization
 
-For a confirmed empty private repository, initialize the currently active schema
-chosen by the Skill contract. Do not invent a Topic.
-
-A V1 repository uses a schemaVersion 1 `vault.json`. A V2 repository uses a V2
-manifest plus its required Learning Strategy state. Validate and reread the
-resulting authoritative state before claiming initialization succeeded.
-
-## Migration
-
-A schema change requires an explicit deterministic migration. V1 -> V2 uses
-`migrations/v1-to-v2.md` and `scripts/migrate_vault_v1_to_v2.py`.
-
-Migration changes persistence boundaries only. It must not reassess or rewrite
-learner semantics.
+For a confirmed empty private repository, create the current manifest and required Learning Strategy state, validate them, and reread them before claiming initialization succeeded. Do not invent a Topic.
