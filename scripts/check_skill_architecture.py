@@ -8,6 +8,8 @@ THIS_FILE = Path(__file__).resolve()
 
 REQUIRED = [
     "skills/topic-coach/SKILL.md",
+    "skills/topic-coach/references/topic-lifecycle.md",
+    "skills/topic-coach/references/assessment-and-evidence.md",
     "skills/ask-coach/SKILL.md",
     "skills/learning-view/SKILL.md",
     "skills/vault-curator/SKILL.md",
@@ -56,6 +58,19 @@ def iter_text_files(path: Path):
             yield child
 
 
+def read_text(rel: str) -> str:
+    path = ROOT / rel
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
+def require_phrases(errors: list[str], label: str, text: str, phrases: list[str]) -> None:
+    for phrase in phrases:
+        if phrase not in text:
+            errors.append(f"{label} contract missing: {phrase}")
+
+
 def main() -> None:
     errors: list[str] = []
 
@@ -78,35 +93,67 @@ def main() -> None:
                 if pattern in text:
                     errors.append(f"stale reference {pattern!r} in {path.relative_to(ROOT)}")
 
-    topic = (ROOT / "skills/topic-coach/SKILL.md").read_text(encoding="utf-8")
-    ask = (ROOT / "skills/ask-coach/SKILL.md").read_text(encoding="utf-8")
-    github_ops = (ROOT / "references/github-operations.md").read_text(encoding="utf-8")
-    coach_state = (ROOT / "references/coach-state.md").read_text(encoding="utf-8")
-    vault_format = (ROOT / "references/vault-format.md").read_text(encoding="utf-8")
+    topic = read_text("skills/topic-coach/SKILL.md")
+    topic_lifecycle = read_text("skills/topic-coach/references/topic-lifecycle.md")
+    assessment = read_text("skills/topic-coach/references/assessment-and-evidence.md")
+    ask = read_text("skills/ask-coach/SKILL.md")
+    github_ops = read_text("references/github-operations.md")
+    coach_state = read_text("references/coach-state.md")
+    vault_format = read_text("references/vault-format.md")
 
-    required_topic_phrases = [
-        "name: topic-coach",
-        "Topic-local learning controller",
-        "A learner naming an area does **not** automatically make that area a new Topic",
-        "Do **not** build a Vault-wide review queue",
-        "Assessment Item Design",
-        "Every Topic Coach turn must be interruption-safe",
-        "An unanswered question, exercise, prediction, or verification prompt is not",
-        "do not manufacture a\nquestion merely to keep the conversation going",
-    ]
-    for phrase in required_topic_phrases:
-        if phrase not in topic:
-            errors.append(f"Topic Coach contract missing: {phrase}")
+    # Always-loaded Topic Coach invariants stay in SKILL.md. Branch-specific
+    # contracts are validated in the references that SKILL.md routes to.
+    require_phrases(
+        errors,
+        "Topic Coach core",
+        topic,
+        [
+            "name: topic-coach",
+            "Topic-local learning controller",
+            "references/topic-lifecycle.md",
+            "references/assessment-and-evidence.md",
+            "## Interruption Safety",
+            "Every Topic Coach turn must remain valid if the learner stops responding immediately afterward.",
+            "do not manufacture a question merely to keep the conversation going.",
+        ],
+    )
 
-    required_ask_phrases = [
-        "portfolio-level learning planner",
-        "Global Review Scheduling",
-        "Learning Strategy Synthesis",
-        "-> Topic Coach",
-    ]
-    for phrase in required_ask_phrases:
-        if phrase not in ask:
-            errors.append(f"Ask Coach contract missing: {phrase}")
+    require_phrases(
+        errors,
+        "Topic lifecycle reference",
+        topic_lifecycle,
+        [
+            "# Topic Lifecycle",
+            "A learner naming an area does not automatically make that area a new Topic",
+            "Do not choose among unrelated Topics here",
+            "## Choose The Next Useful Action",
+        ],
+    )
+
+    require_phrases(
+        errors,
+        "Assessment reference",
+        assessment,
+        [
+            "# Assessment And Evidence",
+            "## Assessment Item Design",
+            "An unanswered task is never contradiction/failure evidence",
+            "Missing evidence is not a gap",
+            "Do not build a Vault-wide review queue",
+        ],
+    )
+
+    require_phrases(
+        errors,
+        "Ask Coach",
+        ask,
+        [
+            "portfolio-level learning planner",
+            "## Global Review Scheduling",
+            "## Learning Strategy Synthesis",
+            "concrete handoff to Topic Coach",
+        ],
+    )
 
     required_shared_phrases = [
         (github_ops, "Topic Coach\n  -> Topic state", "GitHub Operations Topic ownership"),
