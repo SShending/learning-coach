@@ -156,6 +156,9 @@ def main() -> None:
         "## Interruption Safety",
         "## Learning Notes",
         "## Persistence Boundary",
+        "plausible durable retrieval unit",
+        "Do not wait until note creation is already decided.",
+        "cheap note-candidate check",
         "A learning note is one possible persisted artifact, not the default output.",
         "do not manufacture a question merely to keep the conversation going.",
     ])
@@ -180,6 +183,7 @@ def main() -> None:
     ])
     require_phrases(errors, "Learning notes reference", learning_notes, [
         "# Learning Notes",
+        "Candidate generation belongs in the main Topic Coach loop",
         "## Worthiness Gate",
         "## Learner Errors And Misconceptions",
         "## Granularity",

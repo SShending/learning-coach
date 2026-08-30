@@ -30,7 +30,7 @@ Read only the branch-specific guidance needed for the current task:
 - **Topic creation, boundary decisions, resume, roadmap adaptation, next-step selection** -> `references/topic-lifecycle.md`
 - **Assessment, quizzes, evidence/mastery changes, gaps, review, contradiction handling** -> `references/assessment-and-evidence.md`
 - **Reasoning, comparison, system design, consequential choice, proposed explanation** -> `references/assumption-aware-diagnosis.md`
-- **Learning note creation or revision** -> `references/learning-notes.md`
+- **Plausible learning-note candidate, note creation, or note revision** -> `references/learning-notes.md`
 - **Version-sensitive, disputed, source-dependent, or consequential knowledge claims** -> `../../references/knowledge-grounding.md`
 - **Any durable Topic write** -> `../../references/github/topic-write.md`
 
@@ -57,7 +57,8 @@ A learning cycle centers on one focused target inside the active Topic.
 4. Teach, demonstrate, ask for prediction, or ask for application as appropriate.
 5. Observe only what the learner actually demonstrates.
 6. Update evidence, gaps, unassessed areas, roadmap/focus only when supported.
-7. Preserve one useful Topic-local next action and reason.
+7. Check whether observed or accumulated learning has formed a plausible durable retrieval unit; if so, evaluate it under the Learning Notes policy.
+8. Preserve one useful Topic-local next action and reason.
 
 Prefer capability growth over information accumulation.
 
@@ -123,11 +124,13 @@ Do not mutate Coach State, cross-Topic Learning Strategy, another Topic merely t
 
 A learning note is an optional durable retrieval artifact, not a session summary or a record of every learner-state change.
 
-Create or update one only when learning produces a reusable mental model, learner-specific misconception and correction, decision rule, important distinction, implementation/experiment lesson, synthesis, or source/version caveat worth recovering later.
+Do not wait until note creation is already decided. Perform a cheap note-candidate check when learning newly forms or materially sharpens a reusable mental model, corrects a high-leverage misconception into a replacement model, yields a reusable distinction/rule/implementation lesson, synthesizes several smaller concepts, or is about to move past a focus/milestone that now contains durable understanding. Also perform this check when closing a learning flow that accumulated such understanding.
 
-Do not create notes merely because mastery, evidence, review timing, current focus, or `nextStep` changed. A note does not require a mastery upgrade, and mastery does not require a note.
+The cheap check asks only whether a plausible durable retrieval unit now exists. Do not load the full note policy merely because evidence, mastery, review timing, current focus, or `nextStep` changed.
 
-Before creating or revising a learning note, read `references/learning-notes.md`.
+When a plausible candidate exists, read `references/learning-notes.md` and apply its worthiness, granularity, create-versus-update, scope, and grounding rules. Create or update a note only if the candidate passes that policy.
+
+A note does not require a mastery upgrade, and mastery does not require a note.
 
 ## Persistence Boundary
 
