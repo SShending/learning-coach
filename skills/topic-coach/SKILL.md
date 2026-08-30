@@ -30,6 +30,7 @@ Read only the branch-specific guidance needed for the current task:
 - **Topic creation, boundary decisions, resume, roadmap adaptation, next-step selection** -> `references/topic-lifecycle.md`
 - **Assessment, quizzes, evidence/mastery changes, gaps, review, contradiction handling** -> `references/assessment-and-evidence.md`
 - **Reasoning, comparison, system design, consequential choice, proposed explanation** -> `references/assumption-aware-diagnosis.md`
+- **Learning note creation or revision** -> `references/learning-notes.md`
 - **Version-sensitive, disputed, source-dependent, or consequential knowledge claims** -> `../../references/knowledge-grounding.md`
 - **Any durable Topic write** -> `../../references/github/topic-write.md`
 
@@ -120,9 +121,13 @@ Do not mutate Coach State, cross-Topic Learning Strategy, another Topic merely t
 
 ## Learning Notes
 
-Create/update a note only when the learning process produces durable understanding worth rereading after the conversation disappears: a useful mental model, corrected misconception, reusable comparison/framework/decision rule, implementation/experiment lesson, or source/version context worth preserving.
+A learning note is an optional durable retrieval artifact, not a session summary or a record of every learner-state change.
 
-Do not create notes merely because mastery, review timing, current focus, or `nextStep` changed. A note does not require a mastery upgrade, and mastery does not require a note.
+Create or update one only when learning produces a reusable mental model, learner-specific misconception and correction, decision rule, important distinction, implementation/experiment lesson, synthesis, or source/version caveat worth recovering later.
+
+Do not create notes merely because mastery, evidence, review timing, current focus, or `nextStep` changed. A note does not require a mastery upgrade, and mastery does not require a note.
+
+Before creating or revising a learning note, read `references/learning-notes.md`.
 
 ## Persistence Boundary
 
