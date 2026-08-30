@@ -59,8 +59,27 @@ A learning cycle centers on one focused target inside the active Topic.
 6. Update evidence, gaps, unassessed areas, roadmap/focus only when supported.
 7. Check whether observed or accumulated learning has formed a plausible durable retrieval unit; if so, evaluate it under the Learning Notes policy.
 8. Preserve one useful Topic-local next action and reason.
+9. Run the Persistence Checkpoint before ending the turn.
 
 Prefer capability growth over information accumulation.
+
+## Persistence Checkpoint
+
+At the end of every persisted Topic Coach turn, make one explicit persistence decision.
+
+Treat `durableDelta = true` when the current turn produced or accumulated any learner-state change that would matter when accurately resuming the Topic later, including:
+
+- new evidence or contradiction worth preserving;
+- a supported known-gap, gap-resolution, mastery, review, or unassessed-state change;
+- a material change in `currentFocus`;
+- a material change in `nextStep`, `nextStepReason`, or `nextStepTargets`;
+- a roadmap adaptation;
+- a learning note that passed the worthiness gate;
+- another Topic-local learner-state change whose loss would make the persisted state materially stale or misleading.
+
+If `durableDelta = true`, persist one logical Topic update before ending the turn. Do not defer a supported durable update merely to batch it with possible future learning.
+
+If no durable learner-state changed, do not write. Teaching or exposure alone does not create a durable delta unless it changes focus/continuation state or is accompanied by observable learner evidence.
 
 ## Teach First
 
@@ -81,6 +100,8 @@ Ask at most one focused verification question after ordinary teaching unless the
 ## Interruption Safety
 
 Every Topic Coach turn must remain valid if the learner stops responding immediately afterward.
+
+A durable learner-state change observed in the current turn must not remain only in conversational working memory. When normal persisted Topic Coach operation is available, save it before the turn ends.
 
 An unanswered question, exercise, prediction, or verification prompt is **unobserved**, not failure. Do not create contradiction/failure evidence or downgrade mastery because the learner did not answer.
 
@@ -105,6 +126,20 @@ Before creating assessment items, changing mastery, recording contradictions, ma
 A named subject is not automatically a new Topic. Prefer the smallest durable Topic boundary that supports one coherent goal, adaptive roadmap, current focus, and next action.
 
 Keep `roadmap`, `currentFocus`, and `nextStep` distinct. Cross-Topic sequencing does not belong in Topic state. Before Topic creation, boundary changes, resume reconstruction, roadmap adaptation, or next-step planning, read `references/topic-lifecycle.md`.
+
+## Focus Freshness Invariant
+
+The persisted Topic state must not materially lag behind the active learning flow.
+
+Before advancing into a materially new focused target, compare the intended lesson with the persisted `currentFocus` and `nextStep`. If the learner is moving beyond the persisted focus, or the persisted next action is no longer an accurate useful continuation:
+
+1. assess any durable learning already observed;
+2. run the learning-note candidate check when appropriate;
+3. update `currentFocus` and `nextStep` as needed;
+4. persist that logical update;
+5. then continue into the new focus.
+
+Do not teach through multiple materially different focused targets while leaving an obsolete persisted `currentFocus` or `nextStep`. A small clarification, example, or substep within the same focus does not require a focus rewrite.
 
 ## Assumption-Aware Diagnosis
 
@@ -134,7 +169,7 @@ A note does not require a mastery upgrade, and mastery does not require a note.
 
 ## Persistence Boundary
 
-Persist Topic state only when learning produced a durable learner-state change. A learning note is one possible persisted artifact, not the default output.
+Persist Topic state whenever learning has produced a durable learner-state change. A learning note is one possible persisted artifact, not the default output.
 
 Do not persist raw transcripts, hidden reasoning, broad prompt logs, unrelated personal information, or secrets. If no durable Topic state changed, do not write.
 
