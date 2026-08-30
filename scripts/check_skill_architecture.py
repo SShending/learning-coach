@@ -11,6 +11,7 @@ REQUIRED = [
     "skills/topic-coach/references/topic-lifecycle.md",
     "skills/topic-coach/references/assessment-and-evidence.md",
     "skills/topic-coach/references/assumption-aware-diagnosis.md",
+    "skills/topic-coach/references/learning-notes.md",
     "skills/ask-coach/SKILL.md",
     "skills/learning-view/SKILL.md",
     "skills/vault-curator/SKILL.md",
@@ -135,6 +136,7 @@ def main() -> None:
     lifecycle = read_text("skills/topic-coach/references/topic-lifecycle.md")
     assessment = read_text("skills/topic-coach/references/assessment-and-evidence.md")
     diagnosis = read_text("skills/topic-coach/references/assumption-aware-diagnosis.md")
+    learning_notes = read_text("skills/topic-coach/references/learning-notes.md")
     ask = read_text("skills/ask-coach/SKILL.md")
     curator = read_text("skills/vault-curator/SKILL.md")
     github_router = read_text("references/github-operations.md")
@@ -149,6 +151,7 @@ def main() -> None:
         "references/topic-lifecycle.md",
         "references/assessment-and-evidence.md",
         "references/assumption-aware-diagnosis.md",
+        "references/learning-notes.md",
         "../../references/github/topic-write.md",
         "## Interruption Safety",
         "## Learning Notes",
@@ -174,6 +177,17 @@ def main() -> None:
         "misconception, failure mode, or tempting shortcut",
         "Ask at most one clarifying question",
         "Teach first when straightforward",
+    ])
+    require_phrases(errors, "Learning notes reference", learning_notes, [
+        "# Learning Notes",
+        "## Worthiness Gate",
+        "## Learner Errors And Misconceptions",
+        "## Granularity",
+        "## Length Guidance",
+        "## Create Versus Update",
+        "## Scope Stability",
+        "## Deletion Test",
+        "future retrieval value",
     ])
     require_phrases(errors, "Ask Coach", ask, [
         "portfolio-level learning planner",
