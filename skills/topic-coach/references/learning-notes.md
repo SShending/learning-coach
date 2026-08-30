@@ -1,6 +1,6 @@
 # Learning Notes
 
-Read this reference only when Topic Coach is considering creating or revising a learning note.
+Read this reference when Topic Coach's cheap candidate check finds a plausible durable retrieval unit, or when revising an existing learning note. Candidate generation belongs in the main Topic Coach loop; this reference decides whether the candidate is actually worth persisting and how to shape it.
 
 A learning note is a **durable retrieval artifact**. Its job is to preserve a compact learner-specific model that will still be useful after the original conversation and session details are gone.
 
