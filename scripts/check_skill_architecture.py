@@ -19,6 +19,7 @@ REQUIRED = [
     "skills/vault-curator/references/structural-refactor.md",
     "skills/vault-curator/references/forget.md",
     "skills/vault-curator/references/public-export.md",
+    "evals/behavior/topic-coach-persistence.json",
     "references/vault-format.md",
     "references/github-operations.md",
     "references/github/read-authority.md",
@@ -139,6 +140,7 @@ def main() -> None:
     learning_notes = read_text("skills/topic-coach/references/learning-notes.md")
     ask = read_text("skills/ask-coach/SKILL.md")
     curator = read_text("skills/vault-curator/SKILL.md")
+    behavior_eval = read_text("evals/behavior/topic-coach-persistence.json")
     github_router = read_text("references/github-operations.md")
     topic_write = read_text("references/github/topic-write.md")
     grounding = read_text("references/knowledge-grounding.md")
@@ -153,14 +155,25 @@ def main() -> None:
         "references/assumption-aware-diagnosis.md",
         "references/learning-notes.md",
         "../../references/github/topic-write.md",
+        "## Persistence Checkpoint",
         "## Interruption Safety",
+        "## Focus Freshness Invariant",
         "## Learning Notes",
         "## Persistence Boundary",
+        "Before ending every Topic Coach turn during normal persisted operation",
         "plausible durable retrieval unit",
         "Do not wait until note creation is already decided.",
         "cheap note-candidate check",
         "A learning note is one possible persisted artifact, not the default output.",
         "do not manufacture a question merely to keep the conversation going.",
+    ])
+    require_phrases(errors, "Topic Coach persistence behavior eval", behavior_eval, [
+        '"suite": "topic-coach-persistence"',
+        '"explanation-evidence-must-persist"',
+        '"exposure-only-does-not-force-write"',
+        '"stale-focus-must-checkpoint-before-advance"',
+        '"same-focus-clarification-does-not-churn-focus"',
+        '"interruption-after-durable-evidence"',
     ])
     require_phrases(errors, "Topic lifecycle reference", lifecycle, [
         "# Topic Lifecycle",
