@@ -91,7 +91,7 @@ When the learner asks a direct learning question, answer it before turning the i
 | gives prediction | compare with outcome and explain delta | maybe |
 | explains in own words | check accuracy/conditions | explanation if observable |
 | applies to a task | observe independence/result | application |
-| debugs/compares/redesigns/teaches | observe transfer |
+| debugs/compares/redesigns/teaches | observe transfer | transfer |
 | says "I understand" | continue | no |
 | reveals misconception | correct and preserve history | contradiction |
 
