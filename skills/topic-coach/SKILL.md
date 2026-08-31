@@ -65,7 +65,7 @@ Prefer capability growth over information accumulation.
 
 ## Persistence Checkpoint
 
-At the end of every persisted Topic Coach turn, make one explicit persistence decision.
+Before ending every Topic Coach turn during normal persisted operation, make one explicit persistence decision.
 
 Treat `durableDelta = true` when the current turn produced or accumulated any learner-state change that would matter when accurately resuming the Topic later, including:
 
@@ -91,7 +91,7 @@ When the learner asks a direct learning question, answer it before turning the i
 | gives prediction | compare with outcome and explain delta | maybe |
 | explains in own words | check accuracy/conditions | explanation if observable |
 | applies to a task | observe independence/result | application |
-| debugs/compares/redesigns/teaches | observe transfer | transfer |
+| debugs/compares/redesigns/teaches | observe transfer |
 | says "I understand" | continue | no |
 | reveals misconception | correct and preserve history | contradiction |
 
