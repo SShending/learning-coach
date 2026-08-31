@@ -1,0 +1,104 @@
+{
+  "suite": "topic-coach-persistence",
+  "purpose": "Regression fixtures for Topic Coach persistence decisions. These cases test semantic behavior, not routing. Run them with an agent/eval harness that can inspect the resulting Topic-state writes.",
+  "cases": [
+    {
+      "id": "explanation-evidence-must-persist",
+      "initial_state": {
+        "currentFocus": "Git remote tracking and divergence",
+        "nextStep": "Explain how pull --rebase integrates remote and local history."
+      },
+      "learner_move": "git pull --rebase就是将远端更新先拉取到本地，本地的commit跟在更新的后面吗",
+      "expected": {
+        "evidence": "Record supported explanation evidence for the fetch-plus-rebase mental model.",
+        "durableDelta": true,
+        "persist_before_turn_end": true,
+        "must_not": [
+          "Defer the evidence solely to batch it with a future turn.",
+          "Upgrade mastery beyond what the explanation evidence supports."
+        ]
+      }
+    },
+    {
+      "id": "exposure-only-does-not-force-write",
+      "initial_state": {
+        "currentFocus": "Git stash mental model",
+        "nextStep": "Explain what stash preserves and when to use it."
+      },
+      "coach_move": "Explain git stash while staying within the same focus.",
+      "learner_move": "好的",
+      "expected": {
+        "evidence": "Do not create mastery evidence from acknowledgement alone.",
+        "durableDelta": false,
+        "persist_before_turn_end": false,
+        "must_not": [
+          "Create a write merely because teaching occurred.",
+          "Treat acknowledgement as demonstrated mastery."
+        ]
+      }
+    },
+    {
+      "id": "stale-focus-must-checkpoint-before-advance",
+      "initial_state": {
+        "currentFocus": "Safe versus forced local branch deletion with git branch -d and -D",
+        "nextStep": "Contrast -d with -D on an unmerged branch."
+      },
+      "accumulated_learning": [
+        "The learner has already completed the branch-deletion distinction.",
+        "The learning flow has progressed through remote-tracking refs, divergence, merge/rebase, and pull --rebase."
+      ],
+      "intended_next_focus": "Conflict handling and index semantics",
+      "expected": {
+        "durableDelta": true,
+        "persist_before_turn_end": true,
+        "before_advancing": [
+          "Assess durable learning already observed without inventing mastery.",
+          "Run the learning-note candidate check when appropriate.",
+          "Refresh currentFocus and nextStep so persisted state no longer points to branch deletion.",
+          "Persist the logical Topic update before teaching through another materially new focus."
+        ],
+        "must_not": [
+          "Continue across multiple new focused targets while leaving the persisted focus stale."
+        ]
+      }
+    },
+    {
+      "id": "same-focus-clarification-does-not-churn-focus",
+      "initial_state": {
+        "currentFocus": "Git rebase and history rewriting",
+        "nextStep": "Understand what happens to original commits after rebase."
+      },
+      "learner_move": "那原来的ABCE还在吗",
+      "expected": {
+        "durableDelta": false,
+        "persist_before_turn_end": false,
+        "focus_behavior": "Treat this as a clarification/substep inside the existing rebase focus unless the learner demonstrates new durable evidence or continuation state materially changes.",
+        "must_not": [
+          "Rewrite currentFocus for every clarification.",
+          "Create evidence merely because the coach explained the answer."
+        ]
+      }
+    },
+    {
+      "id": "interruption-after-durable-evidence",
+      "initial_state": {
+        "currentFocus": "Git ahead, behind, and divergence",
+        "nextStep": "Classify a changed commit graph by ancestry."
+      },
+      "learner_move": "behind",
+      "observation": "The answer is correct and independently demonstrates the targeted classification.",
+      "conversation_ends_after_turn": true,
+      "expected": {
+        "durableDelta": true,
+        "persist_before_turn_end": true,
+        "must": [
+          "Persist the supported evidence before the turn ends.",
+          "Preserve a useful nextStep if continuation state changed."
+        ],
+        "must_not": [
+          "Leave the evidence only in conversational working memory because another turn might follow."
+        ]
+      }
+    }
+  ]
+}
