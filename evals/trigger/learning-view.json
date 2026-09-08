@@ -18,5 +18,10 @@
   {"query":"Give me a weekly plan based on what is most urgent to review.","should_trigger":false},
   {"query":"Fix the stale generated Topic README files.","should_trigger":false},
   {"query":"Explain actor-critic and check whether I understand it.","should_trigger":false},
-  {"query":"Forget the stored material for an archived Topic.","should_trigger":false}
+  {"query":"Forget the stored material for an archived Topic.","should_trigger":false},
+  {"query":"今天学了什么？","should_trigger":true},
+  {"query":"Show learning activity yesterday.","should_trigger":true},
+  {"query":"这周和过去 7 天的学习记录有什么不同？","should_trigger":true},
+  {"query":"Show learning activity from September 1 to September 8.","should_trigger":true},
+  {"query":"每天自动帮我补写学习日志并提高 mastery。","should_trigger":false}
 ]

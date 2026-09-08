@@ -25,4 +25,8 @@ Files:
 
 - `behavior/topic-coach-persistence.json` — verifies Topic Coach persistence checkpoints, focus freshness, interruption safety, evidence boundaries, and the counter-case where exposure alone must not cause a write.
 
+- `behavior/learning-view-temporal.json` — covers calendar windows, timezone/DST boundaries, late capture, deduplication, historical limits, partial reads, and zero-write inspection.
+
+Topic persistence cases also cover capture classification, assisted projects, owner handoffs, idempotency, explicit non-persistence, and failed writes.
+
 These JSON fixtures are declarative regression cases, not a claim that this repository currently contains a full agent-behavior runner. A semantic harness should inspect both the response behavior and resulting authoritative Vault writes. Static architecture checks may verify that the regression assets exist, but they cannot substitute for running the behavioral cases.

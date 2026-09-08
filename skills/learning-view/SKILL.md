@@ -1,6 +1,6 @@
 ---
 name: learning-view
-description: Show and explain the learner's existing Learning Vault state without changing it. Use whenever the learner asks to see, summarize, inspect, compare, list, or visualize current progress, a Topic, roadmap, gaps, unassessed areas, notes, reviews, evidence, mastery basis, Learning Strategy, or stored Ask Coach advisory context—even if they only ask "where am I?" or "show my progress." Never teach/assess new mastery, reprioritize what to learn next, or mutate any Vault authority domain; hand those to Topic Coach, Ask Coach, or Vault Curator.
+description: Show and explain the learner's existing Learning Vault state without changing it. Use whenever the learner asks to see, summarize, inspect, compare, list, or visualize current progress, learning activity today/yesterday/this week/last 7 days or a date range, a Topic, roadmap, gaps, unassessed areas, notes, reviews, evidence, mastery basis, Learning Strategy, or stored Ask Coach advisory context—even if they only ask "where am I?" or "show my progress." Never teach/assess new mastery, reprioritize what to learn next, or mutate any Vault authority domain; hand those to Topic Coach, Ask Coach, or Vault Curator.
 ---
 
 # Learning View
@@ -30,6 +30,10 @@ Never append evidence, change mastery, create gaps/unassessed entries, alter roa
 Current-conversation demonstrations do not become evidence in Learning View. If the learner asks to turn inspection into teaching/assessment, portfolio advice, or maintenance, hand off to the corresponding Skill.
 
 ## Views
+
+### Temporal Views
+
+For “what did I learn today?”, yesterday, this week, last 7 days, or a date range, read `references/temporal-views.md`. Dynamically aggregate existing sessions, evidence, notes, and `appliedUpdates`; do not create a daily-learning database. Report recorded activity separately from demonstrated capability and expose incomplete history.
 
 ### Vault Overview
 

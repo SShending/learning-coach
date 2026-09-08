@@ -1,0 +1,187 @@
+{
+  "suite": "learning-view-temporal",
+  "purpose": "Semantic regression fixtures; all views must have zero Vault writes. Requires an agent behavior harness, not merely static validation.",
+  "cases": [
+    {
+      "id": "local-midnight",
+      "request": "今天学了什么？",
+      "initial_state": {
+        "now": "2026-09-08T10:00:00+08:00",
+        "timezone": "Asia/Shanghai",
+        "evidence_observedAt": [
+          "2026-09-07T15:59:59Z",
+          "2026-09-07T16:00:00Z",
+          "2026-09-08T03:00:00Z"
+        ]
+      },
+      "expected": {
+        "must": [
+          "Resolve September 8 local day; include only the second event so far. Third event is future relative to now."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "yesterday",
+      "request": "What did I learn yesterday?",
+      "initial_state": {
+        "now": "2026-09-08T10:00:00+08:00",
+        "timezone": "Asia/Shanghai"
+      },
+      "expected": {
+        "must": [
+          "Resolve September 7, with end-exclusive September 8 midnight."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "week-versus-seven-days",
+      "request": "Compare this week and last 7 days.",
+      "initial_state": {
+        "now": "2026-09-08T10:00:00+08:00",
+        "timezone": "Asia/Shanghai"
+      },
+      "expected": {
+        "must": [
+          "This week is September 7–8; last 7 days is September 2–8."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "dst-calendar-window",
+      "request": "Show yesterday.",
+      "initial_state": {
+        "now": "2026-03-09T12:00:00-04:00",
+        "timezone": "America/New_York"
+      },
+      "expected": {
+        "must": [
+          "Use March 8 local day: 05:00Z March 8 through 04:00Z March 9, a 23-hour interval."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "inclusive-date-range",
+      "request": "Show September 1 through September 3, 2026.",
+      "initial_state": {
+        "timezone": "Asia/Shanghai"
+      },
+      "expected": {
+        "must": [
+          "Include September 3; exclude September 4 midnight."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "reversed-range",
+      "request": "Show September 8 through September 1, 2026.",
+      "initial_state": {},
+      "expected": {
+        "must": [
+          "Ask for corrected endpoints; do not silently swap them."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "linked-records-not-four-lessons",
+      "request": "Show today.",
+      "initial_state": {
+        "session": "s1",
+        "evidence": {
+          "id": "e1",
+          "sessionId": "s1"
+        },
+        "note": "n1 linked from s1",
+        "appliedUpdates": [
+          "u1"
+        ],
+        "all_dates": "today"
+      },
+      "expected": {
+        "must": [
+          "Group linked sources and count each record once; do not claim four lessons or four mastery gains."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "late-capture",
+      "request": "Show today.",
+      "initial_state": {
+        "today": "2026-09-08",
+        "session_createdAt": "2026-09-08T08:00:00Z",
+        "body_learning_date": "2026-09-01",
+        "evidence_observedAt": "2026-09-01T08:00:00Z",
+        "appliedAt": "2026-09-08T08:00:00Z"
+      },
+      "expected": {
+        "must": [
+          "Show late capture separately; do not call the old evidence demonstrated today."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "historical-note-limits",
+      "request": "What notes did I create last month and how much did mastery rise?",
+      "initial_state": {
+        "note_updatedAt": "2026-09-08T08:00:00Z",
+        "concept_level": 3,
+        "historical_baseline": null
+      },
+      "expected": {
+        "must": [
+          "State that latest note metadata cannot establish last-month creation and current mastery cannot establish a delta."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "empty-and-partial",
+      "request": "Show today.",
+      "initial_state": {
+        "topic_a": "readable; no dated activity",
+        "topic_b": "read failed",
+        "undated_record": "timestamp missing"
+      },
+      "expected": {
+        "must": [
+          "Report no recorded activity in inspected dated records, partial coverage and undated material; do not say nothing was learned."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "read-only-with-new-answer",
+      "request": "Show this week; I just independently solved a problem.",
+      "initial_state": {
+        "write_access": false
+      },
+      "expected": {
+        "must": [
+          "View persisted activity only; hand assessment to Topic Coach without writing evidence or appliedUpdates."
+        ],
+        "vault_writes": 0
+      }
+    },
+    {
+      "id": "structure-only",
+      "request": "Show today including Vault maintenance.",
+      "initial_state": {
+        "manifest_appliedUpdate": "today; no semantic detail",
+        "nextReview": "today; no review evidence"
+      },
+      "expected": {
+        "must": [
+          "Label record updated with details unavailable; do not infer learning, mastery gains, or a completed review."
+        ],
+        "vault_writes": 0
+      }
+    }
+  ]
+}

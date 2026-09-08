@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Check Learning Coach progressive-disclosure routing and contract ownership."""
 
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +15,8 @@ REQUIRED = [
     "skills/topic-coach/references/learning-notes.md",
     "skills/ask-coach/SKILL.md",
     "skills/learning-view/SKILL.md",
+    "skills/learning-view/references/temporal-views.md",
+    "evals/behavior/learning-view-temporal.json",
     "skills/vault-curator/SKILL.md",
     "skills/vault-curator/references/review-checklist.md",
     "skills/vault-curator/references/structural-refactor.md",
@@ -240,6 +243,49 @@ def main() -> None:
         "coach-state.json",
         "supports one active schema",
     ])
+
+    # Validate regression assets structurally as well as retaining contract anchors.
+    for suite in ("topic-coach-persistence", "learning-view-temporal"):
+        try:
+            fixture = json.loads(read_text(f"evals/behavior/{suite}.json"))
+            cases = fixture["cases"]
+            ids = [case["id"] for case in cases]
+            if fixture["suite"] != suite or not cases or len(ids) != len(set(ids)):
+                errors.append(f"invalid or duplicate behavior cases: {suite}")
+            for case in cases:
+                if not isinstance(case.get("expected"), dict) or not case["expected"]:
+                    errors.append(f"missing semantic expectations: {suite}/{case['id']}")
+                if suite == "learning-view-temporal" and case["expected"].get("vault_writes") != 0:
+                    errors.append(f"temporal view must require zero writes: {case['id']}")
+        except (ValueError, KeyError, TypeError) as exc:
+            errors.append(f"invalid behavior fixture {suite}: {exc}")
+
+    view = read_text("skills/learning-view/SKILL.md")
+    temporal = read_text("skills/learning-view/references/temporal-views.md")
+    require_phrases(errors, "Capture ownership", topic, [
+        "## Learning Capture / Persistence Triage",
+        "Topic Coach must not write Learning Strategy or Coach State.",
+        "Routing is not permission to write an external project",
+    ])
+    require_phrases(errors, "Temporal routing", view, [
+        "references/temporal-views.md", "## Read-Only Invariant",
+    ])
+    require_phrases(errors, "Temporal authority", temporal, [
+        "end-exclusive", "observedAt", "createdAt", "updatedAt", "appliedAt",
+        "Current state is not a complete event log.",
+    ])
+    # Temporal inspection adds no authority document or Skill.
+    actual_skills = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
+    if actual_skills != {"topic-coach", "ask-coach", "learning-view", "vault-curator"}:
+        errors.append("unexpected Skill boundary change")
+    schema = json.loads(read_text("references/schemas/topic-state.schema.json"))
+    if set(schema["properties"]) != {
+        "schemaVersion", "documentType", "vaultId", "id", "title", "goal",
+        "targetCapability", "scope", "nonGoals", "roadmap", "currentFocus",
+        "knownGaps", "unassessed", "nextStep", "nextStepReason", "nextStepTargets",
+        "concepts", "notes", "sessions", "appliedUpdates",
+    }:
+        errors.append("Topic authority fields changed; review capture/view ownership")
 
     if errors:
         print("SKILL ARCHITECTURE CHECK FAILED")

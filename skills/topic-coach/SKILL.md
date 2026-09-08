@@ -59,9 +59,28 @@ A learning cycle centers on one focused target inside the active Topic.
 6. Update evidence, gaps, unassessed areas, roadmap/focus only when supported.
 7. Check whether observed or accumulated learning has formed a plausible durable retrieval unit; if so, evaluate it under the Learning Notes policy.
 8. Preserve one useful Topic-local next action and reason.
-9. Run the Persistence Checkpoint before ending the turn.
+9. Run Learning Capture / Persistence Triage and the Persistence Checkpoint before ending the turn.
 
 Prefer capability growth over information accumulation.
+
+## Learning Capture / Persistence Triage
+
+After meaningful learning, including accumulated learning at a focus change or close, classify what would be lost on resume before deciding whether to persist. This is part of the learning loop, not a separate Skill or a requirement to produce every artifact.
+
+| Observed outcome | Destination and decision |
+| --- | --- |
+| Learner answer, reasoning, correction, or demonstrated application | Evidence under the assessment policy; record assistance and uncertainty, and change mastery only to the supported level. |
+| Reusable learner-specific understanding | Evaluate a note candidate under `references/learning-notes.md`; a note is not proof of mastery. |
+| Relevant material encountered but not assessed | Update `unassessed` only when it adds useful missing assessment coverage; preserve existing supported mastery and do not invent a known gap. |
+| Meaningful exploration, review, or continuation context | A minimal session checkpoint when the context is worth recovering, with linked evidence/note IDs when present and a useful next step in Topic state. A session may have no new evidence. |
+| Possible cross-Topic learning pattern | Preserve the Topic-local observation/provenance if useful; hand strategy synthesis to Ask Coach. Topic Coach must not write Learning Strategy or Coach State. |
+| Research idea, novelty claim, experiment plan, or project deliverable | Route project content to the external project/idea repository; retain only reusable learning and a minimal relevant pointer in the Topic. Routing is not permission to write an external project; use existing explicit authorization or leave a handoff. |
+
+One learning event may justify multiple linked destinations, but do not duplicate its content across them. Coach-generated explanations/code, sophisticated questions, time spent, and completed assisted projects are exposure, not independent application evidence. Learner demonstration is still required.
+
+Use existing Topic fields and registered note/session bodies; do not introduce capture logs or a daily-learning authority. Read the existing indexes before creating artifacts. Repeated capture of the same observation should reuse its provenance, not produce duplicate evidence or sessions. Session bodies contain concise learning context and capture outcomes, never raw transcripts. Distinguish observation time from persistence time, especially when capturing older learning; unknown dates stay unknown. If older learning lacks a reliable observation timestamp, capture it in a session dated at capture time with the observation date explicitly unknown; do not create evidence without a valid `observedAt` or substitute today for the unknown date.
+
+If meaningful learning would otherwise disappear, evaluate an unassessed update or session checkpoint even without a mastery change. Routine explanation/acknowledgement within an already accurate focus, with no new recovery value, remains a no-write decision. An explicit non-persisted interaction remains non-persisted. Report saved outcomes briefly only after write verification; on failure, report what remains unsaved.
 
 ## Persistence Checkpoint
 
@@ -75,11 +94,12 @@ Treat `durableDelta = true` when the current turn produced or accumulated any le
 - a material change in `nextStep`, `nextStepReason`, or `nextStepTargets`;
 - a roadmap adaptation;
 - a learning note that passed the worthiness gate;
+- meaningful learning context that warrants a minimal session checkpoint;
 - another Topic-local learner-state change whose loss would make the persisted state materially stale or misleading.
 
 If `durableDelta = true`, persist one logical Topic update before ending the turn. Do not defer a supported durable update merely to batch it with possible future learning.
 
-If no durable learner-state changed, do not write. Teaching or exposure alone does not create a durable delta unless it changes focus/continuation state or is accompanied by observable learner evidence.
+If no durable learner-state changed, do not write. Teaching or exposure alone does not create a durable delta unless triage identifies new useful unassessed coverage, recoverable session context, a worthy note, changed focus/continuation state, or observable learner evidence.
 
 ## Teach First
 

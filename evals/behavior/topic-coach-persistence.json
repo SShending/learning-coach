@@ -99,6 +99,96 @@
           "Leave the evidence only in conversational working memory because another turn might follow."
         ]
       }
+    },
+    {
+      "id": "meaningful-exposure-checkpoint",
+      "learner_move": "A sustained exploration of memory retrieval introduced a relevant area absent from unassessed; learner has not answered an assessment.",
+      "expected": {
+        "must": [
+          "Save useful unassessed coverage and minimal session context through one Topic update.",
+          "Keep mastery unchanged; do not create failure evidence."
+        ]
+      }
+    },
+    {
+      "id": "assisted-project-is-not-application",
+      "learner_move": "Coach wrote a working agent; learner asked detailed questions but has not independently explained or modified it.",
+      "expected": {
+        "must": [
+          "Capture meaningful exploration and continuation context.",
+          "Do not award level 3 or learner application evidence from generated code."
+        ]
+      }
+    },
+    {
+      "id": "note-without-mastery",
+      "learner_move": "A learner-specific reusable distinction accumulated across the session and passes the note worthiness gate; no assessment occurred.",
+      "expected": {
+        "must": [
+          "Create or refine the existing note owning that idea.",
+          "Link minimal session provenance when useful and preserve mastery."
+        ]
+      }
+    },
+    {
+      "id": "strategy-owner-handoff",
+      "learner_move": "A chosen Topic lesson suggests a pattern also seen in another Topic.",
+      "expected": {
+        "must": [
+          "Persist only the supported chosen-Topic observation if useful.",
+          "Hand cross-Topic synthesis to Ask Coach; do not write Learning Strategy, Coach State, or another Topic."
+        ]
+      }
+    },
+    {
+      "id": "external-project-routing",
+      "learner_move": "Discussion contains a Text2SQL experiment plan and one reusable learning distinction; external project writes are not authorized.",
+      "expected": {
+        "must": [
+          "Keep project details out of the Vault; give an external-project handoff without writing there.",
+          "Evaluate the reusable distinction for a Topic note without asserting mastery."
+        ]
+      }
+    },
+    {
+      "id": "capture-retry",
+      "learner_move": "The same observation was saved; the prior write timed out but its update ID is present on reread.",
+      "expected": {
+        "must": [
+          "Verify the existing result and reuse the logical update ID.",
+          "Do not duplicate evidence, note, or session."
+        ]
+      }
+    },
+    {
+      "id": "explicit-non-persisted-capture",
+      "learner_move": "Learner requested this interaction not be saved, then independently answered correctly.",
+      "expected": {
+        "must": [
+          "Teach and give feedback without any Vault writes.",
+          "Do not let capture override the explicit non-persistence request."
+        ]
+      }
+    },
+    {
+      "id": "capture-write-failure",
+      "learner_move": "A meaningful checkpoint is prepared, but the authoritative write fails and verification shows no update.",
+      "expected": {
+        "must": [
+          "Report unsaved outcomes accurately.",
+          "Do not claim success or create a hidden local authority."
+        ]
+      }
+    },
+    {
+      "id": "unknown-observation-date",
+      "learner_move": "An available prior conversation contains a useful explanation, but its observation date is unknown.",
+      "expected": {
+        "must": [
+          "Preserve useful context in a session with the actual capture timestamp and explicitly unknown observation date.",
+          "Do not fabricate observedAt, create schema-invalid evidence, or substitute the capture timestamp for the observation time."
+        ]
+      }
     }
   ]
 }
