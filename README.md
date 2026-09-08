@@ -18,6 +18,12 @@ English | [简体中文](README.zh-CN.md)
 
 ---
 
+## Product documentation
+
+- [User guide (简体中文)](docs/user-guide.zh-CN.md): setup, learning, review, planning, and temporal views, with fully fictional history, agent, and photography examples.
+- [Product evolution (简体中文)](docs/product-evolution.zh-CN.md): shipped changes, usage impact, validation limits, and candidate directions.
+
+
 ## Product and Skills
 
 **Learning Coach** is the product/repository/Plugin name. It is not the name of an individual Skill.

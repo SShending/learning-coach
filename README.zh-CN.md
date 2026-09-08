@@ -14,6 +14,12 @@
 
 ---
 
+## 产品文档
+
+- [使用手册](docs/user-guide.zh-CN.md)：从开始学习到复习、跨主题安排与时间视图，使用历史、Agent、摄影的全虚构示例。
+- [产品迭代记录](docs/product-evolution.zh-CN.md)：已实现变化、使用影响、验证边界与讨论中的方向。
+
+
 ## 产品与 Skills
 
 **Learning Coach** 表示整个产品 / repository / Plugin，不再是某一个 Skill 的名字。

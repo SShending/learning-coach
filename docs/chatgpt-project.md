@@ -37,11 +37,14 @@ references/
 ├── knowledge-grounding.md
 ├── coach-state.md
 ├── vault.schema.json
-├── schemas/
-└── migrations/
+└── schemas/
 ```
 
 These are system-wide resources, not part of Topic Coach's private directory.
+
+Unsupported older Vault formats require a separate upgrade; normal Curator operations do not infer or migrate them.
+
+For a full walkthrough using fictional Topics, see the [user guide](user-guide.zh-CN.md). Availability of Skill resources and GitHub tools must be checked in the actual host; a local Plugin installation does not automatically install it into another Chat environment.
 
 ## Setup
 
@@ -57,7 +60,7 @@ Use my private Learning Vault as the source of truth for durable learning state.
 Use Topic Coach when I am learning, practicing, being assessed, or advancing one chosen Topic.
 Use Ask Coach when I ask what to learn, review, practice, connect, defer, or explore across Topics.
 Use Learning View when I ask to inspect stored state without changing it.
-Use Vault Curator when I ask to review, repair, migrate, or reorganize the Vault itself.
+Use Vault Curator when I ask to review, repair, or reorganize the Vault itself.
 
 Do not save raw conversations.
 ```
@@ -81,14 +84,14 @@ A learner naming a subject does not automatically create a Topic: Topic Coach sh
 ```text
 Use Topic Coach.
 
-I want to learn Agent Foundations. Help me define the right Topic boundary, target capability, and roadmap, then start from the next useful step.
+I want to learn photography. Help me define the right Topic boundary, target capability, and roadmap, then start from the next useful step.
 ```
 
 Or:
 
 ```text
 Use Topic Coach.
-Resume agent-memory.
+Resume photo-basics.
 ```
 
 ## Ask What To Do Next Across Topics

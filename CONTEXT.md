@@ -91,3 +91,7 @@ Coach State is durable portfolio advisory memory: candidate Topics, durable cros
 ## Review
 
 Ask Coach prioritizes review across the portfolio. Topic Coach executes retrieval/reapplication within the chosen Topic and records the observed result as Topic evidence.
+
+## Product Documentation
+
+Maintain `docs/product-evolution.zh-CN.md` and `docs/user-guide.zh-CN.md` alongside user-visible behavior changes. Record shipped behavior separately from proposals, link verified changes, and distinguish static validation from executed behavior tests. Use independently authored fictional examples only; never use a learner's real Vault as demonstration material. Documentation-only edits do not imply a Plugin version bump.

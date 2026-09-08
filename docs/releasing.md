@@ -95,7 +95,7 @@ Before publishing, verify:
 5. Schema smoke tests pass.
 6. Skill architecture/routing checks pass.
 7. Plugin release checks pass.
-8. README accurately describes the current four-Skill architecture and GitHub dependency.
+8. README accurately describes the current four-Skill architecture and GitHub dependency. Update [product evolution](product-evolution.zh-CN.md) and the affected [user guide](user-guide.zh-CN.md) sections for user-visible changes; keep proposed features separate from shipped behavior and use fictional examples only.
 9. No learner-specific Vault data, credentials, or private repository contents are included.
 10. The personal marketplace installation test has exercised real Plugin discovery and runtime behavior.
 
