@@ -29,7 +29,7 @@
       "required": ["id", "path", "title", "capturedAt", "updatedAt", "status", "kind", "claimStatus", "tags", "topicHints", "sources"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
-        "path": { "type": "string", "pattern": "^\\.learning-vault/inbox/[a-z0-9]+(?:-[a-z0-9]+)*\\.md$" },
+        "path": { "type": "string", "pattern": "^inbox/items/[a-z0-9]+(?:-[a-z0-9]+)*\\.md$" },
         "title": { "type": "string", "minLength": 1 },
         "capturedAt": { "$ref": "#/$defs/timestamp" },
         "updatedAt": { "$ref": "#/$defs/timestamp" },
