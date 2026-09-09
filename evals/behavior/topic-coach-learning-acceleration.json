@@ -141,6 +141,51 @@
           "Preserve the original Topic target and return path rather than creating an unrelated new Topic by default."
         ]
       }
+    },
+    {
+      "id": "delta-refines-existing-note",
+      "initial_state": {
+        "existing_note": "A reusable mental model of ordinary LLM inference already owns the retrieval target for how request context reaches generation."
+      },
+      "learner_move": "The learner now understands that RAG inserts retrieval before generation and can explain the new retrieval failure modes.",
+      "expected": {
+        "must": [
+          "Check whether the new learning strengthens the same future retrieval target before creating another note.",
+          "Update the existing mental-model note when the delta belongs to the same central reusable idea.",
+          "Preserve why the delta changes behavior or failure modes rather than adding a bare feature list."
+        ],
+        "must_not": [
+          "Create a separate glossary-style note merely because the term RAG is new."
+        ]
+      }
+    },
+    {
+      "id": "shared-foundation-does-not-force-note-merge",
+      "initial_state": {
+        "existing_note": "A stable note explains the general Agent execution loop."
+      },
+      "learner_move": "The learner develops a reusable model of memory consolidation with a different future retrieval question from the execution loop.",
+      "expected": {
+        "must": [
+          "Create a distinct note when the new model serves a meaningfully different retrieval target and passes the worthiness gate."
+        ],
+        "must_not": [
+          "Append every derived concept to one giant foundation note merely because they share an Agent base model."
+        ]
+      }
+    },
+    {
+      "id": "no-valid-base-store-new-primitive",
+      "learner_move": "The learner is encountering a genuinely new mechanism and every available analogy distorts its governing behavior.",
+      "expected": {
+        "must": [
+          "Teach the mechanism concretely and establish the new primitive directly.",
+          "Only consider a durable note after the learner has a working model and the normal worthiness gate passes."
+        ],
+        "must_not": [
+          "Invent an invariant-plus-delta framing solely to make the note look compact."
+        ]
+      }
     }
   ]
 }
