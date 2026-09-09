@@ -86,6 +86,11 @@ def main() -> None:
             "candidateTopics": {}, "crossTopicConnections": {},
             "advisoryHypotheses": {}, "appliedUpdates": {},
         },
+        "Knowledge Inbox": {
+            "schemaVersion": 2, "documentType": "knowledge-inbox",
+            "vaultId": "github:example/learning-vault", "updatedAt": timestamp,
+            "items": {}, "appliedUpdates": {},
+        },
     }
 
     for name, document in valid_documents.items():
@@ -112,10 +117,25 @@ def main() -> None:
             },
             "crossTopicConnections": {}, "advisoryHypotheses": {}, "appliedUpdates": {},
         },
-        "Knowledge Inbox": {
+        "invalid Knowledge Inbox item status": {
             "schemaVersion": 2, "documentType": "knowledge-inbox",
             "vaultId": "github:example/learning-vault", "updatedAt": timestamp,
-            "items": {}, "appliedUpdates": {},
+            "items": {
+                "bad-item": {
+                    "id": "bad-item",
+                    "path": ".learning-vault/inbox/bad-item.md",
+                    "title": "Bad item",
+                    "capturedAt": timestamp,
+                    "updatedAt": timestamp,
+                    "status": "maybe",
+                    "kind": "fact",
+                    "claimStatus": "confirmed",
+                    "tags": [],
+                    "topicHints": [],
+                    "sources": ["chat:example"],
+                }
+            },
+            "appliedUpdates": {},
         },
     }
 
