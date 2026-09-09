@@ -26,3 +26,33 @@ underlying method into a conditional, teach-first learning policy:
 This keeps the strategy compatible with Learning Coach's broader goals:
 responsive teaching, low-friction interaction, observable mastery evidence, and
 an inspectable learner state.
+
+## Learning acceleration: foundations and invariant-plus-delta explanations
+
+The `Learning Acceleration` teaching policy was inspired by a Bilibili video from
+飞天闪客 describing a long-horizon approach to learning: optimize for learning
+acceleration rather than only immediate learning speed, spend deliberate time on
+high-reuse general foundations, and understand new concepts as an unchanged base
+plus the meaningful increment that changed.
+
+Source:
+https://www.bilibili.com/video/BV1m8D7BWEKZ/
+
+Learning Coach independently adapts those ideas into bounded operational rules
+rather than treating the video as a prompt or specification:
+
+- prefer reusable foundations when they have high downstream leverage and repair
+  a real learner gap;
+- stop prerequisite expansion at the nearest sufficient blocking foundation
+  instead of recursively teaching everything underneath a topic;
+- acquire unfamiliar mechanisms concretely before compressing them;
+- describe a new concept as `existing model + delta` only when the existing model
+  is a valid basis for transfer;
+- reject forced analogies and teach a new primitive directly when no valid base
+  exists;
+- treat compact abstractions as possible learning-note candidates, not automatic
+  proof of mastery or automatic persistence.
+
+The resulting policy lives inside Topic Coach as a conditional pedagogical
+strategy. Its goal is to make later learning cheaper through reusable mental
+models without turning foundation study into an end in itself.
