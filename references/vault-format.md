@@ -55,6 +55,22 @@ writes the Topic note; the Inbox item becomes `promoted` only after the target
 is verified. An item with no suitable Topic stays in the Inbox rather than
 causing a miscellaneous Topic to be created.
 
+### Resurfacing Into Learning
+
+When saved Inbox material may help an active learning or portfolio decision,
+follow `inbox-resurfacing.md`.
+
+Resurfacing is **consumer-owned retrieval**: Knowledge Inbox stores and triages
+fragments, while Topic Coach or Ask Coach decides whether a fragment is relevant
+to the concrete task it already owns. Knowledge Inbox does not proactively push
+items into another Skill.
+
+Use metadata-first progressive retrieval and normally expand at most 1–3 bodies.
+A shared tag, broad subject word, or Topic name alone is not a sufficient match.
+Saved material can recover useful prior context, but it is never learner
+capability evidence by itself. Learning View may display Inbox state read-only
+but does not turn it into a recommendation.
+
 ## Shared Learner Model
 
 A Topic may contain a bounded goal and observable `targetCapability`, adaptive capability `roadmap`, `currentFocus`, `knownGaps`, `unassessed`, Concepts and mastery evidence, note/session indexes, and `nextStep` with optional reason/targets.

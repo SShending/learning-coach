@@ -43,6 +43,8 @@ jobs:
         run: python scripts/validate_vault_schemas.py
       - name: Validate skill architecture and routing contracts
         run: python scripts/check_skill_architecture.py
+      - name: Validate Inbox resurfacing contract
+        run: python scripts/check_inbox_resurfacing.py
       - name: Validate plugin release package
         run: python scripts/check_plugin_release.py
       - name: Validate personal plugin installer syntax

@@ -1,0 +1,79 @@
+{
+  "suite": "inbox-resurfacing",
+  "purpose": "Regression fixtures for task-driven Knowledge Inbox retrieval without learner-state contamination or context flooding.",
+  "cases": [
+    {
+      "id": "topic-task-can-resurface-specific-fragment",
+      "learner_move": "Use Topic Coach. Continue DeepSeek Harness: I still confuse runtime orchestration with model reasoning.",
+      "context": {
+        "currentFocus": "runtime orchestration",
+        "inbox_candidates": [
+          "Runtime can orchestrate between model calls without being model reasoning.",
+          "A generic note tagged agent about prompt design.",
+          "A saved restaurant recommendation."
+        ]
+      },
+      "expected": {
+        "must": [
+          "Treat the current learning task as the retrieval query, not the broad Topic name alone.",
+          "Read Inbox metadata first and expand only the specific runtime-orchestration candidate if it materially helps.",
+          "Use the fragment as prior retrieval context, not as evidence that the learner remembers or understands it."
+        ],
+        "must_not": [
+          "Load every Inbox body.",
+          "Raise mastery from the saved fragment alone."
+        ]
+      }
+    },
+    {
+      "id": "broad-tag-overlap-does-not-trigger",
+      "learner_move": "Use Topic Coach. Explain a new agent evaluation concept inside my current Topic.",
+      "context": {
+        "inbox_candidate": "An unrelated implementation lesson whose only overlap is the tag agent."
+      },
+      "expected": {
+        "must": [
+          "Do not resurface the item solely because of a shared tag or broad subject word."
+        ]
+      }
+    },
+    {
+      "id": "metadata-first-limits-context",
+      "learner_move": "Use Topic Coach. Help me debug this Concept using anything genuinely relevant that I saved before.",
+      "context": {
+        "active_inbox_count": 40,
+        "plausible_candidates": 5
+      },
+      "expected": {
+        "must": [
+          "Inspect the Inbox index/metadata before bodies.",
+          "Normally expand at most 1-3 bodies that are most relevant to the concrete learning task.",
+          "Keep irrelevant Inbox content out of the model context."
+        ]
+      }
+    },
+    {
+      "id": "ask-coach-explicitly-considers-saved-fragments",
+      "learner_move": "Use Ask Coach. Look at my saved Inbox fragments and tell me whether any are worth turning into future learning attention.",
+      "expected": {
+        "must": [
+          "Read active Inbox metadata because the learner explicitly made saved fragments part of the portfolio decision.",
+          "Treat Inbox material as candidate exploration material, not mastery evidence or review urgency.",
+          "Do not create a Topic merely because a fragment looks interesting."
+        ]
+      }
+    },
+    {
+      "id": "learning-view-does-not-recommend",
+      "learner_move": "Use Learning View. Show me my Knowledge Inbox and current Topics.",
+      "expected": {
+        "must": [
+          "Display requested Inbox and Topic state read-only.",
+          "Do not rank Inbox items as learning recommendations or silently inject them into Topic state.",
+          "Hand off if the learner asks which saved fragments should influence learning next."
+        ],
+        "vault_writes": 0
+      }
+    }
+  ]
+}
