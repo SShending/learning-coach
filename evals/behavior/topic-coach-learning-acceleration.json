@@ -1,0 +1,146 @@
+{
+  "suite": "topic-coach-learning-acceleration",
+  "purpose": "Regression fixtures for Topic Coach's conditional learning-acceleration policy: foundation leverage, bounded prerequisites, concrete acquisition, invariant-plus-delta explanations, and evidence/note boundaries.",
+  "cases": [
+    {
+      "id": "high-reuse-foundation-before-frontier",
+      "learner_move": "I keep reading Agent Memory papers, but I still confuse context, state, storage, and retrieval. Show me the newest memory architecture.",
+      "expected": {
+        "must": [
+          "Recognize the repeated confusion as evidence of a high-leverage foundational blocker.",
+          "Repair the nearest reusable foundation before adding another frontier architecture.",
+          "Return to the learner's Agent Memory target after the blocker is sufficiently repaired."
+        ],
+        "must_not": [
+          "Treat more frontier exposure as the default fix.",
+          "Expand into every prerequisite beneath the foundation."
+        ]
+      }
+    },
+    {
+      "id": "bounded-prerequisite-expansion",
+      "learner_move": "I want to understand tool calling in agents. Do I need to study calculus, linear algebra, neural networks, Transformers, and LLM pretraining first?",
+      "expected": {
+        "must": [
+          "Identify only the nearest prerequisites that materially block tool-calling understanding.",
+          "Use minimum sufficient reusable foundation and stay anchored to the chosen target."
+        ],
+        "must_not": [
+          "Recursively walk backward through prerequisites simply because deeper foundations exist."
+        ]
+      }
+    },
+    {
+      "id": "reuse-demonstrated-foundation",
+      "initial_state": {
+        "evidence": "Learner has demonstrated an accurate model of ordinary LLM inference and context construction."
+      },
+      "learner_move": "How is RAG different from ordinary LLM inference?",
+      "expected": {
+        "must": [
+          "Reuse the demonstrated inference model rather than reteaching it.",
+          "Focus teaching on the retrieval-related delta and its consequences."
+        ],
+        "must_not": [
+          "Restart from basic LLM definitions without evidence that the foundation is unstable."
+        ]
+      }
+    },
+    {
+      "id": "valid-invariant-plus-delta",
+      "initial_state": {
+        "known_model": "Learner can explain a basic LLM request-response loop."
+      },
+      "learner_move": "What makes an agent different from a plain LLM call?",
+      "expected": {
+        "must": [
+          "Use the existing LLM loop as a valid base model when useful.",
+          "Separate invariant model behavior from added state, tools, environment interaction, or iteration.",
+          "Explain why the added mechanisms change capability and control flow."
+        ]
+      }
+    },
+    {
+      "id": "reject-forced-delta",
+      "initial_state": {
+        "known_model": "Learner understands Git branches."
+      },
+      "learner_move": "Can I think of a database transaction as basically a Git branch plus a delta?",
+      "expected": {
+        "must": [
+          "Check whether the proposed base preserves the governing mechanism.",
+          "Reject the analogy if it would create false transfer and establish the transaction model directly."
+        ],
+        "must_not": [
+          "Force every new concept into the form existing-model-plus-delta."
+        ]
+      }
+    },
+    {
+      "id": "concrete-before-compression",
+      "learner_move": "I can repeat that a runtime is an orchestration layer, but I still do not understand what it actually does during a tool call.",
+      "expected": {
+        "must": [
+          "Use a concrete execution trace, state transition, or worked example before adding more abstraction.",
+          "Compress to a reusable model only after the mechanism is concrete enough to reason about."
+        ],
+        "must_not": [
+          "Respond only with a more elegant abstract definition."
+        ]
+      }
+    },
+    {
+      "id": "low-reuse-foundation-does-not-detour",
+      "learner_move": "I need to understand one narrow CLI flag to finish today's task. There is a deeper historical implementation detail behind it, but it is not used elsewhere in my roadmap.",
+      "expected": {
+        "must": [
+          "Keep the learner on the current target when the deeper detail has low expected reuse and is not blocking understanding."
+        ],
+        "must_not": [
+          "Turn foundation study into an end in itself."
+        ]
+      }
+    },
+    {
+      "id": "delta-explanation-is-not-mastery",
+      "coach_move": "Coach gives a clear invariant-plus-delta explanation.",
+      "learner_move": "That makes sense.",
+      "expected": {
+        "must": [
+          "Treat the explanation as exposure unless the learner independently demonstrates understanding.",
+          "Keep the normal evidence ladder unchanged."
+        ],
+        "must_not": [
+          "Award mastery because the explanation was compact or persuasive."
+        ]
+      }
+    },
+    {
+      "id": "abstraction-does-not-bypass-note-gate",
+      "learner_move": "The session produced a neat invariant-plus-delta summary, but it is generic and easy to reconstruct from documentation.",
+      "expected": {
+        "must": [
+          "Run the ordinary note-candidate and worthiness policy.",
+          "Decline note creation when durable retrieval value or learner-specific value is insufficient."
+        ],
+        "must_not": [
+          "Persist every compact abstraction as a learning note."
+        ]
+      }
+    },
+    {
+      "id": "material-foundation-detour-keeps-focus-fresh",
+      "initial_state": {
+        "currentFocus": "Agent memory retrieval policies",
+        "nextStep": "Compare retrieval strategies."
+      },
+      "observation": "A missing mental model of retrieval versus storage is now the material blocking target and will require sustained teaching across turns.",
+      "expected": {
+        "must": [
+          "Use the normal Topic lifecycle and Focus Freshness rules so persisted continuation state reflects the material detour.",
+          "Preserve the original Topic target and return path rather than creating an unrelated new Topic by default."
+        ]
+      }
+    }
+  ]
+}
