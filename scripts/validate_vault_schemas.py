@@ -55,7 +55,7 @@ def main() -> None:
             "topics": {"agent-memory": {"statePath": "topics/agent-memory/state.json"}},
             "learningStrategy": {"statePath": ".learning-vault/learning-strategy.json"},
             "coachState": {"statePath": ".learning-vault/coach-state.json"},
-            "knowledgeInbox": {"statePath": ".learning-vault/inbox.json"},
+            "knowledgeInbox": {"statePath": "inbox/state.json"},
             "appliedUpdates": {},
             "publicExports": {},
         },
@@ -104,6 +104,10 @@ def main() -> None:
             **valid_documents["manifest"],
             "migrationHistory": [],
         },
+        "legacy Knowledge Inbox binding": {
+            **valid_documents["manifest"],
+            "knowledgeInbox": {"statePath": ".learning-vault/inbox.json"},
+        },
         "invalid Coach State candidate status": {
             "schemaVersion": 2, "documentType": "coach-state",
             "vaultId": "github:example/learning-vault",
@@ -123,11 +127,31 @@ def main() -> None:
             "items": {
                 "bad-item": {
                     "id": "bad-item",
-                    "path": ".learning-vault/inbox/bad-item.md",
+                    "path": "inbox/items/bad-item.md",
                     "title": "Bad item",
                     "capturedAt": timestamp,
                     "updatedAt": timestamp,
                     "status": "maybe",
+                    "kind": "fact",
+                    "claimStatus": "confirmed",
+                    "tags": [],
+                    "topicHints": [],
+                    "sources": ["chat:example"],
+                }
+            },
+            "appliedUpdates": {},
+        },
+        "legacy Knowledge Inbox item path": {
+            "schemaVersion": 2, "documentType": "knowledge-inbox",
+            "vaultId": "github:example/learning-vault", "updatedAt": timestamp,
+            "items": {
+                "legacy-item": {
+                    "id": "legacy-item",
+                    "path": ".learning-vault/inbox/legacy-item.md",
+                    "title": "Legacy item path",
+                    "capturedAt": timestamp,
+                    "updatedAt": timestamp,
+                    "status": "inbox",
                     "kind": "fact",
                     "claimStatus": "confirmed",
                     "tags": [],

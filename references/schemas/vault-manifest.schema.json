@@ -25,7 +25,7 @@
     "topicBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "type": "string", "pattern": "^topics/[a-z0-9]+(?:-[a-z0-9]+)*/state\\.json$" } }, "additionalProperties": false },
     "strategyBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": ".learning-vault/learning-strategy.json" } }, "additionalProperties": false },
     "coachBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": ".learning-vault/coach-state.json" } }, "additionalProperties": false },
-    "inboxBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": ".learning-vault/inbox.json" } }, "additionalProperties": false },
+    "inboxBinding": { "type": "object", "required": ["statePath"], "properties": { "statePath": { "const": "inbox/state.json" } }, "additionalProperties": false },
     "appliedUpdate": { "type": "object", "required": ["updateId", "baseRevision", "appliedAt"], "properties": { "updateId": { "type": "string", "minLength": 1 }, "baseRevision": { "type": "string", "minLength": 1 }, "appliedAt": { "$ref": "#/$defs/timestamp" } }, "additionalProperties": true }
   }
 }

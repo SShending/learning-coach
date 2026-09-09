@@ -10,9 +10,11 @@ Learning Coach supports one active schema. Read `.learning-vault/vault.json` fir
 .learning-vault/
 ├── vault.json                         authoritative manifest
 ├── learning-strategy.json             authoritative cross-Topic strategy
-├── coach-state.json                   optional authoritative advisory memory
-├── inbox.json                         optional authoritative knowledge-fragment index
-└── inbox/                             immutable/copy-on-write Inbox item bodies
+└── coach-state.json                   optional authoritative advisory memory
+
+inbox/
+├── state.json                         optional authoritative knowledge-fragment index
+└── items/                             immutable/copy-on-write Inbox item bodies
 
 topics/<topic-id>/
 ├── state.json                         authoritative Topic learner state
@@ -25,14 +27,22 @@ public-exports/
 
 Validate authoritative documents with the schemas under `references/schemas/`.
 
+The root layout intentionally separates user-owned learning content from hidden control state:
+
+- `.learning-vault/` contains Vault control-plane and cross-Topic system state;
+- `inbox/` contains visible low-commitment reusable knowledge;
+- `topics/` contains visible committed learning domains.
+
+`inbox/` and `topics/` are filesystem peers but not semantic peers: an Inbox item remains retrieval material, not Topic learner state.
+
 ## Authority Ownership
 
-- `.learning-vault/vault.json` owns Vault membership, Topic bindings, Learning Strategy binding, optional Coach State binding, lifecycle/topology metadata, and manifest-local idempotency.
+- `.learning-vault/vault.json` owns Vault membership, Topic bindings, Learning Strategy binding, optional Coach State binding, optional Knowledge Inbox binding, lifecycle/topology metadata, and manifest-local idempotency.
 - `topics/<topic-id>/state.json` owns one Topic's learner state and Topic-local `appliedUpdates`.
 - `.learning-vault/learning-strategy.json` owns cross-Topic Learning Strategy and strategy-local `appliedUpdates`.
 - bound `.learning-vault/coach-state.json` owns durable portfolio advisory memory and Coach-State-local `appliedUpdates`.
-- bound `.learning-vault/inbox.json` owns knowledge-fragment metadata, lifecycle status, and Inbox-local `appliedUpdates`.
-- `.learning-vault/inbox/*.md` contains compact reusable fragments selected by Inbox metadata.
+- bound `inbox/state.json` owns knowledge-fragment metadata, lifecycle status, and Inbox-local `appliedUpdates`.
+- `inbox/items/*.md` contains compact reusable fragments selected by Inbox metadata.
 - note/session Markdown bodies contain durable content selected by Topic state.
 - Topic README is derived and non-authoritative.
 
@@ -96,6 +106,12 @@ Within one Topic:
 - `levelBasis` refers only to evidence on the same Concept;
 - note/session IDs and registered paths agree;
 - roadmap milestone IDs are unique.
+
+Within Knowledge Inbox:
+
+- every item `path` resolves under `inbox/items/`;
+- the manifest binding resolves exactly to `inbox/state.json`;
+- legacy `.learning-vault/inbox.json` and `.learning-vault/inbox/*.md` paths are not current authority paths.
 
 ## Notes, Sessions, And Projections
 
