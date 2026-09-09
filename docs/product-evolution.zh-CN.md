@@ -4,6 +4,29 @@
 
 从 2026-09-08 开始持续维护。下方较早条目是依据仓库提交与版本文件整理的精选历史，不是从首版开始的完整发布日志。产品版本表示源码包版本，不代表已在所有宿主或公开 marketplace 发布。
 
+## 2026-09-09 · 3.0.0-alpha.23 · Knowledge Inbox（工作区草案）
+
+状态：已在当前工作区实现，尚未提交或发布。
+
+### 为什么改
+
+聊天中会出现一些值得以后找回的知识，但它们既不值得立即开始系统学习，也不应被误记成 Topic 进度或 mastery 证据。把它们塞进 Topic notes 会让 Topic 变成杂物桶；把每次聊天写成 session 又会留下过多历史噪声。
+
+### 功能变化
+
+- 增加轻量 `Knowledge Inbox` Skill，负责明确捕获、查看、去重和整理知识碎片。
+- 在同一个私有 Learning Vault 中增加可选的 `.learning-vault/inbox/` 条目目录及其索引；不新增第二个仓库或本地数据库。
+- Inbox 条目只表示“以后可能值得检索”，不创建 Topic、不记录 mastery/evidence，也不保存原始聊天记录。
+- 条目可以链接到已有 Topic；正式提升为 Topic note 时交给 Topic Coach，验证目标笔记后再更新 Inbox 状态。
+- README 示例要求首次使用时明确 `<owner>/<repository>`，之后由宿主或 Project 复用已选仓库，避免把用户地址硬编码在插件中。
+
+### 验证与限制
+
+- 已更新 schema、authority routing、Skill 架构检查、Plugin release 检查和 Knowledge Inbox 的触发/行为回归夹具。
+- `check_skill_architecture.py` 与 `check_plugin_release.py` 已通过。
+- `validate_vault_schemas.py` 在当前环境因缺少 Python `jsonschema` 依赖未能执行；这不是 schema 失败结论，需在带依赖的环境补跑。
+- 当前仍需真实宿主验证 GitHub 连接、首次 Inbox 初始化和 Topic-note promotion 的跨 Skill 交接。
+
 ## 如何维护
 
 每次改变用户行为时，在同一个改动中补充条目，并更新手册对应章节：
@@ -22,7 +45,7 @@
 - 手册使用虚构学习者“小岚”，贯穿历史、Agent、摄影三条学习线，展示证据、连续性、跨主题安排与时间视图。
 - 写清当前时间视图由 LLM 执行规则，专用聚合脚本仍未实现；日常流程不将 Work 或本地 Vault clone 设为前提。
 - 修正 Project 配置文档中已经过时的迁移目录与 Curator 升级职责描述。
-- 不改变 Vault schema、权限或四个 Skill 的运行职责。文档相对链接、历史提交引用与仓库 preflight 已检查；这不是新的运行时版本。
+- 当时不改变 Vault schema、权限或四个 Skill 的运行职责。文档相对链接、历史提交引用与仓库 preflight 已检查；这不是新的运行时版本。
 
 ## 2026-09-08 · 3.0.0-alpha.22 · 学习捕获与时间视图
 
@@ -104,7 +127,7 @@ Learning Capture 是 Topic Coach 内部协议，不需要新增命令。Learning
 
 依据：[架构整理 1ad5e51](https://github.com/SShending/learning-coach/commit/1ad5e51)。
 
-围绕当前 manifest-based Vault 格式整理四个 Skill 与共享协议，按操作加载需要的引用文件。当前运行不猜测旧格式，也不把升级逻辑塞进普通学习流程。
+围绕当时的 manifest-based Vault 格式整理四个 Skill 与共享协议，按操作加载需要的引用文件。当前运行不猜测旧格式，也不把升级逻辑塞进普通学习流程。
 
 用户影响：学习、组合规划、只读展示和结构维护具有明确边界；遇到不支持的格式应单独升级。更早的架构决策保留在 [ADR 目录](adr/)，不作为当前安装手册。
 

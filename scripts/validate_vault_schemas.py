@@ -17,6 +17,7 @@ SCHEMA_PATHS = [
     REFS / "schemas" / "topic-state.schema.json",
     REFS / "schemas" / "learning-strategy.schema.json",
     REFS / "schemas" / "coach-state.schema.json",
+    REFS / "schemas" / "knowledge-inbox.schema.json",
 ]
 
 
@@ -54,6 +55,7 @@ def main() -> None:
             "topics": {"agent-memory": {"statePath": "topics/agent-memory/state.json"}},
             "learningStrategy": {"statePath": ".learning-vault/learning-strategy.json"},
             "coachState": {"statePath": ".learning-vault/coach-state.json"},
+            "knowledgeInbox": {"statePath": ".learning-vault/inbox.json"},
             "appliedUpdates": {},
             "publicExports": {},
         },
@@ -109,6 +111,11 @@ def main() -> None:
                 }
             },
             "crossTopicConnections": {}, "advisoryHypotheses": {}, "appliedUpdates": {},
+        },
+        "Knowledge Inbox": {
+            "schemaVersion": 2, "documentType": "knowledge-inbox",
+            "vaultId": "github:example/learning-vault", "updatedAt": timestamp,
+            "items": {}, "appliedUpdates": {},
         },
     }
 

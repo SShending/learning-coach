@@ -14,6 +14,7 @@ Files:
 - `trigger/topic-coach.json`
 - `trigger/learning-view.json`
 - `trigger/vault-curator.json`
+- `trigger/knowledge-inbox.json`
 
 When descriptions change, rerun the same evals against the old and new descriptions. Keep a held-out subset when optimizing descriptions repeatedly so routing rules do not overfit the examples.
 
@@ -24,6 +25,7 @@ Behavior fixtures capture real failure modes after a Skill has already triggered
 Files:
 
 - `behavior/topic-coach-persistence.json` — verifies Topic Coach persistence checkpoints, focus freshness, interruption safety, evidence boundaries, and the counter-case where exposure alone must not cause a write.
+- `behavior/knowledge-inbox.json` — verifies explicit low-commitment capture, no passive logging, triage without Topic creation, and promotion handoff boundaries.
 
 - `behavior/learning-view-temporal.json` — covers calendar windows, timezone/DST boundaries, late capture, deduplication, historical limits, partial reads, and zero-write inspection.
 

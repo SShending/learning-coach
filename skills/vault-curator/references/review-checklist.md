@@ -95,13 +95,24 @@ Recommend the smallest structural change that improves future diagnosis.
 
 Ensure candidate Topic IDs and referenced Topic IDs remain coherent with the manifest, advisory hypotheses remain hypotheses, inferred connections are not presented as learner-state facts, and transient daily priorities/review urgency have not leaked into durable Coach State.
 
-## 9. Refactor readiness
+## 9. Knowledge Inbox integrity
+
+When the optional Inbox is bound, check that item IDs and paths agree, selected
+bodies exist, linked Topic IDs resolve, promoted targets are recorded only after
+verification, duplicate central ideas are not accumulating, and Inbox content
+has not been treated as mastery evidence, Topic state, or raw transcript storage.
+
+Missing Inbox authority is not a defect unless the learner has chosen to enable
+the feature. Dismissed items and superseded copy-on-write bodies may remain in
+history; cleanup is explicit.
+
+## 10. Refactor readiness
 
 Before merge/split/consolidation, account for every affected roadmap milestone, Concept, evidence record/session provenance, prerequisite, `levelBasis`, `nextStepTargets`, note/session body and metadata reference, Topic README projection, focus/gaps/unassessed/next-step semantics, manifest binding, and Coach State reference.
 
 If these cannot be mapped safely, mark the refactor not ready.
 
-## 10. Healthy result
+## 11. Healthy result
 
 A valid result may be:
 

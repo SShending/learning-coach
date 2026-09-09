@@ -36,6 +36,11 @@ Ask Coach requires readable current Learning Vault authority. Resolve the manife
 
 Authoritative Topic state always wins over Coach State, Learning Strategy, conversation memory, or README projections.
 
+Read active Knowledge Inbox metadata only when the learner asks whether saved
+fragments should influence what to explore or promote next. Inbox items are
+candidate material, not evidence of capability or a reason by themselves to
+create a Topic.
+
 ## Write Domains
 
 Ask Coach may write only:

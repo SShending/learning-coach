@@ -1,6 +1,6 @@
 # Companion Skills
 
-Learning Coach is the product. Four Skills separate portfolio planning, Topic learning, presentation, and Vault maintenance.
+Learning Coach is the product. Five Skills separate portfolio planning, low-commitment fragment capture, Topic learning, presentation, and Vault maintenance.
 
 ```text
                          Learning Portfolio
@@ -11,16 +11,20 @@ Learning Coach is the product. Four Skills separate portfolio planning, Topic le
                  Coach State + Learning Strategy
                                 |
                                 v
+                       Knowledge Inbox
+                     capture / triage fragments
+                                |
+                                v
                            Topic Coach
                        Topic-local learning
                       Topic-state persistence
                                 |
                                 v
                          Learning Vault
-                        /             \
-                       v               v
-                Learning View     Vault Curator
-                read-only         maintain / repair
+                        /       |       \
+                       v        v        v
+                Learning View  Inbox    Vault Curator
+                read-only     read-only  maintain / repair
 ```
 
 ## Topic Coach
@@ -50,7 +54,14 @@ It must never create Topic evidence, change mastery, update Topic roadmap/curren
 
 ## Learning View
 
-Learning View presents authoritative Topic, Learning Strategy, and Coach State read-only. It does not advise, teach, assess, or mutate.
+Learning View presents authoritative Topic, Knowledge Inbox, Learning Strategy, and Coach State read-only. It does not advise, teach, assess, or mutate.
+
+## Knowledge Inbox
+
+Knowledge Inbox captures useful chat fragments that the learner explicitly wants
+to keep without starting systematic learning. It owns Inbox metadata and item
+bodies, but never creates Topics or mastery evidence. Promotion into a Topic
+note is handed to Topic Coach.
 
 ## Vault Curator
 

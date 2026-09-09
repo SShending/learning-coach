@@ -10,13 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_PATH = ROOT / ".codex-plugin" / "plugin.json"
 APP_PATH = ROOT / ".app.json"
 
-SKILLS = ["topic-coach", "ask-coach", "learning-view", "vault-curator"]
+SKILLS = ["topic-coach", "ask-coach", "learning-view", "vault-curator", "knowledge-inbox"]
 SHARED_CONTRACTS = [
     "references/vault-format.md",
     "references/github-operations.md",
     "references/knowledge-grounding.md",
     "references/coach-state.md",
     "references/vault.schema.json",
+    "references/schemas/knowledge-inbox.schema.json",
+    "references/github/inbox-write.md",
 ]
 GITHUB_CONNECTOR_ID = "connector_76869538009648d5b282a4bb21c3d157"
 

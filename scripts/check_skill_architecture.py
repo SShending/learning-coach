@@ -14,6 +14,10 @@ REQUIRED = [
     "skills/topic-coach/references/assumption-aware-diagnosis.md",
     "skills/topic-coach/references/learning-notes.md",
     "skills/ask-coach/SKILL.md",
+    "skills/knowledge-inbox/SKILL.md",
+    "skills/knowledge-inbox/references/inbox-policy.md",
+    "evals/trigger/knowledge-inbox.json",
+    "evals/behavior/knowledge-inbox.json",
     "skills/learning-view/SKILL.md",
     "skills/learning-view/references/temporal-views.md",
     "evals/behavior/learning-view-temporal.json",
@@ -40,6 +44,8 @@ REQUIRED = [
     "references/schemas/topic-state.schema.json",
     "references/schemas/learning-strategy.schema.json",
     "references/schemas/coach-state.schema.json",
+    "references/schemas/knowledge-inbox.schema.json",
+    "references/github/inbox-write.md",
 ]
 
 ACTIVE_TEXT_ROOTS = [
@@ -144,11 +150,14 @@ def main() -> None:
     ask = read_text("skills/ask-coach/SKILL.md")
     curator = read_text("skills/vault-curator/SKILL.md")
     behavior_eval = read_text("evals/behavior/topic-coach-persistence.json")
+    inbox_behavior_eval = read_text("evals/behavior/knowledge-inbox.json")
     github_router = read_text("references/github-operations.md")
     topic_write = read_text("references/github/topic-write.md")
     grounding = read_text("references/knowledge-grounding.md")
     coach_state = read_text("references/coach-state.md")
     vault_format = read_text("references/vault-format.md")
+    inbox = read_text("skills/knowledge-inbox/SKILL.md")
+    inbox_policy = read_text("skills/knowledge-inbox/references/inbox-policy.md")
 
     require_phrases(errors, "Topic Coach core", topic, [
         "name: topic-coach",
@@ -216,6 +225,27 @@ def main() -> None:
         "../../references/github/advisory-write.md",
         "concrete handoff to Topic Coach",
     ])
+    require_phrases(errors, "Knowledge Inbox", inbox, [
+        "name: knowledge-inbox",
+        "The Inbox preserves retrieval value, not learner capability.",
+        "Capture only when the learner explicitly asks to review or save session notes",
+        "Do not award mastery, create evidence",
+        "Promotion is a handoff, not an automatic Topic mutation.",
+        "../../references/github/inbox-write.md",
+    ])
+    require_phrases(errors, "Knowledge Inbox policy", inbox_policy, [
+        "# Knowledge Inbox Policy",
+        "## Worth Capturing",
+        "## Triage States",
+        "## Duplicate And Promotion Test",
+    ])
+    require_phrases(errors, "Knowledge Inbox behavior eval", inbox_behavior_eval, [
+        '"suite": "knowledge-inbox"',
+        '"session-review-proposes-notes"',
+        '"ordinary-chat-does-not-capture"',
+        '"triage-does-not-create-topic"',
+        '"promotion-is-a-handoff"',
+    ])
     require_phrases(errors, "Vault Curator", curator, [
         "references/review-checklist.md",
         "references/structural-refactor.md",
@@ -239,13 +269,13 @@ def main() -> None:
     require_phrases(errors, "Topic write", topic_write, ["A normal Topic Coach update touches one Topic"])
     require_phrases(errors, "Coach State", coach_state, ["Topic Coach must not treat Coach State"])
     require_phrases(errors, "Vault format", vault_format, [
-        "shared by Topic Coach, Ask Coach, Learning View, and Vault Curator",
+        "shared by Topic Coach, Ask Coach, Knowledge Inbox, Learning View, and Vault Curator",
         "coach-state.json",
         "supports one active schema",
     ])
 
     # Validate regression assets structurally as well as retaining contract anchors.
-    for suite in ("topic-coach-persistence", "learning-view-temporal"):
+    for suite in ("topic-coach-persistence", "learning-view-temporal", "knowledge-inbox"):
         try:
             fixture = json.loads(read_text(f"evals/behavior/{suite}.json"))
             cases = fixture["cases"]
@@ -276,7 +306,7 @@ def main() -> None:
     ])
     # Temporal inspection adds no authority document or Skill.
     actual_skills = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
-    if actual_skills != {"topic-coach", "ask-coach", "learning-view", "vault-curator"}:
+    if actual_skills != {"topic-coach", "ask-coach", "learning-view", "vault-curator", "knowledge-inbox"}:
         errors.append("unexpected Skill boundary change")
     schema = json.loads(read_text("references/schemas/topic-state.schema.json"))
     if set(schema["properties"]) != {

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SShending/learning-coach/blob/main/references/schemas/knowledge-inbox.schema.json",
+  "title": "Learning Vault Knowledge Inbox",
+  "description": "Authoritative index for reusable knowledge fragments that are not learner-state evidence.",
+  "type": "object",
+  "required": ["schemaVersion", "documentType", "vaultId", "updatedAt", "items", "appliedUpdates"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "documentType": { "const": "knowledge-inbox" },
+    "vaultId": { "type": "string", "minLength": 1 },
+    "updatedAt": { "$ref": "#/$defs/timestamp" },
+    "items": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/item" }
+    },
+    "appliedUpdates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/appliedUpdate" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "item": {
+      "type": "object",
+      "required": ["id", "path", "title", "capturedAt", "updatedAt", "status", "kind", "claimStatus", "tags", "topicHints", "sources"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "type": "string", "pattern": "^\\.learning-vault/inbox/[a-z0-9]+(?:-[a-z0-9]+)*\\.md$" },
+        "title": { "type": "string", "minLength": 1 },
+        "capturedAt": { "$ref": "#/$defs/timestamp" },
+        "updatedAt": { "$ref": "#/$defs/timestamp" },
+        "status": { "enum": ["inbox", "snoozed", "linked", "promoted", "dismissed"] },
+        "kind": { "enum": ["fact", "distinction", "rule", "how_to", "reference", "question", "idea"] },
+        "claimStatus": { "enum": ["confirmed", "working_model", "open_question", "unsupported"] },
+        "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "topicHints": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "linkedTopicIds": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "promotedTo": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "sources": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "lastTriagedAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "additionalProperties": true
+    },
+    "appliedUpdate": {
+      "type": "object",
+      "required": ["updateId", "baseRevision", "appliedAt"],
+      "properties": {
+        "updateId": { "type": "string", "minLength": 1 },
+        "baseRevision": { "type": "string", "minLength": 1 },
+        "appliedAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

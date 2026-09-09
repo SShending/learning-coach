@@ -6,11 +6,12 @@ server, PAT flow, tunnel, runtime API key, and always-on deployment.
 
 ## 1. Install Learning Coach And Connect GitHub
 
-Learning Coach is one Plugin containing four Skills:
+Learning Coach is one Plugin containing five Skills:
 
 ```text
 Learning Coach
 ├── Topic Coach
+├── Knowledge Inbox
 ├── Ask Coach
 ├── Learning View
 └── Vault Curator
@@ -58,6 +59,11 @@ state. If the current host is read-only, Topic Coach may inspect state but shoul
 not begin or advance a learning cycle that would create unsavable learner state.
 An explicitly learner-chosen non-persisted interaction (for example, "teach me
 this but do not save it") is a separate supported case.
+
+Knowledge Inbox capture likewise requires a readable and writable Inbox authority.
+If `knowledgeInbox` is not bound in the manifest, offer the learner a one-time
+explicit Vault Curator initialization rather than creating an unbound folder or
+local fallback.
 
 If the private Vault is genuinely empty and initialization is needed, follow the
 current schema contract, preview the files/content scope when required by the

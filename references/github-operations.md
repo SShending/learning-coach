@@ -15,6 +15,7 @@ Always resolve `.learning-vault/vault.json` before following bindings. The curre
 - **Any authoritative read** -> `github/read-authority.md`
 - **Topic Coach learner-state write** -> `github/topic-write.md`
 - **Ask Coach Coach State or Learning Strategy write** -> `github/advisory-write.md`
+- **Knowledge Inbox capture or triage write** -> `github/inbox-write.md`
 - **Vault Curator topology/lifecycle/repair write** -> `github/structural-write.md`
 
 Do not load write protocols for read-only work.
@@ -29,6 +30,9 @@ Ask Coach
   -> Coach State
   -> Learning Strategy (only evidence-backed cross-Topic synthesis)
 
+Knowledge Inbox
+  -> explicit knowledge-fragment capture and triage
+
 Learning View
   -> read-only
 
@@ -37,3 +41,6 @@ Vault Curator
 ```
 
 Topic Coach may read Learning Strategy as lesson context but does not mutate it in an ordinary Topic learning cycle. Ask Coach must not mutate Topic learner state while doing portfolio planning or strategy synthesis.
+
+Knowledge Inbox must not mutate Topic learner state. Promotion is completed by
+Topic Coach first and then reflected in Inbox status after verification.

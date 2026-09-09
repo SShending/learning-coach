@@ -9,6 +9,7 @@ It is a multi-Skill system. **Learning Coach is no longer the name of an individ
 ```text
 Learning Coach product
 ├── Ask Coach      portfolio-level planning
+├── Knowledge Inbox low-commitment chat-fragment capture and triage
 ├── Topic Coach    one-Topic teaching, practice, assessment, and learner-state updates
 ├── Learning View  read-only presentation
 └── Vault Curator  maintenance, lifecycle, repair, and export
@@ -17,6 +18,8 @@ Learning Coach product
 Canonical distinction:
 
 > Ask Coach decides **where learning attention should go**.
+>
+> Knowledge Inbox preserves useful fragments without claiming they are learned.
 >
 > Topic Coach decides **what to do next inside the chosen Topic**.
 >
@@ -55,9 +58,17 @@ The Learning Vault is authoritative as a set of mutation-domain-owned documents:
 - Topic state -> Topic-local learner state;
 - Learning Strategy -> cross-Topic meta-learning observations;
 - Coach State -> durable portfolio advisory memory;
+- Knowledge Inbox -> explicit, low-commitment reusable-fragment capture;
 - Topic README -> derived projection only.
 
 An unsupported older Vault is not interpreted heuristically during learning. It must be upgraded separately before normal operation.
+
+## Knowledge Inbox
+
+Knowledge Inbox is a retrieval layer for useful chat fragments that are not yet
+worth a Topic, learning cycle, or mastery judgment. An Inbox item may later be
+linked to an existing Topic or promoted into a Topic note after an explicit
+handoff, but it never creates a Topic or evidence automatically.
 
 ## Topic
 

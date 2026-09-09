@@ -1,6 +1,6 @@
 ---
 name: learning-view
-description: Show and explain the learner's existing Learning Vault state without changing it. Use whenever the learner asks to see, summarize, inspect, compare, list, or visualize current progress, learning activity today/yesterday/this week/last 7 days or a date range, a Topic, roadmap, gaps, unassessed areas, notes, reviews, evidence, mastery basis, Learning Strategy, or stored Ask Coach advisory context—even if they only ask "where am I?" or "show my progress." Never teach/assess new mastery, reprioritize what to learn next, or mutate any Vault authority domain; hand those to Topic Coach, Ask Coach, or Vault Curator.
+description: Show and explain the learner's existing Learning Vault state without changing it. Use whenever the learner asks to see, summarize, inspect, compare, list, or visualize current progress, learning activity today/yesterday/this week/last 7 days or a date range, a Topic, roadmap, gaps, unassessed areas, notes, reviews, evidence, mastery basis, Knowledge Inbox, Learning Strategy, or stored Ask Coach advisory context—even if they only ask "where am I?" or "show my progress." Never teach/assess new mastery, reprioritize what to learn next, capture new fragments, or mutate any Vault authority domain; hand those to Topic Coach, Ask Coach, Knowledge Inbox, or Vault Curator.
 ---
 
 # Learning View
@@ -20,12 +20,13 @@ Read `../../references/vault-format.md` for the current data model and `../../re
 3. Topic request -> follow `topics[topicId].statePath`.
 4. Learning Strategy -> follow `learningStrategy.statePath`.
 5. Stored advisory context -> follow `coachState.statePath` when bound.
+6. Knowledge Inbox -> follow `knowledgeInbox.statePath` when bound.
 
 If the Vault does not match the current schema, report that it needs upgrading rather than inferring an older layout. If Coach State is absent, say there is no durable advisory-memory domain rather than reconstructing one from conversation history.
 
 ## Read-Only Invariant
 
-Never append evidence, change mastery, create gaps/unassessed entries, alter roadmap/currentFocus/nextStep, create/update notes or sessions, mutate Coach State/Learning Strategy, add `appliedUpdates`, regenerate projections, repair references, or change schema.
+Never append evidence, change mastery, create gaps/unassessed entries, alter roadmap/currentFocus/nextStep, create/update notes or sessions, capture/triage Inbox items, mutate Coach State/Learning Strategy, add `appliedUpdates`, regenerate projections, repair references, or change schema.
 
 Current-conversation demonstrations do not become evidence in Learning View. If the learner asks to turn inspection into teaching/assessment, portfolio advice, or maintenance, hand off to the corresponding Skill.
 
@@ -54,6 +55,13 @@ For notes, gaps, reviews, or evidence, show only the requested slice plus minimu
 ### Coach State View
 
 Present durable advisory memory separately from learner state: candidate Topics/statuses, rationale and `revisitWhen`, durable cross-Topic connections, and advisory hypotheses. Label Coach State as advisory memory, not mastery evidence, roadmap, or learner truth. Do not reinterpret `deferred` as a current recommendation; a fresh Ask Coach run owns that decision.
+
+### Knowledge Inbox View
+
+Show active Inbox items by title, kind, status, capture/update time, tags, and
+verified Topic links. Label them as saved retrieval material, not learning
+activity or mastery. Reading linked bodies is optional and should follow the
+requested slice. Hand capture or triage changes to Knowledge Inbox.
 
 ## Mastery Explanation
 

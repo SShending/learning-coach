@@ -23,11 +23,17 @@ Resolve Topic bindings through the manifest; narrow to requested Topics, otherwi
 | `concepts[*].evidence[*]` | `observedAt`: when demonstrated/contradicted. Preserve result, assistance, and current stale status; stale evidence remains historical activity. |
 | `sessions` | `createdAt`: when the session record was created, not necessarily when learning occurred. A linked body may explicitly identify an earlier learning date; label that date and the capture date separately. |
 | `notes` | `updatedAt`: latest recorded note revision. Say “note updated”; it does not prove creation on that date or mastery. |
+| Knowledge Inbox items | `capturedAt` / `updatedAt`: when a reusable fragment was captured or revised. Label this as saved retrieval material, not learning activity or mastery. |
 | `appliedUpdates` | `appliedAt`: when a domain write was applied. This is an idempotency record, not automatically a learning event or a mastery change. |
 
 Use source-qualified identities (Topic + Concept + evidence ID; Topic + session/note ID; authority domain + update ID). Group evidence with its referenced session and linked notes only when references support that connection. Count each source record once; never sum sessions + evidence + notes + updates into a count of lessons. Do not merge unrelated writes merely because timestamps are close.
 
 Inspect non-Topic authority updates only when the requested view includes structure/advisory/strategy activity. Label those separately from Topic learning. A write without semantic detail is “record updated; details unavailable”, not inferred progress. Session exploration/review without assessment is valid recorded activity with no new mastery evidence.
+
+Include Inbox captures in a temporal view only when the learner asks for saved
+material or Vault activity, or when showing the complete recorded surface. Keep
+them in a separate category from evidence, notes, sessions, and learning
+progress.
 
 ## Historical Limits
 

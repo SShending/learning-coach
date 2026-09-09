@@ -9,6 +9,7 @@ Use an explicit whitelist of selected Topics/notes/fields. Exclude by default:
 - credentials or unnecessary identifiers;
 - unsupported or unresolved claims presented as facts;
 - Coach State and portfolio advisory hypotheses unless explicitly selected;
+- Knowledge Inbox items unless explicitly selected;
 - detailed evidence logs that are not necessary for the public artifact.
 
 Derived public material must not become learner-state authority. Never change the private repository's visibility automatically.

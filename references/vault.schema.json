@@ -7,6 +7,7 @@
     { "$ref": "schemas/vault-manifest.schema.json" },
     { "$ref": "schemas/topic-state.schema.json" },
     { "$ref": "schemas/learning-strategy.schema.json" },
-    { "$ref": "schemas/coach-state.schema.json" }
+    { "$ref": "schemas/coach-state.schema.json" },
+    { "$ref": "schemas/knowledge-inbox.schema.json" }
   ]
 }

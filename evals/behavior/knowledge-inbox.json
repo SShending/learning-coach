@@ -1,0 +1,48 @@
+{
+  "suite": "knowledge-inbox",
+  "purpose": "Regression fixtures for explicit low-commitment knowledge capture and triage.",
+  "cases": [
+    {
+      "id": "session-review-proposes-notes",
+      "learner_move": "收集本次 session 中值得留下的 notes。",
+      "expected": {
+        "must": [
+          "Review the session and propose only worthwhile compact retrieval-oriented notes before writing.",
+          "Save the approved notes after the learner accepts the proposal.",
+          "Keep the item outside Topic evidence, mastery, roadmap, and session state.",
+          "Do not save the raw transcript."
+        ]
+      }
+    },
+    {
+      "id": "ordinary-chat-does-not-capture",
+      "learner_move": "解释一下这个概念。",
+      "expected": {
+        "must": [
+          "Answer normally without writing an Inbox item unless the learner explicitly asks for session-note collection or approves capture."
+        ]
+      }
+    },
+    {
+      "id": "triage-does-not-create-topic",
+      "learner_move": "整理 Inbox，找出哪些可能和现有 Topic 有关。",
+      "expected": {
+        "must": [
+          "List proposed keep, snooze, link, promote, or dismiss actions.",
+          "Do not create a new Topic merely because an item has no current match."
+        ]
+      }
+    },
+    {
+      "id": "promotion-is-a-handoff",
+      "learner_move": "把这条 Inbox 知识正式整理进 Git Topic。",
+      "expected": {
+        "must": [
+          "Hand the target-note decision to Topic Coach.",
+          "Mark the Inbox item promoted only after the target note is verified.",
+          "Do not infer mastery from promotion."
+        ]
+      }
+    }
+  ]
+}

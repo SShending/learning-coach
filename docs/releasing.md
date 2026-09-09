@@ -1,6 +1,6 @@
 # Releasing Learning Coach
 
-Learning Coach is published as one multi-Skill Plugin rather than four separately installed Skills.
+Learning Coach is published as one multi-Skill Plugin rather than five separately installed Skills.
 
 ## Package Shape
 
@@ -12,13 +12,14 @@ learning-coach/
 ├── skills/
 │   ├── ask-coach/
 │   ├── topic-coach/
+│   ├── knowledge-inbox/
 │   ├── learning-view/
 │   └── vault-curator/
 ├── references/
 └── LICENSE
 ```
 
-The Plugin is the product/package boundary. The four Skill directories are behavioral capabilities inside that package. `references/` contains shared system contracts used by multiple Skills.
+The Plugin is the product/package boundary. The five Skill directories are behavioral capabilities inside that package. `references/` contains shared system contracts used by multiple Skills.
 
 ## External Dependency
 
@@ -75,9 +76,9 @@ After installation, open a new Codex thread/session so the Plugin Skills are rel
 
 Verify at least these runtime behaviors:
 
-1. Learning Coach appears as one Plugin, not four independently installed products.
-2. Topic Coach, Ask Coach, Learning View, and Vault Curator are all discoverable inside the installed Plugin.
-3. A one-Topic learning request selects Topic Coach; a portfolio-level prioritization request selects Ask Coach.
+1. Learning Coach appears as one Plugin, not five independently installed products.
+2. Topic Coach, Ask Coach, Knowledge Inbox, Learning View, and Vault Curator are all discoverable inside the installed Plugin.
+3. A one-Topic learning request selects Topic Coach; a portfolio-level prioritization request selects Ask Coach; an explicit fragment-capture request selects Knowledge Inbox.
 4. GitHub connection is requested/used according to `.app.json` rather than PAT/manual-secret instructions.
 5. Topic Coach can read shared contracts from repository-root `references/` in the installed Plugin package.
 6. Learning View stays read-only and Vault Curator does not mutate without an explicit maintenance operation.
@@ -90,12 +91,12 @@ Before publishing, verify:
 
 1. `.codex-plugin/plugin.json` is valid JSON and has the intended version.
 2. `.app.json` declares the GitHub connector dependency.
-3. All four Skills exist and each has `SKILL.md` plus `agents/openai.yaml` metadata.
+3. All five Skills exist and each has `SKILL.md` plus `agents/openai.yaml` metadata.
 4. Shared contracts exist under `references/`.
 5. Schema smoke tests pass.
 6. Skill architecture/routing checks pass.
 7. Plugin release checks pass.
-8. README accurately describes the current four-Skill architecture and GitHub dependency. Update [product evolution](product-evolution.zh-CN.md) and the affected [user guide](user-guide.zh-CN.md) sections for user-visible changes; keep proposed features separate from shipped behavior and use fictional examples only.
+8. README accurately describes the current five-Skill architecture, Knowledge Inbox, and GitHub dependency. Update [product evolution](product-evolution.zh-CN.md) and the affected [user guide](user-guide.zh-CN.md) sections for user-visible changes; keep proposed features separate from shipped behavior and use fictional examples only.
 9. No learner-specific Vault data, credentials, or private repository contents are included.
 10. The personal marketplace installation test has exercised real Plugin discovery and runtime behavior.
 

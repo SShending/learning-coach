@@ -1,6 +1,6 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.22",
+  "version": "3.0.0-alpha.23",
   "description": "A multi-Skill learning system with Topic-local coaching, portfolio planning, read-only views, and a private GitHub-backed Learning Vault.",
   "author": {
     "name": "SShending",
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Learning Coach",
     "shortDescription": "Learn inside Topics and plan across your learning portfolio",
-    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach runs Topic-local learning, Ask Coach plans across the portfolio, Learning View presents state read-only, and Vault Curator maintains the Vault. The Plugin requires the canonical GitHub app and never requires PATs or private infrastructure.",
+    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach runs Topic-local learning, Ask Coach plans across the portfolio, Knowledge Inbox captures reusable chat fragments without creating Topics, Learning View presents state read-only, and Vault Curator maintains the Vault. The Plugin requires the canonical GitHub app and never requires PATs or private infrastructure.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Interactive", "Write"],

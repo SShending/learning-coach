@@ -1,6 +1,6 @@
 # Learning Vault Format
 
-This reference defines the **current** durable Learning Vault model shared by Topic Coach, Ask Coach, Learning View, and Vault Curator.
+This reference defines the **current** durable Learning Vault model shared by Topic Coach, Ask Coach, Knowledge Inbox, Learning View, and Vault Curator.
 
 Learning Coach supports one active schema. Read `.learning-vault/vault.json` first and validate it against `schemas/vault-manifest.schema.json`. If it does not match the current schema, stop normal operation and report that the Vault must be upgraded outside the learning flow. Do not guess a legacy layout.
 
@@ -10,7 +10,9 @@ Learning Coach supports one active schema. Read `.learning-vault/vault.json` fir
 .learning-vault/
 ├── vault.json                         authoritative manifest
 ├── learning-strategy.json             authoritative cross-Topic strategy
-└── coach-state.json                   optional authoritative advisory memory
+├── coach-state.json                   optional authoritative advisory memory
+├── inbox.json                         optional authoritative knowledge-fragment index
+└── inbox/                             immutable/copy-on-write Inbox item bodies
 
 topics/<topic-id>/
 ├── state.json                         authoritative Topic learner state
@@ -29,10 +31,29 @@ Validate authoritative documents with the schemas under `references/schemas/`.
 - `topics/<topic-id>/state.json` owns one Topic's learner state and Topic-local `appliedUpdates`.
 - `.learning-vault/learning-strategy.json` owns cross-Topic Learning Strategy and strategy-local `appliedUpdates`.
 - bound `.learning-vault/coach-state.json` owns durable portfolio advisory memory and Coach-State-local `appliedUpdates`.
+- bound `.learning-vault/inbox.json` owns knowledge-fragment metadata, lifecycle status, and Inbox-local `appliedUpdates`.
+- `.learning-vault/inbox/*.md` contains compact reusable fragments selected by Inbox metadata.
 - note/session Markdown bodies contain durable content selected by Topic state.
 - Topic README is derived and non-authoritative.
 
 The Learning Vault is authoritative as a **set of domain-owned documents**. Do not create a second learner-state database in conversation memory, README projections, or another file.
+
+## Knowledge Inbox
+
+The optional Knowledge Inbox stores useful chat-derived fragments that the
+learner wants to retrieve later but does not want to turn into a Topic or
+systematic learning plan. Inbox items may contain compact facts, distinctions,
+rules, how-to reminders, references, questions, or ideas.
+
+Inbox capture is explicit or learner-approved; it is not passive conversation
+logging. An item is not mastery evidence, a known gap, an unassessed area, a
+session, or a Topic. Free-text Topic hints and verified links may help later
+triage without creating or mutating Topic learner state.
+
+Promotion into a Topic note is a cross-domain handoff: Topic Coach decides and
+writes the Topic note; the Inbox item becomes `promoted` only after the target
+is verified. An item with no suitable Topic stays in the Inbox rather than
+causing a miscellaneous Topic to be created.
 
 ## Shared Learner Model
 

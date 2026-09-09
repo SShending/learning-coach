@@ -1,0 +1,13 @@
+[
+  {"query":"Collect the notes worth keeping from this session.","should_trigger":true},
+  {"query":"Put this useful distinction in my Learning Vault Inbox.","should_trigger":true},
+  {"query":"List my saved knowledge fragments and group duplicates.","should_trigger":true},
+  {"query":"Snooze this Inbox item until next month.","should_trigger":true},
+  {"query":"Link this saved fragment to my existing Git Topic without changing mastery.","should_trigger":true},
+  {"query":"Turn this Inbox item into a Topic note after checking whether it is worth keeping.","should_trigger":true},
+  {"query":"Teach me this concept and quiz me on it inside my agent-memory Topic.","should_trigger":false},
+  {"query":"What should I study next across my Topics?","should_trigger":false},
+  {"query":"Show my current learning state without changing anything.","should_trigger":false},
+  {"query":"Review my Vault structure and repair orphaned files.","should_trigger":false},
+  {"query":"What is the difference between TCP and HTTP?","should_trigger":false}
+]

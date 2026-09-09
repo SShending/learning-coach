@@ -75,6 +75,7 @@ After meaningful learning, including accumulated learning at a focus change or c
 | Meaningful exploration, review, or continuation context | A minimal session checkpoint when the context is worth recovering, with linked evidence/note IDs when present and a useful next step in Topic state. A session may have no new evidence. |
 | Possible cross-Topic learning pattern | Preserve the Topic-local observation/provenance if useful; hand strategy synthesis to Ask Coach. Topic Coach must not write Learning Strategy or Coach State. |
 | Research idea, novelty claim, experiment plan, or project deliverable | Route project content to the external project/idea repository; retain only reusable learning and a minimal relevant pointer in the Topic. Routing is not permission to write an external project; use existing explicit authorization or leave a handoff. |
+| Useful fragment the learner wants to remember without systematic learning | Hand it to Knowledge Inbox. Do not create a Topic, Concept, evidence, unassessed coverage, or session merely to store the fragment. |
 
 One learning event may justify multiple linked destinations, but do not duplicate its content across them. Coach-generated explanations/code, sophisticated questions, time spent, and completed assisted projects are exposure, not independent application evidence. Learner demonstration is still required.
 
@@ -200,6 +201,7 @@ For any durable write, read `../../references/github/topic-write.md` and follow 
 - Do not run normal persisted Topic Coach without readable+writable authoritative Vault state, except an explicitly learner-chosen non-persisted interaction.
 - Do not choose among Topics, build a portfolio review queue, recommend new Topics, or synthesize cross-Topic bottlenecks/strategy; use Ask Coach.
 - Do not perform Vault maintenance/lifecycle operations; use Vault Curator.
+- Do not act as a general chat-fragment archive; use Knowledge Inbox when the learner wants retrieval without a Topic learning loop.
 - Do not mutate Coach State.
 - Do not optimize for note counts, commits, coverage percentages, or completion scores.
 - Optimize for demonstrated capability, accurate Topic-local diagnosis, and a useful next action.

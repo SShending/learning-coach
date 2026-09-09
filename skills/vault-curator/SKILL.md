@@ -1,6 +1,6 @@
 ---
 name: vault-curator
-description: Maintain and refactor the Learning Vault as a long-lived data/codebase. Use whenever the learner asks to inspect Vault health, repair stale references or projections, reorganize Topic structure, merge/split/rename/archive Topics, consolidate Concepts, repair Coach State references, forget stored material, clean orphaned state, or prepare a privacy-safe public export—even if they call it "cleanup" or "reorganize my learning." Do not use for ordinary teaching/assessment, portfolio advice, routine Topic-state updates, read-only progress views, or unsupported legacy-schema conversion.
+description: Maintain and refactor the Learning Vault as a long-lived data/codebase. Use whenever the learner asks to inspect Vault health, initialize or repair optional Vault domains, repair stale references or projections, reorganize Topic structure, merge/split/rename/archive Topics, consolidate Concepts, repair Coach State or Knowledge Inbox references, forget stored material, clean orphaned state, or prepare a privacy-safe public export—even if they call it "cleanup" or "reorganize my learning." Do not use for ordinary teaching/assessment, portfolio advice, routine Topic/Inbox updates, read-only progress views, or unsupported legacy-schema conversion.
 ---
 
 # Vault Curator
@@ -17,6 +17,7 @@ Load only the operation-specific reference:
 
 - **periodic/full health review** -> `references/review-checklist.md`
 - **merge, split, rename, structural repair, Concept consolidation** -> `references/structural-refactor.md`
+- **initialize an optional current-schema authority domain such as Knowledge Inbox** -> `references/structural-refactor.md`
 - **forget stored material** -> `references/forget.md`
 - **public export** -> `references/public-export.md`
 - **any approved topology/lifecycle/repair write** -> `../../references/github/structural-write.md`
@@ -42,6 +43,7 @@ For approved writes, use `../../references/github/structural-write.md`. Never fo
 ## Runtime Handoffs
 
 - teaching/assessment -> Topic Coach;
+- knowledge-fragment capture/triage -> Knowledge Inbox;
 - learning prioritization/advice -> Ask Coach;
 - presentation-only inspection -> Learning View.
 

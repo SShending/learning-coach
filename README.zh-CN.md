@@ -27,6 +27,7 @@
 ```text
 Learning Coach
 ├── Ask Coach      跨 Topic 的学习组合规划
+├── Knowledge Inbox 不进入系统学习的聊天知识收件箱
 ├── Topic Coach    单个 Topic 内的教学、练习、评估和状态更新
 ├── Learning View  只读展示
 └── Vault Curator  维护、生命周期、修复与导出
@@ -35,6 +36,7 @@ Learning Coach
 | Skill | 主要职责 |
 | --- | --- |
 | **Ask Coach** | 跨 Topic 决定学什么/复习什么/练什么，global review priority，Topic 关联与 bottleneck，候选 Topic，Coach State，Learning Strategy synthesis |
+| **Knowledge Inbox** | 明确保存、查看、去重和整理聊天中的可复用知识碎片；不创建 Topic，不记录 mastery 证据 |
 | **Topic Coach** | Topic 边界判断、教学、练习、评估、reasoning diagnosis、Topic roadmap/currentFocus/nextStep、evidence/mastery/gaps、本 Topic review、notes/sessions |
 | **Learning View** | 只读展示 authoritative state |
 | **Vault Curator** | 结构检查、修复、merge/split/rename、forget/archive、export |
@@ -67,7 +69,8 @@ references/
 │   ├── read-authority.md
 │   ├── topic-write.md
 │   ├── advisory-write.md
-│   └── structural-write.md
+│   ├── structural-write.md
+│   └── inbox-write.md
 ├── knowledge-grounding.md
 ├── coach-state.md
 ├── vault.schema.json
@@ -101,7 +104,9 @@ Learning Coach 只支持**当前 manifest-based Learning Vault schema**：
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         跨 Topic meta-learning strategy
-└── coach-state.json               可选 durable portfolio advisory memory
+├── coach-state.json               可选 durable portfolio advisory memory
+├── inbox.json                     可选 Knowledge Inbox 索引
+└── inbox/                         Knowledge Inbox 条目正文
 
 topics/<topic-id>/
 ├── state.json                     authoritative Topic learner state
@@ -110,7 +115,7 @@ topics/<topic-id>/
 └── sessions/
 ```
 
-Learning Vault 的 authority 是**一组 domain-owned documents**。普通 Topic 学习只更新对应 Topic authority。Ask Coach 只在必要时更新 Coach State 或有跨 Topic evidence 支撑的 Learning Strategy。Learning View 永远不写。
+Learning Vault 的 authority 是**一组 domain-owned documents**。普通 Topic 学习只更新对应 Topic authority。Knowledge Inbox 只保存用户明确要求或确认的碎片。Ask Coach 只在必要时更新 Coach State 或有跨 Topic evidence 支撑的 Learning Strategy。Learning View 永远不写。
 
 旧的、不受支持的 Vault layout 不会在运行时被猜测解析；应先独立升级到当前格式，再进入正常学习流程。
 
@@ -123,6 +128,27 @@ Learning Vault 的 authority 是**一组 domain-owned documents**。普通 Topic
 ```text
 Use Topic Coach.
 Resume agent-memory.
+```
+
+### 连接 Learning Vault
+
+第一次使用时，应明确告诉插件要使用哪个私有 GitHub 仓库。填写仓库标识，
+不要填写本地路径，也不要发送令牌：
+
+```text
+我的 Learning Vault 是 <owner>/<private-learning-vault>。
+本次对话使用它；先检查仓库为私有且符合当前 Vault 格式，暂时不要创建 Topic。
+```
+
+插件不能安全地把某个用户的仓库写死在公共包里。如果宿主或 Project 已经
+记住了选中的仓库，之后只有在目标不明确时才需要再次说明。
+
+### 不开始系统学习，只保存一条聊天知识
+
+```text
+Use Knowledge Inbox。
+我的 Learning Vault 是 <owner>/<private-learning-vault>。
+收集本次 session 中值得留下的 notes。先展示建议保留的 notes，得到确认后再保存。不要创建 Topic、声称我已掌握，也不要保存原始聊天记录。
 ```
 
 ### 跨 Topic 决定接下来做什么
@@ -148,7 +174,7 @@ Review my Learning Vault like a codebase. Do not mutate anything yet.
 
 ## Repository 权限要求
 
-Topic Coach 正常 stateful learning 需要 read + write；Learning View 只读；Ask Coach 始终需要可读 authority，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护/生命周期操作时才写。
+Topic Coach 正常 stateful learning 需要 read + write；Knowledge Inbox 的明确捕获/整理需要 read + write；Learning View 只读；Ask Coach 始终需要可读 authority，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护/生命周期操作时才写。
 
 ## 开发
 

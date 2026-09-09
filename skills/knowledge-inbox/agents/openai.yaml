@@ -1,0 +1,4 @@
+interface:
+  display_name: "Knowledge Inbox"
+  short_description: "Collect worthwhile notes from this chat session"
+  default_prompt: "Use $knowledge-inbox to collect notes worth keeping from this chat session and save only the approved notes to my Learning Vault."

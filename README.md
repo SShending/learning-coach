@@ -31,6 +31,7 @@ English | [简体中文](README.zh-CN.md)
 ```text
 Learning Coach
 ├── Ask Coach      portfolio-level planning
+├── Knowledge Inbox low-commitment chat-fragment capture and triage
 ├── Topic Coach    one-Topic teaching, practice, assessment, and persistence
 ├── Learning View  read-only state presentation
 └── Vault Curator  maintenance, lifecycle, repair, and export
@@ -39,6 +40,7 @@ Learning Coach
 | Skill | Owns |
 | --- | --- |
 | **Ask Coach** | what to learn/review/practice across Topics, global review priority, cross-Topic connections/bottlenecks, candidate Topics, Coach State, Learning Strategy synthesis |
+| **Knowledge Inbox** | explicit capture, listing, deduplication, and triage of reusable chat fragments without creating Topics or mastery evidence |
 | **Topic Coach** | Topic boundary after learner choice, teaching, practice, assessment, reasoning diagnosis, Topic roadmap/currentFocus/nextStep, evidence/mastery/gaps, local review, notes/sessions |
 | **Learning View** | read-only presentation of authoritative state |
 | **Vault Curator** | structural review, repair, merge/split/rename, forget/archive, export |
@@ -56,6 +58,7 @@ learning-coach/
 ├── skills/
 │   ├── ask-coach/
 │   ├── topic-coach/
+│   ├── knowledge-inbox/
 │   ├── learning-view/
 │   └── vault-curator/
 └── references/
@@ -83,7 +86,8 @@ references/
 │   ├── read-authority.md
 │   ├── topic-write.md
 │   ├── advisory-write.md
-│   └── structural-write.md
+│   ├── structural-write.md
+│   └── inbox-write.md
 ├── knowledge-grounding.md
 ├── coach-state.md
 ├── vault.schema.json
@@ -117,7 +121,9 @@ Learning Coach supports the **current manifest-based Learning Vault schema**:
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         cross-Topic meta-learning strategy
-└── coach-state.json               optional durable portfolio advisory memory
+├── coach-state.json               optional durable portfolio advisory memory
+├── inbox.json                     optional Knowledge Inbox index
+└── inbox/                         Knowledge Inbox item bodies
 
 topics/<topic-id>/
 ├── state.json                     authoritative Topic learner state
@@ -126,7 +132,7 @@ topics/<topic-id>/
 └── sessions/
 ```
 
-The Learning Vault is authoritative as a **set of domain-owned documents**. Ordinary Topic learning updates only the relevant Topic authority domain. Ask Coach writes only cross-Topic Coach State or evidence-backed Learning Strategy when appropriate. Learning View never writes.
+The Learning Vault is authoritative as a **set of domain-owned documents**. Ordinary Topic learning updates only the relevant Topic authority domain. Knowledge Inbox captures only explicitly requested or approved fragments. Ask Coach writes only cross-Topic Coach State or evidence-backed Learning Strategy when appropriate. Learning View never writes.
 
 Older unsupported Vault layouts are not interpreted by the runtime; upgrade them separately before normal learning operations.
 
@@ -139,6 +145,31 @@ See [Vault Format](references/vault-format.md), [GitHub Operations](references/g
 ```text
 Use Topic Coach.
 Resume agent-memory.
+```
+
+### Connect a Learning Vault
+
+On first use, identify the private GitHub repository explicitly. Use the
+repository identifier, not a local path or credential:
+
+```text
+My Learning Vault is <owner>/<private-learning-vault>.
+Use it for this conversation, verify that it is private and uses the current
+Vault format, and do not create a Topic yet.
+```
+
+The Plugin cannot safely hard-code a learner's repository. Once a host or
+Project remembers the selected repository, do not repeat it unless the target
+is ambiguous.
+
+### Collect worthwhile notes from this chat session
+
+```text
+Use Knowledge Inbox.
+My Learning Vault is <owner>/<private-learning-vault>.
+Collect the notes worth keeping from this session. Show me the proposed notes
+first, then save the approved set. Do not create a Topic, claim mastery, or save
+the raw transcript.
 ```
 
 ### Decide what to learn across Topics
@@ -164,7 +195,7 @@ Review my Learning Vault like a codebase. Do not mutate anything yet.
 
 ## Repository Capability Requirements
 
-Topic Coach needs read+write for normal stateful learning; Learning View uses read only; Ask Coach always needs readable authority and may write only its cross-Topic domains; Vault Curator writes only for explicit maintenance/lifecycle operations.
+Topic Coach needs read+write for normal stateful learning; Knowledge Inbox needs read+write for explicit capture/triage; Learning View uses read only; Ask Coach always needs readable authority and may write only its cross-Topic domains; Vault Curator writes only for explicit maintenance/lifecycle operations.
 
 ## Development
 

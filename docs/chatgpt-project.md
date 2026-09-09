@@ -8,6 +8,7 @@ ChatGPT Project
       +--> Topic Coach     learn / assess / update one Topic
       +--> Ask Coach       portfolio planning / review / strategy
       +--> Learning View   read-only presentation
+      +--> Knowledge Inbox capture / triage
       +--> Vault Curator   maintenance / repair
       |
       v
@@ -23,6 +24,7 @@ GitHub Learning Vault
 | Learning View | required | never used |
 | Vault Curator review | required | not needed |
 | Vault Curator mutation | required | required |
+| Knowledge Inbox | required | required for explicit capture/triage |
 
 No Skill should blind-write when its authoritative input state cannot be read.
 
@@ -58,6 +60,7 @@ A Project named `Learning Coach` is reasonable because that is the product/syste
 Use my private Learning Vault as the source of truth for durable learning state.
 
 Use Topic Coach when I am learning, practicing, being assessed, or advancing one chosen Topic.
+Use Knowledge Inbox when I explicitly want to preserve a useful chat fragment without starting systematic learning.
 Use Ask Coach when I ask what to learn, review, practice, connect, defer, or explore across Topics.
 Use Learning View when I ask to inspect stored state without changing it.
 Use Vault Curator when I ask to review, repair, or reorganize the Vault itself.
@@ -69,13 +72,14 @@ Do not save raw conversations.
 
 ```text
 skills/topic-coach/
+skills/knowledge-inbox/
 skills/ask-coach/
 skills/learning-view/
 skills/vault-curator/
 references/
 ```
 
-`Topic Coach` is the one-Topic learning controller. `Ask Coach` is the portfolio planner. `Learning View` is read-only. `Vault Curator` handles maintenance/lifecycle work.
+`Topic Coach` is the one-Topic learning controller. `Knowledge Inbox` captures reusable fragments without creating Topics. `Ask Coach` is the portfolio planner. `Learning View` is read-only. `Vault Curator` handles maintenance/lifecycle work.
 
 A learner naming a subject does not automatically create a Topic: Topic Coach should decide whether it is a Concept, milestone/cluster, extension of an existing Topic, or a new Topic after the learner chooses to pursue it.
 
@@ -92,6 +96,15 @@ Or:
 ```text
 Use Topic Coach.
 Resume photo-basics.
+```
+
+For a fragment that should be remembered without starting systematic learning:
+
+```text
+Use Knowledge Inbox.
+My Learning Vault is <owner>/<private-learning-vault>.
+Collect the notes worth keeping from this session. Show proposed notes first,
+then save the approved set. Do not create a Topic, claim mastery, or save the raw transcript.
 ```
 
 ## Ask What To Do Next Across Topics
