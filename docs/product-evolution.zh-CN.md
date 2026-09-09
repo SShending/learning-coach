@@ -4,9 +4,33 @@
 
 从 2026-09-08 开始持续维护。下方较早条目是依据仓库提交与版本文件整理的精选历史，不是从首版开始的完整发布日志。产品版本表示源码包版本，不代表已在所有宿主或公开 marketplace 发布。
 
-## 2026-09-09 · 3.0.0-alpha.23 · Knowledge Inbox（工作区草案）
+## 2026-09-09 · 3.0.0-alpha.24 · Knowledge Inbox 回流与根目录拓扑
 
-状态：已在当前工作区实现，尚未提交或发布。
+状态：功能已合并至 main；本条同步源码包版本与使用手册，不表示已在 marketplace 发布。
+
+依据：[PR #24](https://github.com/SShending/learning-coach/pull/24) / [f1a7478](https://github.com/SShending/learning-coach/commit/f1a74784919be28c30b48bbc0d2434b6467a02b0) 定义 learning-memory buffer 与 resurfacing；[PR #25](https://github.com/SShending/learning-coach/pull/25) / [67c28fd](https://github.com/SShending/learning-coach/commit/67c28fd0ad49759fc4c5592aea3143b242e27715) 完成根目录 Inbox 拓扑。
+
+### 为什么改与功能变化
+
+- Knowledge Inbox 从仅供保存、整理的碎片收件箱扩展为 learning-memory buffer：Topic Coach / Ask Coach 在已有具体任务中判断是否取回相关片段，Inbox 自身不主动推送。
+- Resurfacing 先读元数据，通常只展开 1–3 个相关正文；宽泛标签或 Topic 名称重合不足以触发取回，片段本身不构成 mastery/evidence。
+- Learning View 保持只读且不推荐；没有新增 embedding、检索计数、回流日志或 schema 字段。
+- 当前索引为根目录 `inbox/state.json`，正文为 `inbox/items/*.md`。`inbox/` 与 `topics/` 在文件系统同级，`.learning-vault/` 保留控制状态；Inbox 仍是检索材料，不是 Topic learner state。
+
+### 使用影响
+
+旧 `.learning-vault/inbox.json` 与 `.learning-vault/inbox/*.md` 路径不再被当前 schema 接受。由 Vault Curator 按结构迁移协议先复制并验证目标文件，再切换 manifest 的 `knowledgeInbox.statePath`；保留条目 ID、内容、状态、时间、来源和幂等记录。更新插件后通过新会话确认加载版本。
+
+### 验证与限制
+
+- 新增五个 resurfacing 行为夹具，覆盖具体任务匹配、宽泛标签拒绝、元数据优先与上下文上限、Ask Coach 显式使用及 Learning View 只读边界；`check_inbox_resurfacing.py` 已接入 CI。
+- Schema 回归覆盖根目录绑定、拒绝旧隐藏绑定与旧正文路径，并保留独立的非法状态检查。
+- 合并后的 [main CI（67c28fd）](https://github.com/SShending/learning-coach/actions/runs/34357345700) 已通过 schema、skill architecture、Inbox resurfacing、plugin release 与 installer syntax 检查。本次版本同步也需通过同一组检查，结果以本次提交的 Actions 为准。
+- 行为夹具与静态检查不等于真实宿主执行；GitHub 连接、首次初始化、实际片段回流及跨 Skill promotion 仍需真实宿主验证。
+
+## 2026-09-09 · 3.0.0-alpha.23 · Knowledge Inbox 初版
+
+状态：初版已提交（[9adfaf9](https://github.com/SShending/learning-coach/commit/9adfaf9)）；以下保留初版行为与当时验证记录。后续 schema smoke 修复见 [ecf933f](https://github.com/SShending/learning-coach/commit/ecf933f)，回流与拓扑变化见 alpha.24。
 
 ### 为什么改
 
