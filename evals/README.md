@@ -25,6 +25,7 @@ Behavior fixtures capture real failure modes after a Skill has already triggered
 Files:
 
 - `behavior/topic-coach-persistence.json` — verifies Topic Coach persistence checkpoints, focus freshness, interruption safety, evidence boundaries, and the counter-case where exposure alone must not cause a write.
+- `behavior/topic-coach-learning-acceleration.json` — verifies foundation leverage, bounded prerequisite expansion, concrete-before-abstract teaching, valid invariant-plus-delta transfer, rejection of forced analogies, and preservation of evidence/note boundaries.
 - `behavior/knowledge-inbox.json` — verifies explicit low-commitment capture, no passive logging, triage without Topic creation, and promotion handoff boundaries.
 
 - `behavior/learning-view-temporal.json` — covers calendar windows, timezone/DST boundaries, late capture, deduplication, historical limits, partial reads, and zero-write inspection.

@@ -30,6 +30,7 @@ Read only the branch-specific guidance needed for the current task:
 - **Topic creation, boundary decisions, resume, roadmap adaptation, next-step selection** -> `references/topic-lifecycle.md`
 - **Assessment, quizzes, evidence/mastery changes, gaps, review, contradiction handling** -> `references/assessment-and-evidence.md`
 - **Reasoning, comparison, system design, consequential choice, proposed explanation** -> `references/assumption-aware-diagnosis.md`
+- **Entering a new domain, recurring prerequisite confusion, frontier-vs-foundation tradeoffs, or explaining a new concept through an existing mental model** -> `references/learning-acceleration.md`
 - **Plausible learning-note candidate, note creation, or note revision** -> `references/learning-notes.md`
 - **Version-sensitive, disputed, source-dependent, or consequential knowledge claims** -> `../../references/knowledge-grounding.md`
 - **Any durable Topic write** -> `../../references/github/topic-write.md`
@@ -117,6 +118,18 @@ When the learner asks a direct learning question, answer it before turning the i
 | reveals misconception | correct and preserve history | contradiction |
 
 Ask at most one focused verification question after ordinary teaching unless the learner asks for a quiz or assessment. Ask only when the expected evidence is useful enough to justify continuing the learning loop; do not manufacture a question merely to keep the conversation going.
+
+## Learning Acceleration
+
+Learning acceleration is a conditional pedagogical strategy, not a default answer format.
+
+When the learner enters a new domain, repeatedly hits a reusable prerequisite, follows frontier material without a stable base, or encounters a concept that can validly reuse an existing mental model, read `references/learning-acceleration.md`.
+
+Optimize for **future learning speed**, not only immediate completion. Prefer the nearest high-leverage foundation when it materially reduces later relearning, then return to the learner's chosen target. Do not recursively expand prerequisites merely because deeper foundations exist.
+
+When a valid nearby model exists, prefer learning the **invariant structure + meaningful delta** over storing another isolated definition. Do not force this decomposition when the analogy is weak, the base model is not understood, or the new concept needs its own primitive model.
+
+Acquire unfamiliar mechanisms concretely before compressing them. Reuse demonstrated foundations instead of reteaching them. This strategy does not alter the evidence ladder, create mastery from explanation, or bypass the Learning Notes worthiness gate.
 
 ## Interruption Safety
 
