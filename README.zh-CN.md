@@ -104,9 +104,11 @@ Learning Coach 只支持**当前 manifest-based Learning Vault schema**：
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         跨 Topic meta-learning strategy
-├── coach-state.json               可选 durable portfolio advisory memory
-├── inbox.json                     可选 Knowledge Inbox 索引
-└── inbox/                         Knowledge Inbox 条目正文
+└── coach-state.json               可选 durable portfolio advisory memory
+
+inbox/
+├── state.json                     可选 Knowledge Inbox 索引
+└── items/                         Knowledge Inbox 条目正文
 
 topics/<topic-id>/
 ├── state.json                     authoritative Topic learner state
@@ -114,6 +116,8 @@ topics/<topic-id>/
 ├── notes/
 └── sessions/
 ```
+
+这个根目录布局刻意把 `.learning-vault/` 留给隐藏的 control-plane 状态；用户拥有、可复用的知识放在可见的 `inbox/`，正式进入系统学习的内容放在 `topics/`。`inbox/` 与 `topics/` 在文件系统上同级，但 Inbox 条目仍只是 retrieval material，不是 mastery evidence 或 Topic state。
 
 Learning Vault 的 authority 是**一组 domain-owned documents**。普通 Topic 学习只更新对应 Topic authority。Knowledge Inbox 只保存用户明确要求或确认的碎片。Ask Coach 只在必要时更新 Coach State 或有跨 Topic evidence 支撑的 Learning Strategy。Learning View 永远不写。
 
@@ -183,6 +187,7 @@ Topic Coach 正常 stateful learning 需要 read + write；Knowledge Inbox 的�
 ```text
 python scripts/validate_vault_schemas.py
 python scripts/check_skill_architecture.py
+python scripts/check_inbox_resurfacing.py
 python scripts/check_plugin_release.py
 ```
 

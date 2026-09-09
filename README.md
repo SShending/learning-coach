@@ -121,9 +121,11 @@ Learning Coach supports the **current manifest-based Learning Vault schema**:
 .learning-vault/
 ├── vault.json                     Vault manifest / topology
 ├── learning-strategy.json         cross-Topic meta-learning strategy
-├── coach-state.json               optional durable portfolio advisory memory
-├── inbox.json                     optional Knowledge Inbox index
-└── inbox/                         Knowledge Inbox item bodies
+└── coach-state.json               optional durable portfolio advisory memory
+
+inbox/
+├── state.json                     optional Knowledge Inbox index
+└── items/                         Knowledge Inbox item bodies
 
 topics/<topic-id>/
 ├── state.json                     authoritative Topic learner state
@@ -131,6 +133,8 @@ topics/<topic-id>/
 ├── notes/
 └── sessions/
 ```
+
+The root layout deliberately keeps hidden control state under `.learning-vault/` while user-owned reusable knowledge is visible under `inbox/` and committed learning lives under `topics/`. `inbox/` and `topics/` are filesystem peers, but Inbox items are still retrieval material rather than mastery evidence or Topic state.
 
 The Learning Vault is authoritative as a **set of domain-owned documents**. Ordinary Topic learning updates only the relevant Topic authority domain. Knowledge Inbox captures only explicitly requested or approved fragments. Ask Coach writes only cross-Topic Coach State or evidence-backed Learning Strategy when appropriate. Learning View never writes.
 
@@ -204,6 +208,7 @@ Run the full preflight with:
 ```text
 python scripts/validate_vault_schemas.py
 python scripts/check_skill_architecture.py
+python scripts/check_inbox_resurfacing.py
 python scripts/check_plugin_release.py
 ```
 
