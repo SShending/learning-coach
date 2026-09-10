@@ -45,6 +45,8 @@ jobs:
         run: python scripts/check_skill_architecture.py
       - name: Validate learning acceleration policy contracts
         run: python scripts/check_learning_acceleration.py
+      - name: Validate cross-Topic reuse contracts
+        run: python scripts/check_cross_topic_reuse.py
       - name: Validate Inbox resurfacing contract
         run: python scripts/check_inbox_resurfacing.py
       - name: Validate plugin release package

@@ -127,6 +127,46 @@ Do **not** force a delta explanation when:
 
 When no valid base exists, teach the new primitive directly. It may become a reusable foundation for later deltas.
 
+## Cross-Topic Reuse Consumption
+
+A durable `crossTopicConnection` may help Topic Coach discover a reusable foundation while teaching the **current** Topic. It is a retrieval pointer, not proof that the learner can reuse the mechanism.
+
+Use cross-Topic reuse only when it can materially reduce redundant teaching for the current target.
+
+### Retrieval sequence
+
+1. read the bound Coach State only when the current Topic may benefit from reuse;
+2. filter to active connections whose `topicIds` include the current Topic;
+3. select only connections whose shared mechanism is relevant to the current focus or next action;
+4. treat the connection summary and basis as a hint for where to look, not as authority about mastery;
+5. read the minimum authoritative state/evidence from the connected Topic needed to verify the candidate foundation;
+6. reuse the foundation only when the learner has sufficiently demonstrated the relevant mechanism and the Delta Validity Gate passes;
+7. teach or assess the current Topic's **delta / transfer**, not the already-demonstrated invariant.
+
+Do not scan the whole Topic graph or preload every connected Topic. Connection count is not instructional priority.
+
+### Connection evidence boundary
+
+Keep these separate:
+
+```text
+stored/inferred connection
+!= demonstrated source foundation
+!= demonstrated transfer into the current Topic
+```
+
+A `basis: stored`, `basis: inferred`, or `basis: grounded` connection describes why the relationship is remembered. None of those values by itself proves learner capability.
+
+If the connected Topic has only exposure, weak/contradictory evidence, or an unassessed foundation, do not skip the foundation merely because the connection exists. Either teach the current target directly or repair the nearest blocking foundation under the normal bounded-prerequisite rule.
+
+### Topic authority boundary
+
+Cross-Topic reuse never copies evidence or mastery from one Topic into another.
+
+Topic Coach may use source-Topic evidence to decide that redundant explanation is unnecessary, but current-Topic mastery still requires observable behavior relevant to the current Topic. Do not mutate the source Topic or Coach State during ordinary reuse.
+
+A roadmap milestone may remain because it expresses a current-Topic capability even when its generic foundation is already demonstrated elsewhere. Reuse can shorten the route through that milestone; it does not automatically delete it.
+
 ## Prefer Reconstruction Over Definition Accumulation
 
 Do not make the learner store every new concept as an isolated glossary entry when it can be reconstructed from a stable model plus a small delta.
@@ -214,7 +254,13 @@ Do not create a special mastery scale for this policy.
 
 **Pattern:** the coach reteaches basics the learner has already demonstrated.
 
-**Response:** reuse demonstrated knowledge and move directly to the new delta or application.
+**Response:** reuse demonstrated knowledge and move directly to the new delta or application. When that knowledge lives in another Topic, use an active connection only as the retrieval hint and verify the source evidence before skipping explanation.
+
+### Advisory connection treated as mastery
+
+**Pattern:** a stored cross-Topic connection causes Topic Coach to skip teaching or award current-Topic mastery without checking learner evidence.
+
+**Response:** separate relationship evidence from learner evidence. Verify the source foundation, then require current-Topic demonstration for transfer or Topic-specific capability.
 
 ## Success Criterion
 

@@ -60,6 +60,8 @@ Restore the minimum state needed to continue accurately:
 
 Read Learning Strategy when it can materially improve the lesson, but do not synthesize or mutate cross-Topic strategy here.
 
+When the manifest binds Coach State and cross-Topic reuse could materially reduce relearning in the current Topic, inspect only active `crossTopicConnections` that include the current Topic. Treat each connection as an advisory retrieval hint, not as learner evidence or a curriculum edge. Follow `learning-acceleration.md` before reusing a connected foundation: verify the relevant mechanism against authoritative state/evidence in the connected Topic, and do not scan unrelated Topics merely because they are connected elsewhere in the graph.
+
 When taking over after learning has already begun, distinguish previous exposure, demonstrated understanding/application, relevant but unassessed areas, and evidence-supported known gaps. Do not manufacture evidence for earlier work that has not been demonstrated.
 
 ## Roadmap Planning And Adaptation
@@ -81,6 +83,8 @@ Adapt the roadmap when Topic-local evidence changes the useful route, including:
 - a blocking gap appearing or resolving;
 - the learner changing this Topic's target capability;
 - an older roadmap no longer fitting current Topic state.
+
+Cross-Topic reuse may change how a milestone is taught without deleting the milestone. Evidence demonstrated in another Topic can justify skipping redundant explanation of the shared foundation, but it does not automatically prove the current Topic's Topic-specific capability or create Topic-local mastery.
 
 Keep roadmap, `currentFocus`, and `nextStep` distinct.
 

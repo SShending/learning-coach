@@ -4,6 +4,33 @@
 
 从 2026-09-08 开始持续维护。下方较早条目是依据仓库提交与版本文件整理的精选历史，不是从首版开始的完整发布日志。产品版本表示源码包版本，不代表已在所有宿主或公开 marketplace 发布。
 
+## 2026-09-10 · alpha.24 之后 · Learning Acceleration 与跨 Topic 复用闭环
+
+状态：实现已完成并由相关 PR 集成；读取 main 时，以各 PR 的实际合并状态为准。本轮不改变 Plugin package version、Vault schema 或五个 Skill 的职责边界。
+
+依据：[PR #26](https://github.com/SShending/learning-coach/pull/26) 引入 Topic Coach learning acceleration；[PR #30](https://github.com/SShending/learning-coach/pull/30) 集成 Learning Notes、Ask Coach、Vault Curator 与 Learning View 的配套策略；[PR #31](https://github.com/SShending/learning-coach/pull/31) 增加 reuse-aware Ask Coach；[PR #32](https://github.com/SShending/learning-coach/pull/32) 补齐 Topic Coach 对 cross-Topic connection 的消费链路。
+
+### 为什么改与功能变化
+
+- Topic Coach 在适用时优化长期学习成本：优先有真实复用价值的 foundation，限制 prerequisite 无限展开；新知识有有效旧模型时用 `invariant + delta`，没有有效旧模型时建立新的 primitive。
+- Learning Notes 倾向保存可复用 mental model，而不是逐项 glossary；Vault Curator 只在同一 governing mechanism / retrieval target 下做 consolidation；Learning View 区分 exposure、demonstrated capability、reuse potential 与 demonstrated transfer。
+- Ask Coach 可以发现并持久化长期有价值的 cross-Topic connections，并在排序时区分两种相反作用：缺失的共享 foundation 可能因 downstream reuse 提升优先级；已证明的 foundation 则成为 reuse credit，使相关下游 Topic 更便宜。推荐顺序是 advisory，不是固定课程。
+- Topic Coach 在恢复当前 Topic、且跨 Topic 复用确实可能减少重复教学时，可读取与当前 Topic 直接相关的 active connection；connection 只作为检索提示。Topic Coach 必须回读关联 Topic 的权威 evidence，确认共享 foundation 足够 demonstrated 后才能跳过重复解释，并把教学集中到当前 Topic 的 delta / transfer。
+- 跨 Topic reuse 不复制 evidence/mastery，不自动删除当前 Topic roadmap capability，也不让 Topic Coach 接管 portfolio 排序；Ask Coach 仍负责“学哪个”，Topic Coach 仍负责“当前 Topic 内怎么学”。
+
+### 使用影响
+
+用户不需要严格遵守 Ask Coach 给出的 Topic 顺序。按推荐顺序通常可以提高复用效率；如果用户主动跳到下游 Topic，Topic Coach 只在真正 blocking 时补最近、最小的 prerequisite，然后返回用户选择的 Topic。
+
+本轮同时修正文档中的 Knowledge Inbox 路径：当前 authoritative layout 是根目录 `inbox/state.json` 与 `inbox/items/`，和 `topics/` 同级；旧 `.learning-vault/inbox*` 路径不再是当前 authority。
+
+### 验证与限制
+
+- Learning Acceleration 已有 Topic Coach、Ask Coach、Vault Curator、Learning View 的声明式行为回归与静态 contract checker；PR #32 再增加 Topic Coach cross-Topic reuse 的五个回归场景，并将专用 checker 接入 CI。
+- 真实 Learning Vault 验证已证明 Ask Coach 可以发现、保存、展示并利用 cross-Topic connections；这不等于所有宿主都已运行完整 semantic behavior harness。
+- 声明式 fixture 与静态 checker 仍不能替代真实代理执行。尤其是“是否在恰当时机读取 connection、是否正确选择 source evidence、是否实际减少重复教学”应继续通过真实学习 session 观察。
+- 当前 connection schema 没有单独的 source/target 方向字段；在没有出现可靠性问题前保留现状，不为理论完整性升级 schema。
+
 ## 2026-09-09 · 3.0.0-alpha.24 · Knowledge Inbox 回流与根目录拓扑
 
 状态：功能已合并至 main；本条同步源码包版本与使用手册，不表示已在 marketplace 发布。
