@@ -51,8 +51,26 @@ rather than treating the video as a prompt or specification:
 - reject forced analogies and teach a new primitive directly when no valid base
   exists;
 - treat compact abstractions as possible learning-note candidates, not automatic
-  proof of mastery or automatic persistence.
+  proof of mastery or automatic persistence;
+- at portfolio level, consider whether a bounded shared-foundation investment can
+  reduce future learning cost across multiple Topics, while still applying timing,
+  evidence, and transfer checks;
+- during Vault maintenance, detect when structurally valid knowledge has fragmented
+  into overlapping retrieval units and consolidate only when a real invariant,
+  coherent retrieval target, meaningful deltas, and provenance can all be preserved;
+- in read-only views, expose foundation/reuse/transfer/fragmentation signals as
+  explicit projections from stored authority without pretending those projections
+  are schema fields, mastery evidence, priority decisions, or maintenance judgments.
 
-The resulting policy lives inside Topic Coach as a conditional pedagogical
-strategy. Its goal is to make later learning cheaper through reusable mental
-models without turning foundation study into an end in itself.
+The resulting policy is applied at four levels: Topic Coach uses it as a
+conditional pedagogical strategy inside one Topic; Ask Coach uses it as a
+conditional portfolio strategy when a shared foundation or repeated cross-Topic
+blocker could materially change where attention should go next; Vault Curator
+uses it as a maintenance heuristic for compressing fragmented stored knowledge
+into reusable mental models without collapsing assessment boundaries or merging
+Topics merely because they share foundations; Learning View makes those structures
+legible while keeping visibility separate from prioritization and refactoring.
+
+Its goal is to make later learning cheaper through reusable mental models without
+turning foundation study, note-count reduction, abstraction, or derived metrics
+into ends in themselves.

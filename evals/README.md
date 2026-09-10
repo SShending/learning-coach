@@ -25,9 +25,11 @@ Behavior fixtures capture real failure modes after a Skill has already triggered
 Files:
 
 - `behavior/topic-coach-persistence.json` — verifies Topic Coach persistence checkpoints, focus freshness, interruption safety, evidence boundaries, and the counter-case where exposure alone must not cause a write.
-- `behavior/topic-coach-learning-acceleration.json` — verifies foundation leverage, bounded prerequisite expansion, concrete-before-abstract teaching, valid invariant-plus-delta transfer, rejection of forced analogies, and preservation of evidence/note boundaries.
+- `behavior/topic-coach-learning-acceleration.json` — verifies Topic Coach foundation leverage, bounded prerequisite expansion, concrete-before-abstract teaching, valid invariant-plus-delta transfer, rejection of forced analogies, mental-model note compression, and preservation of evidence/note boundaries.
+- `behavior/ask-coach-learning-acceleration.json` — verifies portfolio-level shared-foundation leverage, timing gates, mechanism-vs-vocabulary checks, bounded foundation recommendations, cross-Topic hypothesis boundaries, transfer validation, and Learning Strategy evidence boundaries.
+- `behavior/vault-curator-knowledge-consolidation.json` — verifies fragmented-model detection, retrieval-target/invariant tests, preservation of meaningful deltas and provenance, note-vs-Concept topology separation, rejection of premature synthesis, and the rule that shared foundations do not force Topic merges.
+- `behavior/learning-view-learning-acceleration.json` — verifies read-only visibility of exposure versus capability, derived foundation/reuse signals, reusable mental-model notes, transfer evidence, possible fragmentation signals, and strict separation from prioritization or refactoring.
 - `behavior/knowledge-inbox.json` — verifies explicit low-commitment capture, no passive logging, triage without Topic creation, and promotion handoff boundaries.
-
 - `behavior/learning-view-temporal.json` — covers calendar windows, timezone/DST boundaries, late capture, deduplication, historical limits, partial reads, and zero-write inspection.
 
 Topic persistence cases also cover capture classification, assisted projects, owner handoffs, idempotency, explicit non-persistence, and failed writes.

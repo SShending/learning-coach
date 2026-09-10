@@ -35,6 +35,38 @@ Usually do not create a note for:
 - information whose only value is that it happened in this session;
 - generic tutorial material with no durable retrieval advantage for this learner.
 
+## Mental Model Compression
+
+When learning has become concrete enough to support abstraction, prefer notes that preserve a **reusable model** rather than a collection of neighboring definitions.
+
+When a valid prior model exists, a useful compression shape is:
+
+```text
+existing model / invariant
++
+meaningful delta
++
+why the delta changes behavior or capability
++
+important boundary or failure condition
+```
+
+For example, if the learner already has a stable model of ordinary LLM inference, a durable RAG note should usually emphasize what retrieval adds, where it enters the flow, and what new failure modes it creates rather than restating the entire LLM model.
+
+This is a compression policy, not a mandatory note template.
+
+Before using invariant-plus-delta compression:
+
+1. confirm that the learner has a sufficiently valid base model;
+2. confirm that the new concept genuinely preserves enough of that base for transfer;
+3. preserve the causal consequence of the delta, not merely a feature list;
+4. include enough base context that the note remains independently retrievable, but do not duplicate a whole existing note;
+5. if no valid base exists, store the new primitive directly rather than forcing an analogy.
+
+Do not compress prematurely. If the learner can repeat an abstraction but cannot reason through a concrete mechanism, execution trace, example, or application, continue teaching before treating the abstraction as a durable mental model.
+
+A concise invariant-plus-delta explanation does not bypass the Worthiness Gate. Generic summaries that are easy to reconstruct from documentation should still be declined unless they have durable retrieval or learner-specific value.
+
 ## Learner Errors And Misconceptions
 
 Do not turn every wrong answer into a note.
@@ -109,8 +141,10 @@ Use only the sections that improve future retrieval. A note may contain:
 # Central idea
 
 ## Why it matters
+## Existing model / invariant
+## Meaningful delta
+## Why the delta matters
 ## Misconception or failure mode
-## Correct model / decision rule
 ## Boundary or conditions
 ## Diagnostic cue
 ## Example
@@ -142,10 +176,13 @@ Update an existing note when new learning:
 - corrects or sharpens the same model;
 - adds an important boundary or condition;
 - adds a recurring misconception/failure mode related to the same model;
+- adds a meaningful delta whose future retrieval target is still the same central model;
 - replaces a weak example with a substantially better one;
 - changes a source/version caveat without changing the central retrieval target.
 
-Create a new note when the new learning answers a meaningfully different future retrieval question.
+Create a new note when the new learning answers a meaningfully different future retrieval question, even if it builds on the same foundation.
+
+Do not create a separate note merely because a new term appeared. If the term is best understood as a delta that strengthens an existing reusable model, prefer revising that model's note.
 
 ## Scope Stability
 
@@ -154,6 +191,8 @@ An existing note has an implicit ownership boundary: its central idea.
 Only append material that strengthens reconstruction of that idea. Do not keep extending a note merely because new material belongs to the same broad Topic.
 
 If a note about HTTP message/transport separation starts accumulating cookies, sessions, CSRF, CORS, deployment, and CDN behavior, split by retrieval target rather than growing a textbook chapter.
+
+Likewise, invariant-plus-delta compression must not turn one foundational note into an unbounded tree of every concept derived from it. Shared foundation is not sufficient reason to merge retrieval targets.
 
 ## Deletion Test
 

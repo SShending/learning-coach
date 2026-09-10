@@ -24,11 +24,12 @@ Ask Coach is request-scoped. If the request becomes Topic-local teaching/assessm
 
 - **Any authoritative Vault read** -> `../../references/vault-format.md` and `../../references/github/read-authority.md`
 - **Portfolio ranking, review scheduling, cross-Topic bottlenecks, candidate Topics, strategy synthesis** -> `references/advisory-model.md`
+- **Shared foundations, repeated cross-Topic blockers, or foundation-vs-frontier attention decisions** -> `references/learning-acceleration.md`
 - **Coach State semantics** -> `../../references/coach-state.md`
 - **Version-sensitive or externally grounded claims** -> `../../references/knowledge-grounding.md`
 - **Durable Coach State or Learning Strategy write** -> `../../references/github/advisory-write.md`
 
-Do not load write protocols for advice that remains ephemeral.
+Do not load write protocols for advice that remains ephemeral. Do not load the learning-acceleration policy merely because foundational knowledge exists; load it when cross-Topic leverage could materially change the recommendation.
 
 ## Resolve Authoritative State
 
@@ -68,23 +69,28 @@ Persist a candidate only when it is likely to matter later. Preserve rationale, 
 
 Persist only relationships or hypotheses likely to matter in future sequencing, transfer, or bottleneck analysis. Preserve uncertainty; never turn an advisory hypothesis directly into a Topic `knownGap`.
 
+Shared vocabulary is not sufficient evidence of a shared foundation. When a possible common mechanism would materially change portfolio priority, use `references/learning-acceleration.md` to test the connection and bound any foundation detour.
+
 ## Learning Strategy Synthesis
 
 Learning Strategy answers: **Which learning approaches help or hinder this learner under which conditions?**
 
 A valid observation requires evidence from at least two distinct Topics. Do not infer fixed personality or learning-style labels or create strategy from one lesson, preference alone, generic theory, transient advice, or activity counts.
 
+A generic learning-acceleration principle is not by itself learner-specific strategy evidence. Observe transfer across Topics before synthesizing a durable strategy claim.
+
 ## Portfolio Decision Loop
 
 1. Identify the real candidate set: existing Topics, review, practice, exploration, or possible new Topics.
 2. Read only the authoritative Topic state needed to compare those candidates.
 3. Evaluate goal relevance, roadmap leverage, prerequisites, evidence progression, review urgency, transfer value, context-switch cost, constraints, and durable advisory context.
-4. Prefer demonstrated capability growth over content coverage or activity counts.
-5. If a cross-Topic bottleneck is only a hypothesis, propose a small Topic Coach assessment instead of treating it as fact.
-6. Choose a recommendation, explain why now, and identify what should wait when useful.
-7. Persist only durable advisory/strategy changes; keep transient ranking logic ephemeral.
+4. When the same plausible blocker affects multiple Topics, consider whether a **bounded shared-foundation repair** could reduce future learning cost; use `references/learning-acceleration.md` when this could change the ranking.
+5. Prefer demonstrated capability growth over content coverage or activity counts.
+6. If a cross-Topic bottleneck is only a hypothesis, propose a small Topic Coach assessment instead of treating it as fact.
+7. Choose a recommendation, explain why now, and identify what should wait when useful.
+8. Persist only durable advisory/strategy changes; keep transient ranking logic ephemeral.
 
-It is valid to recommend no new Topic and to recommend practice/review instead of more study.
+It is valid to recommend no new Topic and to recommend practice/review instead of more study. A foundation is not automatically preferable to an immediate application or deadline-bound target merely because it is reusable.
 
 ## Global Review Scheduling
 
@@ -92,7 +98,7 @@ Ask Coach chooses **which Topic deserves review attention**. Topic Coach execute
 
 ## Periodic Portfolio Review
 
-Focus on actual capability movement, exposure-only areas, global review pressure, Topic stalls, transfer, bottlenecks, what to continue/review/practice/defer, whether a new Topic is justified, and whether cross-Topic evidence supports a Learning Strategy observation.
+Focus on actual capability movement, exposure-only areas, global review pressure, Topic stalls, transfer, bottlenecks, what to continue/review/practice/defer, whether a new Topic is justified, whether one shared foundation could unlock several Topics, and whether cross-Topic evidence supports a Learning Strategy observation.
 
 ## Persistence
 
@@ -100,7 +106,7 @@ When a durable Coach State or Learning Strategy change is justified, read `../..
 
 ## Output
 
-Prefer recommendation, why now, what not to do yet when relevant, remembered advisory/strategy context when it materially affected the decision, and a concrete handoff to Topic Coach.
+Prefer recommendation, why now, what not to do yet when relevant, remembered advisory/strategy context when it materially affected the decision, expected cross-Topic leverage when a foundation investment wins, and a concrete handoff to Topic Coach.
 
 ## Privacy
 
