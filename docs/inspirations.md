@@ -54,11 +54,18 @@ rather than treating the video as a prompt or specification:
   proof of mastery or automatic persistence;
 - at portfolio level, consider whether a bounded shared-foundation investment can
   reduce future learning cost across multiple Topics, while still applying timing,
-  evidence, and transfer checks.
+  evidence, and transfer checks;
+- during Vault maintenance, detect when structurally valid knowledge has fragmented
+  into overlapping retrieval units and consolidate only when a real invariant,
+  coherent retrieval target, meaningful deltas, and provenance can all be preserved.
 
-The resulting policy is applied at two levels: Topic Coach uses it as a conditional
-pedagogical strategy inside one Topic, while Ask Coach uses it as a conditional
-portfolio strategy when a shared foundation or repeated cross-Topic blocker could
-materially change where attention should go next. Its goal is to make later
-learning cheaper through reusable mental models without turning foundation study
-into an end in itself.
+The resulting policy is applied at three levels: Topic Coach uses it as a
+conditional pedagogical strategy inside one Topic; Ask Coach uses it as a
+conditional portfolio strategy when a shared foundation or repeated cross-Topic
+blocker could materially change where attention should go next; Vault Curator
+uses it as a maintenance heuristic for compressing fragmented stored knowledge
+into reusable mental models without collapsing assessment boundaries or merging
+Topics merely because they share foundations.
+
+Its goal is to make later learning cheaper through reusable mental models without
+turning foundation study, note-count reduction, or abstraction itself into an end.

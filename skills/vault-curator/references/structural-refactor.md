@@ -2,15 +2,26 @@
 
 Read this for merge, split, rename, Concept consolidation, orphan repair, or other topology-changing Vault maintenance.
 
+When a proposed refactor is motivated by fragmented notes/Concepts, repeated definitions, or a desire to create a reusable mental model, also read `knowledge-consolidation.md`. Structural similarity alone is not enough to justify knowledge consolidation.
+
 ## Diagnose First
 
 Compare target capabilities, scope, roadmap, Concept semantics, prerequisites, evidence provenance, notes/sessions, current focus, gaps/unassessed, and next-step semantics. Never merge or split based only on lexical similarity.
 
 Classify overlap as duplicate, parent-child, shared prerequisite, or uncertain.
 
+For knowledge consolidation, additionally distinguish:
+
+- same future retrieval target versus merely related material;
+- a real governing invariant versus superficial vocabulary overlap;
+- meaningful deltas that must survive consolidation;
+- explanatory-note consolidation versus assessment-Concept consolidation.
+
 ## Refactor Readiness
 
 Before mutation, account for every affected roadmap milestone, Concept, evidence record/session provenance, prerequisite, `levelBasis`, `nextStepTargets`, note/session body and metadata reference, Topic README projection, focus/gaps/unassessed/next-step semantics, manifest binding, and Coach State reference.
+
+If knowledge artifacts are being consolidated, identify the retained owner, superseded active selections, unique material to preserve, and the semantic distinction most at risk of being flattened.
 
 If those cannot be mapped safely, mark the refactor not ready.
 
@@ -20,7 +31,9 @@ If those cannot be mapped safely, mark the refactor not ready.
 - do not manufacture mastery changes from reorganization;
 - preserve contradictions;
 - update Coach State references only when semantic mapping is unambiguous;
-- treat prepared but unbound state as non-authoritative until the manifest selects it.
+- treat prepared but unbound state as non-authoritative until the manifest selects it;
+- do not merge Topics merely because they share a reusable foundation;
+- do not force Concept topology to mirror note topology when separate assessment remains useful.
 
 Use `../../../references/github/structural-write.md` for the approved write protocol.
 

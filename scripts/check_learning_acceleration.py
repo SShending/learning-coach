@@ -55,9 +55,14 @@ def main() -> None:
     ask = read("skills/ask-coach/SKILL.md")
     ask_advisory = read("skills/ask-coach/references/advisory-model.md")
     ask_policy = read("skills/ask-coach/references/learning-acceleration.md")
+    curator = read("skills/vault-curator/SKILL.md")
+    curator_review = read("skills/vault-curator/references/review-checklist.md")
+    curator_refactor = read("skills/vault-curator/references/structural-refactor.md")
+    curator_policy = read("skills/vault-curator/references/knowledge-consolidation.md")
     inspirations = read("docs/inspirations.md")
     topic_eval_text = read("evals/behavior/topic-coach-learning-acceleration.json")
     ask_eval_text = read("evals/behavior/ask-coach-learning-acceleration.json")
+    curator_eval_text = read("evals/behavior/vault-curator-knowledge-consolidation.json")
 
     require(topic, "Topic Coach routing", [
         "references/learning-acceleration.md",
@@ -105,11 +110,45 @@ def main() -> None:
         "compounding capability",
     ], errors)
 
+    require(curator, "Vault Curator routing", [
+        "references/knowledge-consolidation.md",
+        "## Knowledge Consolidation Boundary",
+        "Do not optimize for fewer artifacts.",
+        "notes may synthesize a reusable mental model while Concepts remain separate",
+    ], errors)
+
+    require(curator_review, "Vault Curator review checklist", [
+        "## 8. Knowledge fragmentation and consolidation quality",
+        "duplicate active notes competing for the same retrieval target",
+        "Treat shared foundations across Topics as a possible transfer relationship",
+    ], errors)
+
+    require(curator_refactor, "Vault Curator structural refactor", [
+        "knowledge-consolidation.md",
+        "same future retrieval target versus merely related material",
+        "do not force Concept topology to mirror note topology",
+    ], errors)
+
+    require(curator_policy, "Vault Curator knowledge consolidation policy", [
+        "# Knowledge Consolidation",
+        "## Fragmentation Signals",
+        "## Consolidation Test",
+        "## Update Before Create",
+        "## Concept Consolidation",
+        "## Preserve Useful Deltas",
+        "## No Premature Synthesis",
+        "## Cross-Topic Boundary",
+        "Do not create new schema fields",
+        "Will the learner be able to reconstruct and reuse the important model more reliably later?",
+    ], errors)
+
     require(inspirations, "Inspirations", [
         "## Learning acceleration: foundations and invariant-plus-delta explanations",
         "https://www.bilibili.com/video/BV1m8D7BWEKZ/",
         "飞天闪客",
-        "Ask Coach uses it as a conditional",
+        "Ask Coach uses it as a",
+        "Vault Curator",
+        "three levels",
     ], errors)
 
     validate_fixture(
@@ -140,6 +179,24 @@ def main() -> None:
             "bounded-foundation-recommendation",
             "generic-principle-is-not-learning-strategy-evidence",
             "transfer-validates-foundation-investment",
+        },
+        errors,
+    )
+
+    validate_fixture(
+        curator_eval_text,
+        "vault-curator-knowledge-consolidation",
+        {
+            "overlapping-glossary-notes-consolidate",
+            "shared-vocabulary-does-not-consolidate",
+            "note-consolidation-does-not-force-concept-merge",
+            "duplicate-concepts-can-consolidate",
+            "shared-foundation-does-not-merge-topics",
+            "premature-synthesis-is-rejected",
+            "meaningful-deltas-survive-consolidation",
+            "existing-owner-is-refined-before-new-synthesis",
+            "read-only-review-does-not-auto-refactor",
+            "consolidation-preserves-contradictions",
         },
         errors,
     )

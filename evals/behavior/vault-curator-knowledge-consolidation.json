@@ -1,0 +1,178 @@
+{
+  "suite": "vault-curator-knowledge-consolidation",
+  "purpose": "Regression fixtures for Vault Curator knowledge consolidation: detecting fragmented reusable models without flattening assessment boundaries, provenance, or Topic semantics.",
+  "cases": [
+    {
+      "id": "overlapping-glossary-notes-consolidate",
+      "initial_state": {
+        "notes": [
+          "Separate short notes define runtime, orchestration, execution context, and tool-call control flow.",
+          "The notes repeatedly reconstruct the same execution mechanism and are retrieved together."
+        ]
+      },
+      "expected": {
+        "must": [
+          "Identify a plausible shared retrieval target and governing mechanism.",
+          "Propose consolidation into a reusable mental model while preserving distinct terms as meaningful deltas or distinctions.",
+          "Preserve provenance and unique learner-specific corrections."
+        ],
+        "must_not": [
+          "Keep duplicate active notes solely because their titles differ.",
+          "Treat note consolidation as mastery evidence."
+        ]
+      }
+    },
+    {
+      "id": "shared-vocabulary-does-not-consolidate",
+      "initial_state": {
+        "notes": [
+          "A Git branch note uses the word state.",
+          "An agent runtime note also uses the word state."
+        ]
+      },
+      "expected": {
+        "must": [
+          "Check for a shared governing mechanism and retrieval target rather than lexical overlap.",
+          "Keep the notes separate when the underlying models answer different future questions."
+        ],
+        "must_not": [
+          "Merge artifacts merely because they share vocabulary."
+        ]
+      }
+    },
+    {
+      "id": "note-consolidation-does-not-force-concept-merge",
+      "initial_state": {
+        "concepts": [
+          "provider is assessed by identifying implementation ownership",
+          "adapter is assessed by designing translation across incompatible interfaces"
+        ],
+        "notes": "Several explanatory notes can be synthesized into one component-boundary mental model."
+      },
+      "expected": {
+        "must": [
+          "Allow one explanatory note to synthesize the shared mental model.",
+          "Keep provider and adapter as separate Concepts when their assessment behaviors and failure modes differ."
+        ],
+        "must_not": [
+          "Force Concept topology to mirror note topology."
+        ]
+      }
+    },
+    {
+      "id": "duplicate-concepts-can-consolidate",
+      "initial_state": {
+        "concepts": [
+          "two Concepts have different names but identical semantics",
+          "both are supported by the same kind of learner evidence and neither has a distinct prerequisite or failure mode"
+        ]
+      },
+      "expected": {
+        "must": [
+          "Recognize the Concepts as plausible duplicates rather than preserving glossary fragmentation.",
+          "Before mutation, map evidence, levelBasis, prerequisites, nextStepTargets, and references to a retained Concept."
+        ],
+        "must_not": [
+          "Change mastery merely because duplicate Concepts are consolidated."
+        ]
+      }
+    },
+    {
+      "id": "shared-foundation-does-not-merge-topics",
+      "initial_state": {
+        "topics": [
+          "DeepSeek Harness uses runtime/control-flow foundations",
+          "Agent Capability Studio also uses runtime/control-flow foundations"
+        ]
+      },
+      "expected": {
+        "must": [
+          "Treat the shared foundation as a possible cross-Topic transfer relationship.",
+          "Preserve separate Topic boundaries when target capabilities remain distinct."
+        ],
+        "must_not": [
+          "Merge Topics solely because they reuse the same foundation."
+        ]
+      }
+    },
+    {
+      "id": "premature-synthesis-is-rejected",
+      "initial_state": {
+        "notes": "Several newly encountered memory-system terms appear related, but the learner has only exposure and the governing mechanism is still uncertain."
+      },
+      "expected": {
+        "must": [
+          "Report the possible consolidation candidate as uncertain or defer it.",
+          "Prefer an honest fragmented representation over a concise but unsupported abstraction."
+        ],
+        "must_not": [
+          "Invent an invariant merely to reduce artifact count."
+        ]
+      }
+    },
+    {
+      "id": "meaningful-deltas-survive-consolidation",
+      "initial_state": {
+        "notes": [
+          "Several agent memory methods share retrieval over stored experience.",
+          "They differ materially in construction timing, update policy, and interference behavior."
+        ]
+      },
+      "expected": {
+        "must": [
+          "Preserve the common retrieval foundation only where valid.",
+          "Keep construction timing, update policy, and interference behavior as explicit meaningful deltas or separate retrieval units."
+        ],
+        "must_not": [
+          "Flatten behaviorally important differences into one generic memory definition."
+        ]
+      }
+    },
+    {
+      "id": "existing-owner-is-refined-before-new-synthesis",
+      "initial_state": {
+        "notes": [
+          "One existing durable note already owns the runtime execution mental model.",
+          "Two later notes add small validated distinctions about tool result observation and state updates."
+        ]
+      },
+      "expected": {
+        "must": [
+          "Prefer refining the existing owner when the new material serves the same retrieval target.",
+          "Preserve unique material and provenance before superseding duplicate active selections."
+        ],
+        "must_not": [
+          "Create another synthesis note while leaving all overlapping notes active by default."
+        ]
+      }
+    },
+    {
+      "id": "read-only-review-does-not-auto-refactor",
+      "learner_move": "Review my Vault health and tell me whether my notes are fragmented.",
+      "expected": {
+        "must": [
+          "Inspect and report consolidation candidates without mutating during the normal read-only review.",
+          "Provide an exact structural plan before any destructive or topology-changing write."
+        ],
+        "must_not": [
+          "Automatically merge or delete notes because a candidate consolidation was found."
+        ]
+      }
+    },
+    {
+      "id": "consolidation-preserves-contradictions",
+      "initial_state": {
+        "notes": "A reusable model has evolved across sessions and one older observation conflicts with the newer model."
+      },
+      "expected": {
+        "must": [
+          "Preserve relevant contradiction/history while consolidating the current retrieval model.",
+          "Keep evidence provenance independently auditable."
+        ],
+        "must_not": [
+          "Erase contradictory evidence to make the consolidated note cleaner."
+        ]
+      }
+    }
+  ]
+}
