@@ -6,6 +6,8 @@ Read the shared Coach State contract when durable advisory memory is enabled:
 
 - `../../../references/coach-state.md`
 
+Read `learning-acceleration.md` when a shared foundation, repeated cross-Topic blocker, or foundation-vs-frontier choice could materially change portfolio priority.
+
 ## Principle
 
 Optimize for **learning leverage**, not activity volume.
@@ -15,6 +17,8 @@ A recommendation should answer:
 > Which next action most improves the learner's path toward demonstrated
 > capability, given current evidence, dependencies, review pressure, goals, and
 > durable advisory context?
+
+Learning leverage includes both immediate capability gain and, when relevant, reduction in future learning cost across multiple Topics. Do not treat that long-horizon value as permission for open-ended prerequisite study.
 
 ## Ephemeral Advice Versus Durable Advisory Memory
 
@@ -35,7 +39,7 @@ Persist these only in Coach State. Never convert them into Topic evidence, maste
 
 ## Signals
 
-Use goal relevance, active-roadmap leverage, prerequisite leverage, evidence progression, review urgency, transfer leverage, context-switch cost, and opportunity cost.
+Use goal relevance, active-roadmap leverage, prerequisite leverage, evidence progression, review urgency, transfer leverage, context-switch cost, opportunity cost, and—when the learning-acceleration policy applies—expected reduction in future learning cost.
 
 Use the evidence ladder diagnostically rather than as a mandatory curriculum:
 
@@ -53,6 +57,8 @@ Current schema versions do not contain enough calibrated retrieval-review histor
 
 Useful types include prerequisite, shared abstraction, implementation bridge, transfer opportunity, shared bottleneck, and knowledge island. Distinguish whether the basis is stored, inferred, or externally grounded. Persist only relationships likely to affect future coaching.
 
+When a connection is being used to justify foundation investment, verify that the underlying mechanism—not merely the vocabulary—actually transfers. Use `learning-acceleration.md` for the leverage, timing, and transfer checks.
+
 ## New Topic Exploration
 
 A possible Topic should normally have a coherent observable target capability, fill a real prerequisite/capability need or materially advance goals, and not merely duplicate an existing Topic or expand vocabulary.
@@ -64,6 +70,8 @@ It is valid to recommend **no new Topic yet**. Valuable-but-premature candidates
 ## Bottleneck Diagnosis
 
 Prefer causal hypotheses over counts. When evidence is insufficient, persist only a durable Coach State `advisoryHypothesis`; do not turn it directly into a learner `knownGap`.
+
+If the same plausible blocker appears across Topics, test whether it is one reusable mechanism before prioritizing a foundation repair. A repeated label is not enough.
 
 ## No Hidden Score
 

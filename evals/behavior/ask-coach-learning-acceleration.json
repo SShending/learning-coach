@@ -1,0 +1,139 @@
+{
+  "suite": "ask-coach-learning-acceleration",
+  "purpose": "Regression fixtures for Ask Coach's portfolio-level learning-acceleration policy: shared-foundation leverage, timing, transfer, evidence boundaries, and bounded detours.",
+  "cases": [
+    {
+      "id": "shared-foundation-unlocks-multiple-topics",
+      "initial_state": {
+        "topics": [
+          "DeepSeek Harness: repeated confusion around runtime, service, provider, and control flow",
+          "Agent Capability Studio: difficulty reasoning about runtime capability boundaries and execution ownership"
+        ]
+      },
+      "learner_move": "What should I focus on next across these topics?",
+      "expected": {
+        "must": [
+          "Recognize a plausible shared software/runtime foundation whose repair could reduce learning cost in both Topics.",
+          "Compare that bounded foundation repair against ordinary Topic progression, review, and practice.",
+          "Explain which future learning is expected to become cheaper and where transfer should be checked."
+        ],
+        "must_not": [
+          "Recommend studying all computer-science fundamentals.",
+          "Create or mutate Topic knownGap state from portfolio advice."
+        ]
+      }
+    },
+    {
+      "id": "deadline-beats-nonblocking-foundation",
+      "initial_state": {
+        "goal": "Finish a narrow Text2SQL evaluation script today",
+        "foundation_candidate": "A broad software architecture topic that may be useful later but is not blocking the script"
+      },
+      "learner_move": "Should I stop and strengthen fundamentals first?",
+      "expected": {
+        "must": [
+          "Apply the timing gate and keep attention on the deadline-bound target when the foundation is not currently blocking it.",
+          "Defer the broader foundation with a concrete revisit condition if it remains valuable."
+        ],
+        "must_not": [
+          "Prefer foundations automatically because they have long-term value."
+        ]
+      }
+    },
+    {
+      "id": "shared-word-is-not-shared-mechanism",
+      "initial_state": {
+        "topics": [
+          "Git state",
+          "Agent runtime state"
+        ]
+      },
+      "learner_move": "Both topics use the word state. Should I treat state as one cross-topic foundation and study it first?",
+      "expected": {
+        "must": [
+          "Check whether the governing mechanism, authority, and lifecycle actually transfer before treating the concept as a shared foundation.",
+          "Reject a cross-Topic foundation claim when only vocabulary overlaps."
+        ],
+        "must_not": [
+          "Infer leverage from shared terminology alone."
+        ]
+      }
+    },
+    {
+      "id": "cross-topic-bottleneck-remains-hypothesis",
+      "initial_state": {
+        "topics": [
+          "Agent Memory: unassessed confusion may involve retrieval versus storage",
+          "RAG: no direct evidence yet about retrieval versus storage"
+        ]
+      },
+      "learner_move": "It sounds like retrieval is my global weakness. Save that as my gap and prioritize it.",
+      "expected": {
+        "must": [
+          "Treat the global bottleneck as an advisory hypothesis when evidence is insufficient.",
+          "Recommend a small Topic Coach diagnostic in a relevant Topic before asserting the shared gap."
+        ],
+        "must_not": [
+          "Write Topic knownGap state from Ask Coach.",
+          "Promote an unassessed hypothesis to learner truth."
+        ]
+      }
+    },
+    {
+      "id": "demonstrated-foundation-does-not-win-again",
+      "initial_state": {
+        "evidence": "The learner has independently demonstrated the runtime control-flow foundation in more than one task.",
+        "current_need": "Agent Memory needs independent application practice."
+      },
+      "learner_move": "What should I work on next?",
+      "expected": {
+        "must": [
+          "Reuse the demonstrated foundation and prioritize the current capability bottleneck when it has higher marginal value.",
+          "Avoid rewarding already-demonstrated foundational knowledge with more explanation by default."
+        ]
+      }
+    },
+    {
+      "id": "bounded-foundation-recommendation",
+      "initial_state": {
+        "shared_blocker": "Weak understanding of async execution affects both an agent runtime project and a Text2SQL concurrent evaluation pipeline."
+      },
+      "learner_move": "Should I learn asyncio first?",
+      "expected": {
+        "must": [
+          "Express the recommendation as a minimum observable capability sufficient to unblock the two Topics.",
+          "Name a transfer check in the second Topic after the bounded repair."
+        ],
+        "must_not": [
+          "Recommend completing an open-ended asyncio curriculum before returning to either Topic."
+        ]
+      }
+    },
+    {
+      "id": "generic-principle-is-not-learning-strategy-evidence",
+      "learner_move": "Foundation-first learning sounds generally good. Save that as my personal Learning Strategy.",
+      "expected": {
+        "must": [
+          "Require learner-specific evidence across at least two distinct Topics before writing a durable Learning Strategy observation.",
+          "Keep the generic learning-acceleration principle as coaching policy rather than learner-specific evidence."
+        ],
+        "must_not": [
+          "Create Learning Strategy from theory or preference alone."
+        ]
+      }
+    },
+    {
+      "id": "transfer-validates-foundation-investment",
+      "initial_state": {
+        "history": "A bounded runtime foundation repair was recommended because it plausibly affected DSH and ACS."
+      },
+      "learner_move": "I can now independently trace the control flow in DSH and use the same model to explain where ACS should intercept capability loading.",
+      "expected": {
+        "must": [
+          "Recognize the second-Topic reuse as evidence that the cross-Topic foundation hypothesis had practical transfer value.",
+          "Keep Topic evidence writes with Topic Coach while allowing durable advisory/strategy synthesis only under their normal ownership rules."
+        ]
+      }
+    }
+  ]
+}
