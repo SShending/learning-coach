@@ -51,8 +51,14 @@ rather than treating the video as a prompt or specification:
 - reject forced analogies and teach a new primitive directly when no valid base
   exists;
 - treat compact abstractions as possible learning-note candidates, not automatic
-  proof of mastery or automatic persistence.
+  proof of mastery or automatic persistence;
+- at portfolio level, consider whether a bounded shared-foundation investment can
+  reduce future learning cost across multiple Topics, while still applying timing,
+  evidence, and transfer checks.
 
-The resulting policy lives inside Topic Coach as a conditional pedagogical
-strategy. Its goal is to make later learning cheaper through reusable mental
-models without turning foundation study into an end in itself.
+The resulting policy is applied at two levels: Topic Coach uses it as a conditional
+pedagogical strategy inside one Topic, while Ask Coach uses it as a conditional
+portfolio strategy when a shared foundation or repeated cross-Topic blocker could
+materially change where attention should go next. Its goal is to make later
+learning cheaper through reusable mental models without turning foundation study
+into an end in itself.
