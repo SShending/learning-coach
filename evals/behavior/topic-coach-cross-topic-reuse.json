@@ -1,0 +1,103 @@
+{
+  "suite": "topic-coach-cross-topic-reuse",
+  "purpose": "Regression fixtures for Topic Coach consuming durable cross-Topic connections as retrieval hints while preserving evidence and ownership boundaries.",
+  "cases": [
+    {
+      "id": "resume-reuses-demonstrated-connected-foundation",
+      "initial_state": {
+        "current_topic": "DeepSeek Harness",
+        "connection": "An active stored shared_abstraction connects Agent Foundations and DeepSeek Harness around the generic Agent runtime/model-tool-observation loop.",
+        "source_evidence": "Agent Foundations has sufficient demonstrated evidence for the generic runtime loop.",
+        "target_need": "DeepSeek Harness still needs Context, Service, Provider, and Plugin composition."
+      },
+      "learner_move": "Use Topic Coach. Resume DeepSeek Harness.",
+      "expected": {
+        "must": [
+          "Use the active connection as a retrieval hint and verify the relevant Agent Foundations evidence before reusing the foundation.",
+          "Skip redundant explanation of the demonstrated generic runtime loop when the delta validity check passes.",
+          "Focus the lesson on the DeepSeek-Harness-specific delta and any current-Topic assessment still needed."
+        ],
+        "must_not": [
+          "Treat the connection record itself as proof of mastery.",
+          "Reteach the demonstrated source foundation from scratch by default."
+        ]
+      }
+    },
+    {
+      "id": "connection-without-source-evidence-does-not-skip-foundation",
+      "initial_state": {
+        "current_topic": "Production Agent Engineering",
+        "connection": "An inferred transfer opportunity connects Web Application Foundations to production Agent request handling.",
+        "source_evidence": "The relevant concurrency/isolation mechanism is unassessed in Web Application Foundations."
+      },
+      "learner_move": "Continue production-agent-engineering and reuse whatever I already know from web foundations.",
+      "expected": {
+        "must": [
+          "Treat the connection as a candidate retrieval path rather than demonstrated reusable knowledge.",
+          "Refuse to skip the unassessed mechanism merely because the connection exists.",
+          "Teach the current target directly or repair only the nearest blocking foundation if needed."
+        ],
+        "must_not": [
+          "Infer learner capability from basis stored, inferred, or grounded alone."
+        ]
+      }
+    },
+    {
+      "id": "cross-topic-reuse-does-not-copy-evidence-or-mastery",
+      "initial_state": {
+        "current_topic": "DeepSeek Harness",
+        "source_topic": "Agent Foundations has demonstrated generic Agent runtime evidence.",
+        "target_topic": "DeepSeek Harness has not yet demonstrated DSH-specific composition."
+      },
+      "learner_move": "Since I already proved the Agent loop elsewhere, mark the DSH runtime section as mastered.",
+      "expected": {
+        "must": [
+          "Use source evidence only to avoid redundant teaching of the shared invariant.",
+          "Require current-Topic observable behavior for DSH-specific capability or transfer claims.",
+          "Keep evidence and mastery in their owning Topics."
+        ],
+        "must_not": [
+          "Copy source-Topic evidence into the current Topic.",
+          "Upgrade current-Topic mastery solely from a cross-Topic connection."
+        ]
+      }
+    },
+    {
+      "id": "reuse-shortens-route-without-deleting-roadmap-capability",
+      "initial_state": {
+        "current_topic": "DeepSeek Harness",
+        "roadmap": "The roadmap still includes understanding the DSH Agent Loop as part of the target capability.",
+        "source_evidence": "The generic Agent loop foundation is demonstrated in Agent Foundations."
+      },
+      "learner_move": "If we reuse Agent Foundations, remove the DSH loop milestone entirely.",
+      "expected": {
+        "must": [
+          "Keep the current-Topic capability structure when DSH-specific understanding still matters.",
+          "Allow reuse to shorten the teaching route through the milestone rather than deleting it automatically.",
+          "Adapt currentFocus or nextStep only if the Topic-local route materially changes."
+        ],
+        "must_not": [
+          "Delete a roadmap capability solely because its generic foundation was demonstrated elsewhere."
+        ]
+      }
+    },
+    {
+      "id": "topic-coach-does-not-become-portfolio-planner",
+      "initial_state": {
+        "current_topic": "Agent Memory",
+        "connections": "Coach State contains several active links from Agent Foundations to other Topics."
+      },
+      "learner_move": "Use Topic Coach. Continue Agent Memory.",
+      "expected": {
+        "must": [
+          "Inspect only connections relevant to the current Agent Memory target when reuse can materially help.",
+          "Stay inside the chosen Topic and use connected knowledge only as instructional context."
+        ],
+        "must_not": [
+          "Rank unrelated Topics or redirect the learner merely because another connected Topic looks globally valuable.",
+          "Scan the full connection graph by default."
+        ]
+      }
+    }
+  ]
+}
