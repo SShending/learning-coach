@@ -59,10 +59,13 @@ def main() -> None:
     curator_review = read("skills/vault-curator/references/review-checklist.md")
     curator_refactor = read("skills/vault-curator/references/structural-refactor.md")
     curator_policy = read("skills/vault-curator/references/knowledge-consolidation.md")
+    view = read("skills/learning-view/SKILL.md")
+    view_policy = read("skills/learning-view/references/learning-acceleration-views.md")
     inspirations = read("docs/inspirations.md")
     topic_eval_text = read("evals/behavior/topic-coach-learning-acceleration.json")
     ask_eval_text = read("evals/behavior/ask-coach-learning-acceleration.json")
     curator_eval_text = read("evals/behavior/vault-curator-knowledge-consolidation.json")
+    view_eval_text = read("evals/behavior/learning-view-learning-acceleration.json")
 
     require(topic, "Topic Coach routing", [
         "references/learning-acceleration.md",
@@ -142,13 +145,36 @@ def main() -> None:
         "Will the learner be able to reconstruct and reuse the important model more reliably later?",
     ], errors)
 
+    require(view, "Learning View routing", [
+        "references/learning-acceleration-views.md",
+        "### Learning Acceleration Views",
+        "encountered material",
+        "structurally reusable knowledge",
+        "Consolidation diagnosis belongs to Vault Curator.",
+        "Derived foundation, invariant/delta, reuse, or fragmentation views are presentation-time projections only.",
+    ], errors)
+
+    require(view_policy, "Learning View acceleration policy", [
+        "# Learning Acceleration Views",
+        "## Evidence Layers",
+        "## Foundation Signals",
+        "## Reuse And Transfer",
+        "## Reusable Mental Model View",
+        "## Exposure Versus Capability View",
+        "## Knowledge Structure View",
+        "## Fragmentation Signals",
+        "## No Schema Pretence",
+        "visibility is not prioritization",
+    ], errors)
+
     require(inspirations, "Inspirations", [
         "## Learning acceleration: foundations and invariant-plus-delta explanations",
         "https://www.bilibili.com/video/BV1m8D7BWEKZ/",
         "飞天闪客",
         "Ask Coach uses it as a",
         "Vault Curator",
-        "three levels",
+        "Learning View",
+        "four levels",
     ], errors)
 
     validate_fixture(
@@ -197,6 +223,24 @@ def main() -> None:
             "existing-owner-is-refined-before-new-synthesis",
             "read-only-review-does-not-auto-refactor",
             "consolidation-preserves-contradictions",
+        },
+        errors,
+    )
+
+    validate_fixture(
+        view_eval_text,
+        "learning-view-learning-acceleration",
+        {
+            "exposure-is-not-mastery",
+            "shared-prerequisite-is-derived-foundation-signal",
+            "shared-vocabulary-does-not-create-foundation",
+            "reuse-potential-is-not-transfer",
+            "transfer-evidence-is-visible",
+            "note-claim-status-is-not-mastery",
+            "mental-model-view-requires-body-inspection",
+            "fragmentation-signal-does-not-refactor",
+            "view-does-not-prioritize",
+            "no-hidden-schema-fields",
         },
         errors,
     )
