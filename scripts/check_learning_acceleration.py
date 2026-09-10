@@ -94,21 +94,31 @@ def main() -> None:
         "references/learning-acceleration.md",
         "bounded shared-foundation repair",
         "expected cross-Topic leverage",
+        "inputs to prioritization, not curriculum locks",
+        "downstream reuse",
+        "Respect learner choice.",
         "A generic learning-acceleration principle is not by itself learner-specific strategy evidence.",
     ], errors)
 
     require(ask_advisory, "Ask Coach advisory model", [
         "reduction in future learning cost across multiple Topics",
         "underlying mechanism—not merely the vocabulary",
+        "## Reuse-Aware Prioritization",
+        "reuse credit",
+        "### Advisory order, not mandatory order",
+        "### Roadmap ownership boundary",
     ], errors)
 
     require(ask_policy, "Ask Coach learning acceleration policy", [
         "# Ask Coach Learning Acceleration",
         "## Cross-Topic Foundation Leverage",
         "## Shared Mechanism, Not Shared Vocabulary",
+        "## Reuse-Aware Topic Ordering",
+        "The recommended Topic order is advisory.",
         "## Repeated Bottleneck Test",
         "## Timing Gate",
         "## Minimum Sufficient Portfolio Detour",
+        "## Topic Authority Boundary",
         "## Relationship To Learning Strategy",
         "compounding capability",
     ], errors)
@@ -205,6 +215,11 @@ def main() -> None:
             "bounded-foundation-recommendation",
             "generic-principle-is-not-learning-strategy-evidence",
             "transfer-validates-foundation-investment",
+            "missing-shared-foundation-can-win-through-downstream-reuse",
+            "demonstrated-foundation-makes-downstream-topic-cheaper",
+            "recommended-topic-order-is-not-mandatory",
+            "reuse-aware-advice-does-not-rewrite-topic-roadmap",
+            "hub-topic-does-not-win-by-connection-count",
         },
         errors,
     )
