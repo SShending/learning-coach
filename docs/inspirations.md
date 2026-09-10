@@ -57,15 +57,20 @@ rather than treating the video as a prompt or specification:
   evidence, and transfer checks;
 - during Vault maintenance, detect when structurally valid knowledge has fragmented
   into overlapping retrieval units and consolidate only when a real invariant,
-  coherent retrieval target, meaningful deltas, and provenance can all be preserved.
+  coherent retrieval target, meaningful deltas, and provenance can all be preserved;
+- in read-only views, expose foundation/reuse/transfer/fragmentation signals as
+  explicit projections from stored authority without pretending those projections
+  are schema fields, mastery evidence, priority decisions, or maintenance judgments.
 
-The resulting policy is applied at three levels: Topic Coach uses it as a
+The resulting policy is applied at four levels: Topic Coach uses it as a
 conditional pedagogical strategy inside one Topic; Ask Coach uses it as a
 conditional portfolio strategy when a shared foundation or repeated cross-Topic
 blocker could materially change where attention should go next; Vault Curator
 uses it as a maintenance heuristic for compressing fragmented stored knowledge
 into reusable mental models without collapsing assessment boundaries or merging
-Topics merely because they share foundations.
+Topics merely because they share foundations; Learning View makes those structures
+legible while keeping visibility separate from prioritization and refactoring.
 
 Its goal is to make later learning cheaper through reusable mental models without
-turning foundation study, note-count reduction, or abstraction itself into an end.
+turning foundation study, note-count reduction, abstraction, or derived metrics
+into ends in themselves.
