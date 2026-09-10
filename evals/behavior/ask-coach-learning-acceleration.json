@@ -1,6 +1,6 @@
 {
   "suite": "ask-coach-learning-acceleration",
-  "purpose": "Regression fixtures for Ask Coach's portfolio-level learning-acceleration policy: shared-foundation leverage, timing, transfer, evidence boundaries, and bounded detours.",
+  "purpose": "Regression fixtures for Ask Coach's portfolio-level learning-acceleration policy: shared-foundation leverage, reuse-aware prioritization, timing, transfer, evidence boundaries, and bounded detours.",
   "cases": [
     {
       "id": "shared-foundation-unlocks-multiple-topics",
@@ -132,6 +132,96 @@
         "must": [
           "Recognize the second-Topic reuse as evidence that the cross-Topic foundation hypothesis had practical transfer value.",
           "Keep Topic evidence writes with Topic Coach while allowing durable advisory/strategy synthesis only under their normal ownership rules."
+        ]
+      }
+    },
+    {
+      "id": "missing-shared-foundation-can-win-through-downstream-reuse",
+      "initial_state": {
+        "topics": [
+          "Agent Foundations: async/runtime scheduling is a supported blocker",
+          "DeepSeek Harness: upcoming lifecycle work reuses async/runtime scheduling",
+          "Production Agent Engineering: upcoming concurrency work reuses async/runtime scheduling"
+        ],
+        "constraint": "The foundation repair is small and there is no immediate deadline elsewhere."
+      },
+      "learner_move": "Which topic should I work on first?",
+      "expected": {
+        "must": [
+          "Allow the shared foundation to rise in priority because one bounded repair can reduce downstream learning cost in multiple goal-relevant Topics.",
+          "Explain the downstream reuse rather than choosing the foundation merely because it is more fundamental."
+        ],
+        "must_not": [
+          "Treat graph centrality or number of connections as sufficient reason to prioritize a Topic."
+        ]
+      }
+    },
+    {
+      "id": "demonstrated-foundation-makes-downstream-topic-cheaper",
+      "initial_state": {
+        "agent_foundations": "The Agent loop and runtime/tool boundary are already demonstrated.",
+        "deepseek_harness": "The remaining target is DSH-specific Context, Service, Provider, and Plugin composition."
+      },
+      "learner_move": "Does Agent Foundations being done change whether DSH is a good next topic?",
+      "expected": {
+        "must": [
+          "Treat the demonstrated Agent foundation as reuse credit that lowers the marginal learning cost of entering DSH.",
+          "Focus the recommendation on the DSH-specific delta rather than scheduling Agent-loop teaching again."
+        ],
+        "must_not": [
+          "Recommend relearning the demonstrated Agent foundation before DSH."
+        ]
+      }
+    },
+    {
+      "id": "recommended-topic-order-is-not-mandatory",
+      "initial_state": {
+        "recommended_order": "Agent Foundations before Production Agent Engineering because the latter can reuse the runtime model.",
+        "learner_choice": "The learner wants to start Production Agent Engineering now."
+      },
+      "learner_move": "I know you recommended Agent Foundations first, but I want to learn production agents now.",
+      "expected": {
+        "must": [
+          "Respect the learner's Topic choice and continue without treating the recommended order as a gate.",
+          "Check only for a nearest blocking prerequisite and recommend a minimum repair if one actually blocks progress."
+        ],
+        "must_not": [
+          "Require completion of the entire upstream Topic before allowing the chosen Topic.",
+          "Frame deviation from the recommendation as invalid learning behavior."
+        ]
+      }
+    },
+    {
+      "id": "reuse-aware-advice-does-not-rewrite-topic-roadmap",
+      "initial_state": {
+        "connection": "Agent Foundations provides a reusable runtime model for DeepSeek Harness.",
+        "dsh_roadmap": "Still includes understanding the DSH Agent Loop as part of the target capability."
+      },
+      "learner_move": "Since the runtime model is reusable, should Ask Coach remove that part from the DSH roadmap?",
+      "expected": {
+        "must": [
+          "Keep reuse-aware ordering as portfolio advice and preserve Topic authority boundaries.",
+          "Explain that Ask Coach may recommend reusing the existing foundation but must not rewrite Topic roadmap, currentFocus, nextStep, mastery, or gaps."
+        ],
+        "must_not": [
+          "Delete or rewrite Topic-local capability structure merely because a cross-Topic connection exists."
+        ]
+      }
+    },
+    {
+      "id": "hub-topic-does-not-win-by-connection-count",
+      "initial_state": {
+        "topic_a": "Agent Foundations has many stored cross-Topic connections but its core runtime capabilities are already demonstrated.",
+        "topic_b": "A current Text2SQL experiment has a concrete unresolved evaluation-design blocker tied directly to the learner's goal."
+      },
+      "learner_move": "Agent Foundations connects to more topics. Should I always prioritize it?",
+      "expected": {
+        "must": [
+          "Reject connection count as a priority score.",
+          "Compare marginal capability gain, current goal relevance, evidence state, timing, and actual downstream reuse before recommending a Topic."
+        ],
+        "must_not": [
+          "Automatically prioritize the most connected Topic."
         ]
       }
     }
