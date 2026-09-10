@@ -1,6 +1,6 @@
 # Learning Coach 使用手册
 
-适用版本：`3.0.0-alpha.24` · 文档更新：2026-09-09
+适用版本：`3.0.0-alpha.24` · 文档更新：2026-09-10
 
 Learning Coach 帮助你持续学习多个主题：把目标、练习中表现出的能力、还没检验的部分，以及下一步该做什么，保存在你自己的私有 GitHub Learning Vault 中。换一次聊天后，教练可以根据这些记录继续，而不必依赖上一段对话仍在上下文里。
 
@@ -30,7 +30,7 @@ Learning Coach 帮助你持续学习多个主题：把目标、练习中表现�
 | 上次聊得很深入，换个聊天却又从头讲 | 从 Vault 恢复目标、当前焦点、证据与下一步 | 教练能接着适合你的位置继续 |
 | 看完了很多内容，不清楚自己是否真的会 | 区分接触过、独立解释、独立应用与迁移 | “已讨论”和“已展示能力”分别呈现 |
 | 学了不少，但没有必要每次写长笔记 | 按学习结果选择 evidence、unassessed、session 或有价值的 note | 保留恢复学习所需的信息，避免堆积聊天摘要 |
-| 同时有几个主题，来回切换 | Ask Coach 根据目标、前置知识、复习需求与时间安排注意力 | 给出当下的选择理由和具体交接 |
+| 同时有几个主题，来回切换 | Ask Coach 根据目标、前置知识、复习需求、跨 Topic 复用与时间安排注意力 | 给出当下的选择理由和具体交接 |
 | 想知道最近有什么进展 | Learning View 按日期展示已有记录 | 看见新证据、笔记更新、未评估探索与记录限制 |
 | 长期使用后结构混乱、引用过时 | Vault Curator 检查并按明确操作维护 | 结构调整不会被当作能力提升 |
 
@@ -87,8 +87,7 @@ Use Knowledge Inbox。
 收集本次 session 中值得留下的 notes。先展示建议保留的 notes，得到确认后再保存。不要创建 Topic、声称我已掌握，也不要保存原始聊天记录。
 ```
 
-条目会进入 Vault 根部的 `.learning-vault/inbox/`，与 `topics/` 并列。它
-表示“以后可能值得检索”，不表示已经开始系统学习。
+条目会进入 Vault 根部的 `inbox/`，与 `topics/` 并列；`.learning-vault/` 保留 manifest、Learning Strategy、Coach State 等控制面与跨 Topic 状态。Inbox 表示“以后可能值得检索”，不表示已经开始系统学习。
 
 ## 4. 建立第一个 Topic
 
@@ -206,6 +205,8 @@ Use Topic Coach.
 
 教练可以恢复已持久化的状态，不保证能恢复所有未保存的聊天。Skill 不必一直常驻每个对话；可靠的连续性来自 Vault 中实际保存的内容。
 
+如果 manifest 绑定了 Coach State，并且当前 Topic 有可能复用其他 Topic 已掌握的基础，Topic Coach 可以读取与当前 Topic 直接相关的 active cross-Topic connection，把它当作“去哪里找可复用知识”的提示。它仍会回读关联 Topic 的权威 evidence；connection 本身不证明 mastery，也不会把另一个 Topic 的证据复制过来。
+
 如果小岚之前已经准确解释过一个概念，复习可以先做检索或应用，再根据表现决定是否重讲：
 
 ```text
@@ -229,11 +230,25 @@ Use Ask Coach.
 
 一种合理的示例建议是先安排一次短史料比较练习，因为它贴近近期目标，且有已观察到的具体困难。它不应只因为摄影笔记最多就优先摄影，也不能把临时排序写成每个 Topic 的下一步。
 
+### 推荐顺序会利用复用，但不是强制课程
+
+Ask Coach 可以保存和使用长期有价值的 cross-Topic connections。如果一个尚未掌握的基础同时阻塞多个近期 Topic，一次有边界的基础修复可能更值得先做；如果这个基础已经有足够 evidence，Ask Coach 则应把它当作 reuse credit，让下游 Topic 更接近自己的特有 delta，而不是再安排一遍基础教学。
+
+例如：
+
+```text
+Topic A 已证明的 shared foundation
+                ↓ reuse
+Topic B = shared foundation + Topic-B-specific delta
+```
+
+这种顺序只是更低学习成本的建议，不是 gate。小岚即使选择先学 Topic B，Topic Coach 也应继续当前 Topic；只有某个前置能力真的阻塞时，才补最近、最小的必要基础，然后回到 Topic B。
+
 ### 三条学习线可以联系，但证据不互相冒用
 
 在“栖川城市博物馆”这个虚构情境中，历史学习帮助小岚辨别史料记载与推断；Agent 学习关注导览回答如何引用、验证材料；摄影学习则关注如何拍摄清楚、可用于观察的图像。
 
-Ask Coach 可以指出它们都涉及“依据是否足以支持判断”，并提出一个跨主题小任务。但能辨析史料，不自动证明能实现 Agent；能独立拍照，也不自动证明会分析历史图像。迁移能力需要在新的任务中实际展示，再由对应 Topic Coach 评估。
+Ask Coach 可以指出它们都涉及“依据是否足以支持判断”，并在关系长期有用时保存为 Coach State connection。但能辨析史料，不自动证明能实现 Agent；能独立拍照，也不自动证明会分析历史图像。Topic Coach 可以复用另一个 Topic 已证明的共同基础来减少重复解释，但迁移能力仍需要在新的任务中实际展示，再由当前 Topic Coach 评估。
 
 ### Learning Strategy：记录方法在哪些条件下有效
 
@@ -368,7 +383,7 @@ Use Knowledge Inbox。我的 Learning Vault 是 <owner>/<private-learning-vault>
 **安排有限时间**
 
 ```text
-Use Ask Coach. 我有 <时长>，近期目标是 <目标>。比较相关 Topic 后建议一个动作。
+Use Ask Coach. 我有 <时长>，近期目标是 <目标>。比较相关 Topic，考虑已有 cross-Topic connections 与可复用 foundation 后建议一个动作。
 ```
 
 **纠正判断**
