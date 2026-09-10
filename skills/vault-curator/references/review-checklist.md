@@ -91,11 +91,29 @@ Within Topics, look for aliases/duplicates, examples mistaken for Concepts, Conc
 
 Recommend the smallest structural change that improves future diagnosis.
 
-## 8. Coach State integrity
+## 8. Knowledge fragmentation and consolidation quality
+
+When the Vault is structurally valid but knowledge is scattered across many Concepts or notes, check whether several artifacts repeatedly reconstruct the same underlying mechanism, distinction, misconception correction, or future retrieval target.
+
+Potential consolidation signals include:
+
+- neighboring glossary-style notes that repeat the same foundation;
+- several notes whose unique content is mostly small deltas over one stable model;
+- Concepts that cannot support meaningfully distinct assessment evidence;
+- repeated explanation fragments that must be read together to reconstruct one working model;
+- duplicate active notes competing for the same retrieval target.
+
+Before recommending consolidation, identify the real invariant, meaningful deltas, retrieval boundary, and provenance that must remain traceable. Read `references/knowledge-consolidation.md` when these signals are material.
+
+Do not recommend consolidation merely to reduce counts. Preserve separate Concepts when assessment precision, prerequisites, failure modes, or target capabilities differ. A note may synthesize explanatory knowledge while Concept boundaries remain separate.
+
+Treat shared foundations across Topics as a possible transfer relationship, not automatic evidence that the Topics should merge.
+
+## 9. Coach State integrity
 
 Ensure candidate Topic IDs and referenced Topic IDs remain coherent with the manifest, advisory hypotheses remain hypotheses, inferred connections are not presented as learner-state facts, and transient daily priorities/review urgency have not leaked into durable Coach State.
 
-## 9. Knowledge Inbox integrity
+## 10. Knowledge Inbox integrity
 
 When the optional Inbox is bound, check that item IDs and paths agree, selected
 bodies exist, linked Topic IDs resolve, promoted targets are recorded only after
@@ -106,16 +124,16 @@ Missing Inbox authority is not a defect unless the learner has chosen to enable
 the feature. Dismissed items and superseded copy-on-write bodies may remain in
 history; cleanup is explicit.
 
-## 10. Refactor readiness
+## 11. Refactor readiness
 
 Before merge/split/consolidation, account for every affected roadmap milestone, Concept, evidence record/session provenance, prerequisite, `levelBasis`, `nextStepTargets`, note/session body and metadata reference, Topic README projection, focus/gaps/unassessed/next-step semantics, manifest binding, and Coach State reference.
 
 If these cannot be mapped safely, mark the refactor not ready.
 
-## 11. Healthy result
+## 12. Healthy result
 
 A valid result may be:
 
 `No structural changes recommended.`
 
-Use it when authority is unambiguous, references and evidence provenance are intact, mastery and roadmap state are auditable, projections are navigable, and no refactor would materially improve learning continuity.
+Use it when authority is unambiguous, references and evidence provenance are intact, mastery and roadmap state are auditable, projections are navigable, and no refactor would materially improve learning continuity or future retrieval/reuse.
