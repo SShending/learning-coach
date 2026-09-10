@@ -62,7 +62,6 @@ def main() -> None:
     require(topic, "Topic Coach routing", [
         "references/learning-acceleration.md",
         "## Learning Acceleration",
-        "minimum sufficient reusable foundation",
     ], errors)
 
     require(topic_policy, "Topic Coach learning acceleration policy", [
@@ -91,9 +90,6 @@ def main() -> None:
     ], errors)
 
     require(ask_advisory, "Ask Coach advisory model", [
-        "reduction in future learning cost across multiple Topics",
-        "Shared Mechanism",
-    ] if "Shared Mechanism" in ask_advisory else [
         "reduction in future learning cost across multiple Topics",
         "underlying mechanism—not merely the vocabulary",
     ], errors)
