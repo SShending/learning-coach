@@ -1,0 +1,182 @@
+{
+  "suite": "learning-view-learning-acceleration",
+  "purpose": "Regression fixtures for Learning View's read-only learning-acceleration projections: exposure versus capability, foundation signals, reusable mental models, transfer, and fragmentation boundaries.",
+  "cases": [
+    {
+      "id": "exposure-is-not-mastery",
+      "initial_state": {
+        "topic": "agent-memory",
+        "sessions": ["Several sessions discussed retrieval and storage."],
+        "unassessed": ["retrieval versus storage boundary"],
+        "concept_level": 0
+      },
+      "learner_move": "Show me what I have learned about agent memory.",
+      "expected": {
+        "must": [
+          "Separate recorded exposure/unassessed coverage from demonstrated capability.",
+          "Keep the Concept at its stored mastery level."
+        ],
+        "must_not": [
+          "Describe repeated discussion as demonstrated mastery."
+        ]
+      }
+    },
+    {
+      "id": "shared-prerequisite-is-derived-foundation-signal",
+      "initial_state": {
+        "concept": "runtime execution model",
+        "referenced_as_prerequisite_by": ["tool-call lifecycle", "service boundaries", "capability loading"]
+      },
+      "learner_move": "Which concepts look foundational in this Topic?",
+      "expected": {
+        "must": [
+          "Show the repeatedly referenced prerequisite as a derived foundation signal.",
+          "Explain the stored structural basis for the signal."
+        ],
+        "must_not": [
+          "Claim that foundation is an authoritative schema field.",
+          "Turn the signal into a recommendation about what to study next."
+        ]
+      }
+    },
+    {
+      "id": "shared-vocabulary-does-not-create-foundation",
+      "initial_state": {
+        "topic_a": "Agent runtime uses the word state.",
+        "topic_b": "RL uses the word state.",
+        "stored_relationship": null
+      },
+      "learner_move": "Show shared foundations across my Topics.",
+      "expected": {
+        "must": [
+          "Avoid creating a shared-foundation edge from vocabulary overlap alone.",
+          "Show uncertainty or omit the relationship when stored/inspected evidence is insufficient."
+        ]
+      }
+    },
+    {
+      "id": "reuse-potential-is-not-transfer",
+      "initial_state": {
+        "concept": "execution model",
+        "structural_reuse": "Referenced by several concepts.",
+        "transfer_evidence": []
+      },
+      "learner_move": "Have I transferred this mental model to other tasks?",
+      "expected": {
+        "must": [
+          "Distinguish structural reuse potential from demonstrated transfer.",
+          "State that no transfer claim is supported without transfer evidence."
+        ],
+        "must_not": [
+          "Infer learner transfer from prerequisite reuse or note similarity."
+        ]
+      }
+    },
+    {
+      "id": "transfer-evidence-is-visible",
+      "initial_state": {
+        "concept_level": 4,
+        "evidence": [
+          {
+            "type": "transfer",
+            "result": "pass",
+            "summary": "Learner applied the execution-loop model to a second framework without guidance."
+          }
+        ]
+      },
+      "learner_move": "Show where my knowledge has actually transferred.",
+      "expected": {
+        "must": [
+          "Surface the stored transfer evidence as demonstrated reuse.",
+          "Keep the evidence distinct from structural foundation/reuse signals."
+        ]
+      }
+    },
+    {
+      "id": "note-claim-status-is-not-mastery",
+      "initial_state": {
+        "note": {
+          "claimStatus": "confirmed",
+          "body": "A compact reusable runtime mental model."
+        },
+        "concept_level": 1
+      },
+      "learner_move": "Show my reusable mental models.",
+      "expected": {
+        "must": [
+          "Show the note's claim status separately from learner capability evidence.",
+          "Preserve the stored Concept mastery level."
+        ],
+        "must_not": [
+          "Interpret a confirmed note as proof that the learner mastered the model."
+        ]
+      }
+    },
+    {
+      "id": "mental-model-view-requires-body-inspection",
+      "initial_state": {
+        "note_metadata": {
+          "kind": "learning_note",
+          "claimStatus": "working_model"
+        },
+        "body_read": false
+      },
+      "learner_move": "Which notes are reusable mental models rather than isolated facts?",
+      "expected": {
+        "must": [
+          "Read the relevant note body before classifying its retrieval target or central model.",
+          "Avoid inferring note semantics from metadata alone."
+        ]
+      }
+    },
+    {
+      "id": "fragmentation-signal-does-not-refactor",
+      "initial_state": {
+        "notes": [
+          "Three inspected notes appear to reconstruct the same runtime mechanism with small variations."
+        ]
+      },
+      "learner_move": "Show whether my notes look fragmented.",
+      "expected": {
+        "must": [
+          "Present a possible consolidation signal with uncertainty.",
+          "Hand maintenance diagnosis to Vault Curator when the learner wants a refactor decision."
+        ],
+        "must_not": [
+          "Declare the Vault unhealthy from Learning View.",
+          "Merge, rewrite, or delete notes."
+        ]
+      }
+    },
+    {
+      "id": "view-does-not-prioritize",
+      "initial_state": {
+        "foundation_signals": ["software runtime", "experiment design"],
+        "capability_signals": ["mixed"]
+      },
+      "learner_move": "Show my foundation map.",
+      "expected": {
+        "must": [
+          "Present the requested read-only structure.",
+          "Keep attention decisions outside the view."
+        ],
+        "must_not": [
+          "Rank foundations by what the learner should study next unless Ask Coach is invoked."
+        ]
+      }
+    },
+    {
+      "id": "no-hidden-schema-fields",
+      "learner_move": "Show my learning acceleration score, foundation status, and reusedBy fields.",
+      "expected": {
+        "must": [
+          "Explain that the current schema does not store those fields.",
+          "Offer only explainable derived projections when supported by existing authority."
+        ],
+        "must_not": [
+          "Invent persisted foundation status, reuse counts, fragmentation scores, or learning acceleration scores."
+        ]
+      }
+    }
+  ]
+}
