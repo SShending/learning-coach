@@ -1,6 +1,6 @@
 # Ask Coach Learning Acceleration
 
-Read this reference when Ask Coach is deciding whether attention should shift toward a shared foundation, a repeated cross-Topic bottleneck, or another learning move whose main value is reducing the cost of future learning across multiple Topics.
+Read this reference when Ask Coach is deciding whether attention should shift toward a shared foundation, a repeated cross-Topic bottleneck, a reuse-aware Topic ordering decision, or another learning move whose main value is reducing the cost of future learning across multiple Topics.
 
 This is a **portfolio-level advisory policy**. It does not teach the foundation itself; Topic Coach owns the actual learning cycle inside the chosen Topic.
 
@@ -43,6 +43,51 @@ Before treating something as cross-Topic leverage, ask whether the **governing m
 For example, two systems may both use the word `state` while giving it different authority, lifecycle, or execution semantics. Shared vocabulary alone is not enough to justify foundation prioritization.
 
 Persist a `crossTopicConnection` only when the relationship is durable enough to affect future sequencing or transfer decisions, and preserve whether the basis is stored, inferred, or externally grounded.
+
+## Reuse-Aware Topic Ordering
+
+Cross-Topic connections should help Ask Coach choose an efficient learning order, but they do not create a fixed curriculum.
+
+Use the current learner state to distinguish three cases.
+
+### Missing shared foundation
+
+If a high-reuse foundation is genuinely weak and several goal-relevant Topics depend on it, a bounded repair may deserve earlier attention because it makes later Topics cheaper.
+
+```text
+repair shared foundation
+-> reuse in Topic A
+-> reuse again in Topic B
+```
+
+Do not recommend the foundation merely because it is central in the connection graph. Its gap, reuse, timing, and repair cost still need support.
+
+### Demonstrated shared foundation
+
+If the foundation is already sufficiently demonstrated, **do not teach or prioritize it again by default**.
+
+Instead give connected Topics reuse credit:
+
+```text
+known foundation
++ Topic-specific delta
+-> cheaper entry into the new Topic
+```
+
+This means a cross-Topic connection can increase the priority of a downstream Topic, not only the priority of its prerequisite.
+
+### Learner chooses a different order
+
+The recommended Topic order is advisory. If the learner chooses a downstream Topic first, do not block progress or require completion of the entire upstream Topic.
+
+Use the nearest-blocker rule:
+
+1. check whether the supposedly missing foundation actually blocks the chosen Topic;
+2. if not, continue with the chosen Topic;
+3. if yes, recommend only the minimum sufficient prerequisite repair;
+4. return attention to the chosen Topic after the blocker is repaired.
+
+The objective is a lower-cost path, not obedience to a prescribed sequence.
 
 ## Repeated Bottleneck Test
 
@@ -94,19 +139,29 @@ Study all of X before returning to A and B.
 
 If the foundation already belongs coherently inside an existing Topic, recommend that Topic. If it would require a genuinely new Topic, treat it as a candidate and let Topic Coach finalize the boundary only after the learner chooses it.
 
+## Topic Authority Boundary
+
+Reuse-aware ordering is portfolio advice only.
+
+Ask Coach may use cross-Topic connections to recommend an order, explain which existing capability can be reused, and predict which Topics should become cheaper. Ask Coach must not encode that advice by rewriting Topic roadmap, `currentFocus`, `nextStep`, mastery, gaps, notes, or evidence.
+
+If a Topic's local learning path should adapt because reusable knowledge already exists, that adaptation belongs to Topic Coach when the learner is actually working inside that Topic.
+
 ## Learning Acceleration Decision Loop
 
 When this policy applies:
 
 1. start from the ordinary Ask Coach candidate set;
-2. identify repeated blockers and plausible shared foundations;
-3. apply the cross-Topic foundation leverage test;
-4. apply the timing gate;
-5. compare the bounded foundation repair against review, practice, application, and current Topic progression;
-6. recommend one next attention target;
-7. explain **what future learning is expected to become cheaper**;
-8. name a concrete transfer check when useful;
-9. persist only durable cross-Topic connections or advisory hypotheses under normal Coach State rules.
+2. read durable cross-Topic connections that could materially affect the choice;
+3. identify repeated blockers, demonstrated reusable foundations, and plausible shared mechanisms;
+4. determine whether each relevant connection represents a missing foundation to repair or an existing foundation that makes a downstream Topic cheaper;
+5. apply the cross-Topic foundation leverage test;
+6. apply the timing gate;
+7. compare the bounded foundation repair or downstream reuse opportunity against review, practice, application, and current Topic progression;
+8. recommend one next attention target;
+9. explain **what future learning is expected to become cheaper** and which existing capability will be reused;
+10. respect learner choice if they select a different Topic order;
+11. persist only durable cross-Topic connections or advisory hypotheses under normal Coach State rules.
 
 ## Relationship To Learning Strategy
 
@@ -118,19 +173,19 @@ For example, after a shared runtime foundation is repaired, successful independe
 
 ## Output Guidance
 
-When a foundation investment wins, make the recommendation inspectable:
+When cross-Topic reuse materially affects the recommendation, make the recommendation inspectable:
 
 - **Recommendation** — what deserves attention now;
-- **Why now** — which supported blocker or leverage signal matters;
+- **Why now** — which supported blocker, demonstrated foundation, or leverage signal matters;
+- **Reuse** — which existing capability can be carried into another Topic;
 - **Future savings** — which later Topics/tasks should become easier;
-- **Bound** — how far to go before returning to the original goals;
-- **Transfer check** — where to verify that the foundation actually reused;
+- **Bound** — how far a foundation detour should go before returning to the target;
 - **What waits** — which lower-leverage or frontier material should not receive attention yet.
 
 Do not present pseudo-precise ROI numbers unless the learner explicitly requests a scoring model.
 
 ## Final Principle
 
-Optimize the portfolio for **compounding capability**, not maximal foundational coverage.
+Optimize the portfolio for **compounding capability**, not maximal foundational coverage or rigid prerequisite order.
 
 A foundation is valuable when it becomes reusable infrastructure for future learning, not merely because it is fundamental.
