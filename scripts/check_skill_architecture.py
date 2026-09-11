@@ -14,6 +14,13 @@ REQUIRED = [
     "skills/topic-coach/references/assumption-aware-diagnosis.md",
     "skills/topic-coach/references/learning-notes.md",
     "skills/ask-coach/SKILL.md",
+    "skills/research-coach/SKILL.md",
+    "skills/research-coach/agents/openai.yaml",
+    "skills/research-coach/references/idea-vault-contract.md",
+    "skills/research-coach/references/research-triage.md",
+    "skills/research-coach/references/learning-handoff.md",
+    "evals/trigger/research-coach.json",
+    "evals/behavior/research-coach-interop.json",
     "skills/knowledge-inbox/SKILL.md",
     "skills/knowledge-inbox/references/inbox-policy.md",
     "evals/trigger/knowledge-inbox.json",
@@ -110,6 +117,22 @@ def require_phrases(errors: list[str], label: str, text: str, phrases: list[str]
             errors.append(f"{label} contract missing: {phrase}")
 
 
+def validate_behavior_fixture(errors: list[str], suite: str) -> None:
+    try:
+        fixture = json.loads(read_text(f"evals/behavior/{suite}.json"))
+        cases = fixture["cases"]
+        ids = [case["id"] for case in cases]
+        if fixture["suite"] != suite or not cases or len(ids) != len(set(ids)):
+            errors.append(f"invalid or duplicate behavior cases: {suite}")
+        for case in cases:
+            if not isinstance(case.get("expected"), dict) or not case["expected"]:
+                errors.append(f"missing semantic expectations: {suite}/{case['id']}")
+            if suite == "learning-view-temporal" and case["expected"].get("vault_writes") != 0:
+                errors.append(f"temporal view must require zero writes: {case['id']}")
+    except (ValueError, KeyError, TypeError) as exc:
+        errors.append(f"invalid behavior fixture {suite}: {exc}")
+
+
 def main() -> None:
     errors: list[str] = []
 
@@ -148,9 +171,14 @@ def main() -> None:
     diagnosis = read_text("skills/topic-coach/references/assumption-aware-diagnosis.md")
     learning_notes = read_text("skills/topic-coach/references/learning-notes.md")
     ask = read_text("skills/ask-coach/SKILL.md")
+    research = read_text("skills/research-coach/SKILL.md")
+    idea_vault_contract = read_text("skills/research-coach/references/idea-vault-contract.md")
+    research_triage = read_text("skills/research-coach/references/research-triage.md")
+    learning_handoff = read_text("skills/research-coach/references/learning-handoff.md")
     curator = read_text("skills/vault-curator/SKILL.md")
     behavior_eval = read_text("evals/behavior/topic-coach-persistence.json")
     inbox_behavior_eval = read_text("evals/behavior/knowledge-inbox.json")
+    research_behavior_eval = read_text("evals/behavior/research-coach-interop.json")
     github_router = read_text("references/github-operations.md")
     topic_write = read_text("references/github/topic-write.md")
     grounding = read_text("references/knowledge-grounding.md")
@@ -172,6 +200,9 @@ def main() -> None:
         "## Focus Freshness Invariant",
         "## Learning Notes",
         "## Persistence Boundary",
+        "## Research Handoff Boundary",
+        "Research Coach is **event-driven**, not resident inside Topic Coach.",
+        "must not trigger automatic Idea Vault capture",
         "Before ending every Topic Coach turn during normal persisted operation",
         "plausible durable retrieval unit",
         "Do not wait until note creation is already decided.",
@@ -220,10 +251,56 @@ def main() -> None:
     ])
     require_phrases(errors, "Ask Coach", ask, [
         "portfolio-level learning planner",
+        "## Research-Driven Learning",
+        "research requires X",
+        "!= learner lacks X",
+        "../research-coach/references/learning-handoff.md",
         "## Global Review Scheduling",
         "## Learning Strategy Synthesis",
         "../../references/github/advisory-write.md",
         "concrete handoff to Topic Coach",
+    ])
+    require_phrases(errors, "Research Coach", research, [
+        "name: research-coach",
+        "request-scoped research controller",
+        "It is not a passive observer of Topic Coach sessions.",
+        "## Research Intent Gate",
+        "## Learning -> Research Handoff",
+        "## Research -> Learning Handoff",
+        "capability demand, not a learner deficiency claim",
+        "use Knowledge Inbox as an Idea Vault staging area",
+    ])
+    require_phrases(errors, "Idea Vault contract", idea_vault_contract, [
+        "# Idea Vault Contract",
+        "external research authority",
+        "Read Before Write",
+        "Never copy Idea Vault maturity/evidence/health into Learning Vault",
+    ])
+    require_phrases(errors, "Research triage", research_triage, [
+        "# Research Triage",
+        "## New-Versus-Existing Gate",
+        "## Research-Worthy Gate",
+        "## Epistemic Bottleneck",
+        "## Decisive Experiment Gate",
+    ])
+    require_phrases(errors, "Research / Learning handoff", learning_handoff, [
+        "# Research / Learning Handoff",
+        "Research Demand",
+        "research requires X",
+        "!= learner lacks X",
+        "not a persisted Learning Vault schema",
+        "No Cross-Vault Copying",
+    ])
+    require_phrases(errors, "Research behavior eval", research_behavior_eval, [
+        '"suite": "research-coach-interop"',
+        '"ordinary-learning-question-stays-topic-local"',
+        '"strong-signal-without-research-intent-does-not-auto-capture"',
+        '"existing-idea-refinement-wins-over-duplicate"',
+        '"research-requirement-is-not-learner-gap"',
+        '"demonstrated-foundation-is-reused"',
+        '"idea-vault-and-learning-vault-remain-separate-authorities"',
+        '"knowledge-inbox-is-not-research-staging"',
+        '"end-to-end-memory-lifecycle-fixture"',
     ])
     require_phrases(errors, "Knowledge Inbox", inbox, [
         "name: knowledge-inbox",
@@ -274,28 +351,15 @@ def main() -> None:
         "supports one active schema",
     ])
 
-    # Validate regression assets structurally as well as retaining contract anchors.
-    for suite in ("topic-coach-persistence", "learning-view-temporal", "knowledge-inbox"):
-        try:
-            fixture = json.loads(read_text(f"evals/behavior/{suite}.json"))
-            cases = fixture["cases"]
-            ids = [case["id"] for case in cases]
-            if fixture["suite"] != suite or not cases or len(ids) != len(set(ids)):
-                errors.append(f"invalid or duplicate behavior cases: {suite}")
-            for case in cases:
-                if not isinstance(case.get("expected"), dict) or not case["expected"]:
-                    errors.append(f"missing semantic expectations: {suite}/{case['id']}")
-                if suite == "learning-view-temporal" and case["expected"].get("vault_writes") != 0:
-                    errors.append(f"temporal view must require zero writes: {case['id']}")
-        except (ValueError, KeyError, TypeError) as exc:
-            errors.append(f"invalid behavior fixture {suite}: {exc}")
+    for suite in ("topic-coach-persistence", "learning-view-temporal", "knowledge-inbox", "research-coach-interop"):
+        validate_behavior_fixture(errors, suite)
 
     view = read_text("skills/learning-view/SKILL.md")
     temporal = read_text("skills/learning-view/references/temporal-views.md")
     require_phrases(errors, "Capture ownership", topic, [
         "## Learning Capture / Persistence Triage",
         "Topic Coach must not write Learning Strategy or Coach State.",
-        "Routing is not permission to write an external project",
+        "It must not inspect or mutate Idea Vault as part of the learning loop.",
     ])
     require_phrases(errors, "Temporal routing", view, [
         "references/temporal-views.md", "## Read-Only Invariant",
@@ -304,10 +368,11 @@ def main() -> None:
         "end-exclusive", "observedAt", "createdAt", "updatedAt", "appliedAt",
         "Current state is not a complete event log.",
     ])
-    # Temporal inspection adds no authority document or Skill.
+
     actual_skills = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
-    if actual_skills != {"topic-coach", "ask-coach", "learning-view", "vault-curator", "knowledge-inbox"}:
+    if actual_skills != {"topic-coach", "ask-coach", "research-coach", "learning-view", "vault-curator", "knowledge-inbox"}:
         errors.append("unexpected Skill boundary change")
+
     schema = json.loads(read_text("references/schemas/topic-state.schema.json"))
     if set(schema["properties"]) != {
         "schemaVersion", "documentType", "vaultId", "id", "title", "goal",
