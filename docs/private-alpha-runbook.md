@@ -1,18 +1,20 @@
 # Pragmatic GitHub Runbook
 
-This runbook connects one learner, the Learning Coach Plugin, and one private
-GitHub Learning Vault. It intentionally avoids the earlier custom Learning Vault
-server, PAT flow, tunnel, runtime API key, and always-on deployment.
+This runbook connects one learner, the Learning Coach Plugin, one private
+GitHub Learning Vault, and—when explicitly used for research—an optional external
+Idea Vault. It intentionally avoids the earlier custom Learning Vault server,
+PAT flow, tunnel, runtime API key, and always-on deployment.
 
 ## 1. Install Learning Coach And Connect GitHub
 
-Learning Coach is one Plugin containing five Skills:
+Learning Coach is one Plugin containing six Skills:
 
 ```text
 Learning Coach
 ├── Topic Coach
 ├── Knowledge Inbox
 ├── Ask Coach
+├── Research Coach
 ├── Learning View
 └── Vault Curator
 ```
@@ -21,6 +23,9 @@ The Plugin declares the canonical GitHub app dependency in `.app.json`. The host
 owns OAuth/account linking and exposes only the GitHub repositories/actions the
 learner has authorized. Do not paste a PAT, private key, runtime key, or other
 credential into a learning chat.
+
+Research Coach is request-scoped. It should not remain resident in Topic Coach
+sessions or passively scan learning turns for research ideas.
 
 For the current personal-marketplace test flow, see `docs/releasing.md`.
 
@@ -35,6 +40,10 @@ Learning Coach does not automatically create a repository or change repository
 visibility. Before the first durable write in a chat, the acting Skill should
 verify the actual repository and capabilities exposed by the current host when
 possible.
+
+An Idea Vault is separate user-owned research authority. Research Coach should
+resolve its repository and current read/write capability independently instead
+of treating it as part of Learning Vault.
 
 ## 3. Start Stateful Topic Learning
 
@@ -85,14 +94,32 @@ Skill contract, and verify the resulting authority after writing.
 - A one-Topic learning/practice/assessment request is handled by Topic Coach.
 - A cross-Topic prioritization/review/new-Topic recommendation is handled by Ask
   Coach.
+- An explicit request to evaluate/refine/ground/test a research idea is handled by
+  Research Coach.
+- A research-related **learning** question remains Topic Coach work until the
+  learner explicitly enters research intent.
+- Research Coach does not auto-capture a strong-looking learning observation into
+  Idea Vault and does not remain resident in the resulting learning session.
+- Research Coach emits a bounded capability demand when research needs learning;
+  Ask Coach checks that demand against authoritative learner evidence before
+  recommending a Topic action.
 - Ask Coach does not mutate Topic mastery/evidence/roadmap/currentFocus/nextStep.
 - Learning View remains read-only.
 - Vault Curator performs structural/lifecycle mutation only as an explicit
   maintenance operation.
 
-## 6. Verify Persistence Safety
+## 6. Verify Authority Separation
 
-- A public Vault repository is rejected for durable learner/advisory-state writes.
+- Idea Vault research evidence/maturity/health/novelty never becomes Learning
+  Vault mastery/evidence/gaps automatically.
+- Topic evidence never becomes research evidence automatically.
+- Knowledge Inbox is not used as the default staging lifecycle for research ideas.
+- V0 introduces no Learning Vault schema field for Idea links or research drivers;
+  the Research -> Ask Coach handoff is resolved at request time.
+
+## 7. Verify Persistence Safety
+
+- A public Learning Vault repository is rejected for durable learner/advisory-state writes.
 - An unrelated nonempty repository is never initialized automatically.
 - A changed authority SHA causes reread/rebuild rather than stale overwrite.
 - A write with an unknown result is resolved by rereading authority/update ID
