@@ -1,0 +1,12 @@
+[
+  {"query":"This memory-granularity observation might be a research idea. Can you check whether it is worth researching?","should_trigger":true},
+  {"query":"Look in my Idea Vault and tell me whether this should refine an existing idea or become a new one.","should_trigger":true},
+  {"query":"Does this hypothesis still look novel relative to current prior work?","should_trigger":true},
+  {"query":"What decisive experiment would falsify this idea?","should_trigger":true},
+  {"query":"I want to advance this active idea. What knowledge or capability is blocking the next research decision?","should_trigger":true},
+  {"query":"Why can memory accumulation cause retrieval interference? Teach me inside agent-memory.","should_trigger":false},
+  {"query":"What should I study next across all my Topics?","should_trigger":false},
+  {"query":"Save this useful explanation in my Inbox.","should_trigger":false},
+  {"query":"Show my current learning state without changing anything.","should_trigger":false},
+  {"query":"Repair orphaned files in my Learning Vault.","should_trigger":false}
+]
