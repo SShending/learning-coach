@@ -1,7 +1,7 @@
 {
   "name": "learning-coach",
-  "version": "3.0.0-alpha.24",
-  "description": "A multi-Skill learning system with Topic-local coaching, portfolio planning, read-only views, and a private GitHub-backed Learning Vault.",
+  "version": "3.0.0-alpha.25",
+  "description": "A multi-Skill learning system with Topic-local coaching, portfolio planning, request-scoped research coaching, read-only views, and a private GitHub-backed Learning Vault.",
   "author": {
     "name": "SShending",
     "url": "https://github.com/SShending"
@@ -9,13 +9,13 @@
   "homepage": "https://github.com/SShending/learning-coach",
   "repository": "https://github.com/SShending/learning-coach",
   "license": "Apache-2.0",
-  "keywords": ["learning", "knowledge-tree", "memory", "review", "coaching", "github", "mcp"],
+  "keywords": ["learning", "research", "knowledge-tree", "memory", "review", "coaching", "github", "mcp"],
   "skills": "./skills/",
   "apps": "./.app.json",
   "interface": {
     "displayName": "Learning Coach",
-    "shortDescription": "Learn inside Topics and plan across your learning portfolio",
-    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach runs Topic-local learning, Ask Coach plans across the portfolio, Knowledge Inbox captures reusable chat fragments without creating Topics, Learning View presents state read-only, and Vault Curator maintains the Vault. The Plugin requires the canonical GitHub app and never requires PATs or private infrastructure.",
+    "shortDescription": "Learn inside Topics, plan across learning, and advance research on request",
+    "longDescription": "Learning Coach is a multi-Skill learning system backed by a user-owned GitHub Learning Vault. Topic Coach runs Topic-local learning, Ask Coach plans across the learning portfolio, Research Coach activates only for explicit research intent and can work with a separately owned Idea Vault, Knowledge Inbox captures reusable chat fragments without creating Topics, Learning View presents state read-only, and Vault Curator maintains the Learning Vault. Research and learner state remain separate authorities. The Plugin requires the canonical GitHub app and never requires PATs or private infrastructure.",
     "developerName": "SShending",
     "category": "Productivity",
     "capabilities": ["Interactive", "Write"],
@@ -23,7 +23,7 @@
     "defaultPrompt": [
       "Resume one of my learning Topics and continue from the next useful step.",
       "Based on my Learning Vault, what should I learn, review, practice, or defer next?",
-      "Show my current learning state without changing it."
+      "Help me evaluate or advance a research idea without mixing it into learner state."
     ]
   }
 }
