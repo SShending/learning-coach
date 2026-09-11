@@ -4,6 +4,46 @@
 
 从 2026-09-08 开始持续维护。下方较早条目是依据仓库提交与版本文件整理的精选历史，不是从首版开始的完整发布日志。产品版本表示源码包版本，不代表已在所有宿主或公开 marketplace 发布。
 
+## 2026-09-11 · 3.0.0-alpha.25 · Request-scoped Research Coach
+
+状态：实现位于 [PR #33](https://github.com/SShending/learning-coach/pull/33)。本轮把 Research Coach 作为第六个 Skill 加入 Plugin；不修改 Learning Vault schema，也不把 Idea Vault 合并进 Learning Vault。
+
+### 为什么改与功能变化
+
+- 学习过程中确实可能产生值得研究的 observation / hypothesis，但如果 Topic Coach 同时负责 teaching、assessment、Topic state、Idea Vault triage、novelty 与 experiment lifecycle，会让职责边界持续膨胀。
+- 新增 **Research Coach**，只在用户明确进入 research intent 时启动，例如“这个能不能研究”“看看 Idea Vault 是否已有类似 idea”“这个 hypothesis 是否有 novelty”“下一步 decisive experiment 是什么”。它是 request-scoped / event-driven，不常驻 Topic Coach context，也不被设计成后台持续扫描学习会话。
+- 普通 research-related learning question 仍由 Topic Coach 处理。例如“为什么 memory accumulation 会造成 retrieval interference？”在用户目的是理解机制时仍是学习问题。强 research-looking observation 但没有明确 research intent 时，只允许轻量提示潜在研究价值，不自动查 novelty、设计实验或写 Idea Vault。
+- Research Coach 把 Idea Vault 视为独立的 external research authority。它先读取目标仓库自己的 README/index，再判断 signal 是 existing-idea refinement、sub-hypothesis、related/competing idea、new candidate，还是暂时不值得持久化；优先 evolution over duplication。
+- Research Coach 可以识别当前 **epistemic bottleneck**，并在研究被知识/能力阻塞时输出 bounded **capability demand**。核心边界是 `research requires X != learner lacks X`：Research Coach 不直接把研究要求写成 learner gap。
+- Ask Coach 接收 capability demand 后，再对照 authoritative Learning Vault evidence、cross-Topic reuse、当前目标、复习压力和时间成本决定学习优先级；已经 demonstrated 的 foundation 直接复用，exposed-but-unassessed 可以先做 bounded verification，最终 Topic-local 学习由 Topic Coach 执行。
+- Knowledge Inbox 不作为 Idea Vault 默认 staging lifecycle。Idea maturity/evidence/health/novelty 不会复制成 learner mastery/evidence/gaps，Topic learner evidence 也不会自动变成 research evidence。
+- V0 不增加 `researchDrivers`、Idea pointers 或其他 cross-vault schema 字段；Research → Learning 关系在请求时解析，真实使用证明长期 pointer 有必要后再讨论持久化。
+
+### 使用影响
+
+典型路径变为：
+
+```text
+Topic Coach 学习
+    ↓ 用户明确提出 research intent
+Research Coach
+    ↓ Idea Vault triage / epistemic bottleneck
+bounded capability demand
+    ↓
+Ask Coach 对照 Learning Vault 与 cross-Topic reuse
+    ↓
+Topic Coach 执行真正需要的学习
+```
+
+用户不需要让 Research Coach 一直在 context 中。Research task 完成后可以直接回到普通学习；如果只是继续理解相关概念，也不需要再次读取 Idea Vault。
+
+### 验证与限制
+
+- 新增 Research Coach trigger fixtures 与 9 个 research/learning interoperability behavior fixtures，覆盖普通学习问题不误触发、显式 research intent、强 signal 不自动捕获、existing idea 优先 refinement、research requirement 不等于 learner gap、demonstrated foundation 复用、两套 Vault authority 分离、Knowledge Inbox 非 research staging，以及 `agent-memory` × `Experience Memory Lifecycle in Text-to-SQL` 的端到端场景。
+- 新增 `scripts/check_research_coach.py`，并将 Research Coach、六 Skill package shape 与相关 contract 检查接入 CI。
+- PR #33 的 GitHub Actions 已通过 schema validation、Skill architecture、learning acceleration、cross-Topic reuse、Inbox resurfacing、Research Coach contract、Plugin release package 与 installer syntax 检查。
+- 这些静态检查与声明式 fixture 仍不等于真实宿主中的 semantic behavior runner。尤其是 automatic Skill routing、真实 Idea Vault read/write、复杂 novelty search 与跨 Skill runtime handoff，仍需要后续真实 session 观察。
+
 ## 2026-09-10 · alpha.24 之后 · Learning Acceleration 与跨 Topic 复用闭环
 
 状态：实现已完成并由相关 PR 集成；读取 main 时，以各 PR 的实际合并状态为准。本轮不改变 Plugin package version、Vault schema 或五个 Skill 的职责边界。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Coach"
+  short_description: "Refine research ideas, tests, and learning demands on request"
+  default_prompt: "Use $research-coach only for explicit research intent: inspect my Idea Vault when relevant, refine or evaluate the active idea, identify the current epistemic bottleneck, and hand bounded capability demands to Ask Coach instead of treating research requirements as learner gaps."

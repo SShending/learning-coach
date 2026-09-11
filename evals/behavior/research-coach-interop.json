@@ -1,0 +1,108 @@
+{
+  "suite": "research-coach-interop",
+  "purpose": "Regression fixtures for request-scoped research routing, Idea Vault ownership, and research-driven learning handoffs without merging research and learner state.",
+  "cases": [
+    {
+      "id": "ordinary-learning-question-stays-topic-local",
+      "initial_state": {"current_topic": "Agent Memory"},
+      "learner_move": "Why can memory accumulation cause retrieval interference? Teach me this inside agent-memory.",
+      "expected": {
+        "must": ["Keep the request in Topic Coach because the learner is asking to understand a mechanism, not to perform research triage."],
+        "must_not": ["Inspect or mutate Idea Vault.", "Passively activate Research Coach merely because the topic is research-related."]
+      }
+    },
+    {
+      "id": "explicit-research-intent-activates-research-coach",
+      "initial_state": {"current_topic": "Agent Memory"},
+      "learner_move": "I suspect memory granularity changes how interference grows with bank scale. Can this be a research hypothesis?",
+      "expected": {
+        "must": ["Treat the learner's explicit research intent as a Research Coach request.", "Separate observation, hypothesis, mechanism, evidence, and speculation before deciding what should persist."],
+        "must_not": ["Keep Research Coach resident after the bounded research request ends."]
+      }
+    },
+    {
+      "id": "strong-signal-without-research-intent-does-not-auto-capture",
+      "initial_state": {"current_topic": "Agent Memory"},
+      "learner_move": "Maybe granularity is why a larger memory bank sometimes hurts.",
+      "expected": {
+        "must": ["Allow a brief note that the observation may have research potential when useful, while continuing the learning flow."],
+        "must_not": ["Create or update an Idea Vault entry automatically.", "Interrupt ordinary learning with novelty search or experiment planning."]
+      }
+    },
+    {
+      "id": "existing-idea-refinement-wins-over-duplicate",
+      "initial_state": {
+        "idea_vault": "A direction-centric Idea Vault already contains Experience Memory Lifecycle in Text-to-SQL, whose Formation x Degradation framing covers representation-dependent degradation."
+      },
+      "learner_move": "Add a new idea that memory granularity may change interference as the bank grows.",
+      "expected": {
+        "must": ["Inspect the existing related idea before creating anything.", "Prefer treating the signal as a refinement or sub-hypothesis when it advances the same central claim."],
+        "must_not": ["Create a duplicate idea merely because the wording or experimental angle differs."]
+      }
+    },
+    {
+      "id": "research-requirement-is-not-learner-gap",
+      "initial_state": {
+        "research_need": "The next experiment requires retrieval-interference diagnosis.",
+        "learning_state": "The learner's current mastery of that capability has not yet been checked in this request."
+      },
+      "learner_move": "What do I need to learn to run this experiment?",
+      "expected": {
+        "must": ["Emit a bounded Research -> Learning capability demand.", "Hand portfolio prioritization to Ask Coach so authoritative learner evidence can be checked."],
+        "must_not": ["Write a knownGap merely because the research requires the capability.", "Claim the learner lacks the capability without Learning Vault evidence."]
+      }
+    },
+    {
+      "id": "demonstrated-foundation-is-reused",
+      "initial_state": {
+        "research_need": "The idea needs retrieval-interference diagnosis plus generic Agent runtime understanding.",
+        "learning_state": "Agent Foundations already has demonstrated evidence for the generic runtime loop; retrieval-interference diagnosis remains unassessed in Agent Memory."
+      },
+      "learner_move": "Use this research blocker to tell me what to learn next.",
+      "expected": {
+        "must": ["Ask Coach compares the research demand with authoritative learner state.", "Reuse the demonstrated Agent foundation and focus any recommendation on the unmet or unassessed research-relevant capability."],
+        "must_not": ["Schedule relearning of demonstrated foundations simply because the research idea mentions them."]
+      }
+    },
+    {
+      "id": "idea-vault-and-learning-vault-remain-separate-authorities",
+      "initial_state": {
+        "idea_vault": "The idea has L4 pilot evidence and health needs-validation.",
+        "learning_vault": "The learner has only explanation-level evidence for a related concept."
+      },
+      "learner_move": "Since the idea has pilot evidence, mark me as mastering the concept too.",
+      "expected": {
+        "must": ["Keep Idea Vault research evidence separate from learner capability evidence."],
+        "must_not": ["Copy idea evidence, health, maturity, or novelty into Topic mastery or evidence."]
+      }
+    },
+    {
+      "id": "knowledge-inbox-is-not-research-staging",
+      "initial_state": {},
+      "learner_move": "Save this research hypothesis to the Inbox first and automatically promote it to Idea Vault later.",
+      "expected": {
+        "must": ["Keep Knowledge Inbox for low-commitment reusable knowledge rather than research lifecycle state."],
+        "must_not": ["Use Inbox as the default staging lifecycle for Idea Vault candidates."]
+      }
+    },
+    {
+      "id": "end-to-end-memory-lifecycle-fixture",
+      "initial_state": {
+        "topic": "agent-memory",
+        "existing_idea": "Experience Memory Lifecycle in Text-to-SQL",
+        "research_signal": "memory granularity x bank scale may alter interference",
+        "source_foundation": "Agent Foundations already demonstrates generic Agent runtime concepts"
+      },
+      "learner_move": "This might advance my Text-to-SQL memory idea. Check it, then tell me what learning would actually unblock the research.",
+      "expected": {
+        "must": [
+          "Research Coach checks whether the signal refines the existing Experience Memory Lifecycle idea rather than creating a duplicate.",
+          "Research Coach identifies the epistemic bottleneck and emits the required capability demand rather than learner gaps.",
+          "Ask Coach compares that demand against Learning Vault evidence and cross-Topic reuse.",
+          "The resulting Topic Coach handoff may skip demonstrated generic Agent foundations and focus on retrieval-interference or memory-lifecycle failure decomposition when that is the unmet need."
+        ],
+        "must_not": ["Merge Idea Vault lifecycle state into Learning Vault.", "Require Research Coach to remain in context during the resulting Topic learning session."]
+      }
+    }
+  ]
+}

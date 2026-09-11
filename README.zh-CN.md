@@ -16,9 +16,8 @@
 
 ## 产品文档
 
-- [使用手册](docs/user-guide.zh-CN.md)：从开始学习到复习、跨主题安排与时间视图，使用历史、Agent、摄影的全虚构示例。
+- [使用手册](docs/user-guide.zh-CN.md)：从开始学习到复习、跨主题安排、研究 handoff 与时间视图，使用历史、Agent、摄影的全虚构示例。
 - [产品迭代记录](docs/product-evolution.zh-CN.md)：已实现变化、使用影响、验证边界与讨论中的方向。
-
 
 ## 产品与 Skills
 
@@ -26,26 +25,44 @@
 
 ```text
 Learning Coach
-├── Ask Coach      跨 Topic 的学习组合规划
+├── Ask Coach       跨 Topic 的学习组合规划
 ├── Knowledge Inbox 不进入系统学习的聊天知识收件箱
-├── Topic Coach    单个 Topic 内的教学、练习、评估和状态更新
-├── Learning View  只读展示
-└── Vault Curator  维护、生命周期、修复与导出
+├── Topic Coach     单个 Topic 内的教学、练习、评估和状态更新
+├── Research Coach  按需触发的研究判断、Idea Vault 工作与学习需求 handoff
+├── Learning View   只读展示
+└── Vault Curator   维护、生命周期、修复与导出
 ```
 
 | Skill | 主要职责 |
 | --- | --- |
-| **Ask Coach** | 跨 Topic 决定学什么/复习什么/练什么，global review priority，Topic 关联与 bottleneck，候选 Topic，Coach State，Learning Strategy synthesis |
+| **Ask Coach** | 跨 Topic 决定学什么/复习什么/练什么，global review priority，Topic 关联与 bottleneck，候选 Topic，Coach State，Learning Strategy synthesis，以及把 Research Coach 给出的 bounded capability demand 转成学习优先级 |
 | **Knowledge Inbox** | 明确保存、查看、去重和整理聊天中的可复用知识碎片；不创建 Topic，不记录 mastery 证据 |
-| **Topic Coach** | Topic 边界判断、教学、练习、评估、reasoning diagnosis、Topic roadmap/currentFocus/nextStep、evidence/mastery/gaps、本 Topic review、notes/sessions |
+| **Topic Coach** | Topic 边界判断、教学、练习、评估、reasoning diagnosis、Topic roadmap/currentFocus/nextStep、evidence/mastery/gaps、本 Topic review、notes/sessions；当用户明确进入 research intent 时只做轻量 handoff |
+| **Research Coach** | 明确 research intent 下的 Idea Vault 读取/更新、new-vs-existing idea triage、hypothesis/novelty/experiment reasoning、epistemic bottleneck，以及 Research -> Learning capability demand |
 | **Learning View** | 只读展示 authoritative state |
 | **Vault Curator** | 结构检查、修复、merge/split/rename、forget/archive、export |
 
 用户说“我想学 X”**不等于 X 自动成为一个 Topic**。Topic Coach 在初始化时判断这个学习区域更适合作为 Concept、roadmap milestone / Concept cluster、已有 Topic 的扩展，还是拥有独立可观察 target capability 的新 Topic。
 
+Research Coach **不会常驻普通学习 context**。只有当用户明确问“这能不能研究”“看看 Idea Vault”“这个 idea 是否有 novelty”“下一步该怎么验证”等 research intent 时才进入。学习中出现一个有趣观察，可以被轻量提示为 research candidate，但不会自动写入 Idea Vault。
+
 ## Plugin Package
 
 Learning Coach 作为**一个 multi-Skill Plugin**分发。Plugin 通过 `.app.json` 声明 canonical GitHub app dependency；当前 alpha 不要求 PAT、private key、tunnel，也不要求自建 MCP server。
+
+```text
+learning-coach/
+├── .codex-plugin/plugin.json
+├── .app.json
+├── skills/
+│   ├── ask-coach/
+│   ├── topic-coach/
+│   ├── research-coach/
+│   ├── knowledge-inbox/
+│   ├── learning-view/
+│   └── vault-curator/
+└── references/
+```
 
 在本地 Codex personal marketplace 中测试安装：
 
@@ -77,7 +94,7 @@ references/
 └── schemas/
 ```
 
-Topic Coach 还会按任务加载 `topic-lifecycle.md`、`assessment-and-evidence.md`、`assumption-aware-diagnosis.md` 等 Topic-local references。
+Topic Coach 会按任务加载 `topic-lifecycle.md`、`assessment-and-evidence.md`、`assumption-aware-diagnosis.md` 等 Topic-local references。Research Coach 同样只在当前 research request 需要时加载 Idea Vault contract、research triage 或 research-learning handoff reference。
 
 ## Topic Model
 
@@ -96,7 +113,7 @@ Topic
 
 Topic roadmap、current focus、next step 是 Topic-local state，由 Topic Coach 负责。跨 Topic 的切换、全局 review 排序、新 Topic 推荐属于 Ask Coach。
 
-## Learning Vault
+## Learning Vault 与 Idea Vault
 
 Learning Coach 只支持**当前 manifest-based Learning Vault schema**：
 
@@ -121,9 +138,11 @@ topics/<topic-id>/
 
 Learning Vault 的 authority 是**一组 domain-owned documents**。普通 Topic 学习只更新对应 Topic authority。Knowledge Inbox 只保存用户明确要求或确认的碎片。Ask Coach 只在必要时更新 Coach State 或有跨 Topic evidence 支撑的 Learning Strategy。Learning View 永远不写。
 
-旧的、不受支持的 Vault layout 不会在运行时被猜测解析；应先独立升级到当前格式，再进入正常学习流程。
+当用户使用 Idea Vault 时，它是**独立的外部 research authority**。Research Coach 只在明确研究任务和当前授权下读取/更新。Idea 的 maturity/evidence/health/novelty 不会因为存在就变成 learner mastery/evidence/gaps；反过来 Topic mastery 也不会变成 research evidence。Research -> Learning 是 bounded runtime handoff，不是 schema merge。
 
-详细协议见 [Vault Format](references/vault-format.md)、[GitHub Operations](references/github-operations.md)、[Coach State](references/coach-state.md) 与 [Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md)。
+旧的、不受支持的 Learning Vault layout 不会在运行时被猜测解析；应先独立升级到当前格式，再进入正常学习流程。
+
+详细协议见 [Vault Format](references/vault-format.md)、[GitHub Operations](references/github-operations.md)、[Coach State](references/coach-state.md)、[Ask Coach Advisory Model](skills/ask-coach/references/advisory-model.md) 与 [Research / Learning Handoff](skills/research-coach/references/learning-handoff.md)。
 
 ## 使用
 
@@ -162,6 +181,16 @@ Use Ask Coach.
 我今天有 45 分钟。根据 Learning Vault，告诉我应该学什么、复习什么、练什么、连接什么或暂缓什么。
 ```
 
+### 学习中明确产生了值得研究的问题
+
+```text
+Use Research Coach.
+我怀疑 memory granularity 会影响 memory bank 变大后的 interference。
+先检查我的 Idea Vault：它是已有 idea 的 refinement，还是值得单独建 idea？接下来最小的 decisive validation 是什么？
+```
+
+如果研究分析暴露出 capability requirement，Research Coach 只输出 bounded capability demand；Ask Coach 再对照 Learning Vault evidence 与 cross-Topic reuse，决定是否真的值得补；最后由 Topic Coach 执行学习。
+
 ### 查看学习状态
 
 ```text
@@ -178,7 +207,7 @@ Review my Learning Vault like a codebase. Do not mutate anything yet.
 
 ## Repository 权限要求
 
-Topic Coach 正常 stateful learning 需要 read + write；Knowledge Inbox 的明确捕获/整理需要 read + write；Learning View 只读；Ask Coach 始终需要可读 authority，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护/生命周期操作时才写。
+Topic Coach 正常 stateful learning 需要 read + write；Knowledge Inbox 的明确捕获/整理需要 read + write；Learning View 只读；Ask Coach 始终需要可读 Learning Vault authority，只能写自己的 cross-Topic authority；Vault Curator 只有在明确维护/生命周期操作时才写。Research Coach 会单独检查外部 Idea Vault 的当前权限，并且不会把 read access 当成 write authorization。
 
 ## 开发
 
