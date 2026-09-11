@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_PATH = ROOT / ".codex-plugin" / "plugin.json"
 APP_PATH = ROOT / ".app.json"
 
-SKILLS = ["topic-coach", "ask-coach", "learning-view", "vault-curator", "knowledge-inbox"]
+SKILLS = ["topic-coach", "ask-coach", "research-coach", "learning-view", "vault-curator", "knowledge-inbox"]
 SHARED_CONTRACTS = [
     "references/vault-format.md",
     "references/github-operations.md",
