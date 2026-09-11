@@ -12,6 +12,7 @@ Files:
 
 - `trigger/ask-coach.json`
 - `trigger/topic-coach.json`
+- `trigger/research-coach.json`
 - `trigger/learning-view.json`
 - `trigger/vault-curator.json`
 - `trigger/knowledge-inbox.json`
@@ -28,6 +29,7 @@ Files:
 - `behavior/topic-coach-learning-acceleration.json` — verifies Topic Coach foundation leverage, bounded prerequisite expansion, concrete-before-abstract teaching, valid invariant-plus-delta transfer, rejection of forced analogies, mental-model note compression, and preservation of evidence/note boundaries.
 - `behavior/topic-coach-cross-topic-reuse.json` — verifies that Topic Coach can consume active cross-Topic connections as retrieval hints, verify source evidence before reuse, avoid copying mastery/evidence across Topics, preserve Topic roadmap capability structure, and stay out of portfolio prioritization.
 - `behavior/ask-coach-learning-acceleration.json` — verifies portfolio-level shared-foundation leverage, reuse-aware prioritization, timing gates, mechanism-vs-vocabulary checks, bounded foundation recommendations, cross-Topic hypothesis boundaries, transfer validation, and Learning Strategy evidence boundaries.
+- `behavior/research-coach-interop.json` — verifies explicit research-intent routing, no passive research monitoring, new-vs-existing idea triage, Idea Vault/Learning Vault authority separation, bounded Research -> Learning capability demands, reuse of demonstrated foundations, rejection of Knowledge Inbox as research staging, and the end-to-end Agent Memory / Experience Memory Lifecycle handoff.
 - `behavior/vault-curator-knowledge-consolidation.json` — verifies fragmented-model detection, retrieval-target/invariant tests, preservation of meaningful deltas and provenance, note-vs-Concept topology separation, rejection of premature synthesis, and the rule that shared foundations do not force Topic merges.
 - `behavior/learning-view-learning-acceleration.json` — verifies read-only visibility of exposure versus capability, derived foundation/reuse signals, reusable mental-model notes, transfer evidence, possible fragmentation signals, and strict separation from prioritization or refactoring.
 - `behavior/knowledge-inbox.json` — verifies explicit low-commitment capture, no passive logging, triage without Topic creation, and promotion handoff boundaries.
@@ -35,4 +37,4 @@ Files:
 
 Topic persistence cases also cover capture classification, assisted projects, owner handoffs, idempotency, explicit non-persistence, and failed writes.
 
-These JSON fixtures are declarative regression cases, not a claim that this repository currently contains a full agent-behavior runner. A semantic harness should inspect both the response behavior and resulting authoritative Vault writes. Static architecture checks may verify that the regression assets exist, but they cannot substitute for running the behavioral cases.
+These JSON fixtures are declarative regression cases, not a claim that this repository currently contains a full agent-behavior runner. A semantic harness should inspect both the response behavior and resulting authoritative writes. Static architecture checks may verify that the regression assets exist, but they cannot substitute for running the behavioral cases.
