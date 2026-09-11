@@ -100,6 +100,8 @@ When an observation is vague, first sharpen it enough to distinguish an interest
 
 When research reveals a learning need, produce **capability demand**, not a learner deficiency claim.
 
+Research Coach emits capability demand, not a learner deficiency claim.
+
 A good handoff states:
 
 ```text
