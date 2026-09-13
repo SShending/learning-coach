@@ -217,6 +217,9 @@ def main() -> None:
         '"stale-focus-must-checkpoint-before-advance"',
         '"same-focus-clarification-does-not-churn-focus"',
         '"interruption-after-durable-evidence"',
+        '"note-without-mastery"',
+        "state.json.notes",
+        "unregistered Markdown note body",
     ])
     require_phrases(errors, "Topic lifecycle reference", lifecycle, [
         "# Topic Lifecycle",
@@ -245,6 +248,9 @@ def main() -> None:
         "## Granularity",
         "## Length Guidance",
         "## Create Versus Update",
+        "## Persistence Registration",
+        "state.json.notes",
+        "An unregistered note body is an orphan",
         "## Scope Stability",
         "## Deletion Test",
         "future retrieval value",
