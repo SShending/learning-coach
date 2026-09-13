@@ -184,6 +184,14 @@ Create a new note when the new learning answers a meaningfully different future 
 
 Do not create a separate note merely because a new term appeared. If the term is best understood as a delta that strengthens an existing reusable model, prefer revising that model's note.
 
+## Persistence Registration
+
+A Topic learning note is not persisted merely because its Markdown body exists. Every created or revised Topic learning note must be registered in the owning Topic's `state.json.notes` index through the Topic write protocol.
+
+Create and verify the linked note body first, then register or update its note metadata in Topic state according to `../../../references/github/topic-write.md`. Treat the Topic-state registration as the authoritative selection of the current note body.
+
+An unregistered note body is an orphan, not authoritative learner state. Do not report note persistence as successful until the Topic state references the intended note metadata and that state write has been verified.
+
 ## Scope Stability
 
 An existing note has an implicit ownership boundary: its central idea.
