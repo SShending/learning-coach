@@ -126,6 +126,8 @@
       "expected": {
         "must": [
           "Create or refine the existing note owning that idea.",
+          "Register or update the note metadata in the owning Topic's state.json.notes index through the Topic write protocol.",
+          "Do not treat an unregistered Markdown note body as successfully persisted learner state.",
           "Link minimal session provenance when useful and preserve mastery."
         ]
       }
