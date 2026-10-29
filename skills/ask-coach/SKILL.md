@@ -143,3 +143,4 @@ Prefer recommendation, why now, what not to do yet when relevant, remembered adv
 ## Privacy
 
 Persist only minimum cross-Topic advisory/strategy detail required for future decisions. Do not store raw conversation, hidden reasoning, credentials, unnecessary personal details, transient daily deliberation, or copied Idea Vault lifecycle state.
+<!-- OB-S:kUTpgRYsHRCP4yej8HtePA -->
